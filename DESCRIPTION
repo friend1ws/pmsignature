@@ -9,7 +9,8 @@ Description: This package is an R implementation of PMSignature (Shiraishi et al
 Version: 0.1
 Authors@R: "Yuichi Shiraishi <friend1ws@gmail.com> [cre]"
 License: License: GPL-3
-https://github.com/friend1ws/pmsignature
+URL: https://github.com/friend1ws/pmsignature
+BugReports: https://github.com/friend1ws/pmsignature/issues
 LazyData: true
 LinkingTo: Rcpp
 Imports:
