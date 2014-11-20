@@ -1,4 +1,12 @@
-
+#' Obtain the parameters for mutation signatures and memberships
+#' 
+#' @param G the matrix of mutation feature data
+#' @param K the number of mutation signatures
+#' @param fdim a vector specifying the number of possible values for each mutation signature
+#' @param isBG the logical value showing whether a background mutaiton features is included or not
+#' @param BG0 a background mutaiton features
+#' @param numInit the number of performing calculations with different initial values
+#' @export
 getPMSignature <- function(G, K, fdim, isBG, BG0, numInit) {
   
   if (isBG) {
@@ -55,6 +63,12 @@ getPMSignature <- function(G, K, fdim, isBG, BG0, numInit) {
 }
 
 
+#' A function for updating parameters using EM-algorithm
+#' 
+#' @param p this variable includes the parameters for mutation signatures and membership parameters
+#' @param y this variable includes the information on the mutation features, 
+#' the number of mutation signatures specified and so on
+#' @export
 updatePMSParam <- function(p, y) {
   
   G <- y[[1]];
@@ -93,6 +107,17 @@ updatePMSParam <- function(p, y) {
   
 }
 
+#' Obtain the standard error estimates for parameters for mutation signatures and memberships
+#' 
+#' @param G the matrix of mutation feature data
+#' @param K the number of mutation signatures
+#' @param fdim a vector specifying the number of possible values for each mutation signature
+#' @param isBG the logical value showing whether a background mutaiton features is included or not
+#' @param BG0 a background mutaiton features
+#' @param F0 the initial value for the parameter of mutation signatures used for bootstraped parameter estimations
+#' @param Q0 the initial value for the parameter of memberships used for bootstraped parameter estimations
+#' @param bootNum the number of performing bootstrap calculations
+#' @export
 bootPMSignature <- function(G, K, fdim, isBG, BG0, F0, Q0, bootNum) {
   
   if (isBG) {
@@ -144,7 +169,12 @@ bootPMSignature <- function(G, K, fdim, isBG, BG0, F0, Q0, bootNum) {
 }
 
 
-
+#' A function for calculating the log-likelihood from the data and parameters
+#' 
+#' @param p this variable includes the parameters for mutation signatures and membership parameters
+#' @param y this variable includes the information on the mutation features, 
+#' the number of mutation signatures specified and so on
+#' @export
 calcPMSLikelihood <- function(p, y) {
   
   G <- y[[1]];
@@ -174,6 +204,11 @@ calcPMSLikelihood <- function(p, y) {
 }
 
 
+#' A functional for generating the function checking the parameter (p) is within the restricted conditions or not
+#' 
+#' @param y this variable includes the information on the mutation features, 
+#' the number of mutation signatures specified and so on
+#' @export
 PMSboundary <- function(y) {
   
   G <- y[[1]];

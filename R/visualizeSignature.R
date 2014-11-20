@@ -1,11 +1,15 @@
-#' @title visualize probabisitic mutaiton signature
+#' @title visualize probabisitic mutaiton signature for the independent model
+#' with two 5' and 3' bases 
 #' @description Generate visualization of mutation signatures for the model with
 #'   substitution patterns and two 5' and 3' bases represented by the indepenent
 #'   representation.
 #'   
-#' @param v1 A vector of a substitution pattern.
-#' @param v2 Vectors of two 5' and 3' bases.
-visPMS_ind5 <- function(v1 = rep(1 / 6, 6), V2 = matrix(1 / 4, 4, 4)) {
+#' @param vF a matrix for mutation signature
+#' @export
+visPMS_ind5 <- function(vF = matrix(0, 5, 6)) {
+  
+  v1 <- vF[1,1:6];
+  V2 <- vF[2:5,1:4];
   
   A <- matrix(0, 5, 4);
   B <- matrix(0, 4, 4);
@@ -74,6 +78,14 @@ visPMS_ind5 <- function(v1 = rep(1 / 6, 6), V2 = matrix(1 / 4, 4, 4)) {
   
 }
 
+#' @title visualize probabisitic mutaiton signature for the independent model
+#' with two 5' and 3' bases and transcription direction
+#' @description Generate visualization of mutation signatures for the model with
+#'   substitution patterns, two 5' and 3' bases and transcription directions represented by the indepenent
+#'   representation.
+#'   
+#' @param vF a matrix for mutation signature
+#' @export
 visPMS_ind5_dir <- function(vF = matrix(0, 6, 6)) {
   
   v1 <- vF[1,1:6];
@@ -159,10 +171,26 @@ visPMS_ind5_dir <- function(vF = matrix(0, 6, 6)) {
 }
 
 
+#' @title visualize probabisitic mutaiton signature for the full model
+#' with one 5' and 3' bases
+#' @description Generate visualization of mutation signatures for the model with
+#'   substitution patterns and one 5' and 3' bases represented by the full
+#'   representation.
+#'   
+#' @param v1 a vector for mutation signature
+#' @export
 visPMS_full3 <- function(v1 = rep(1 / 96, 96)) {
   barplot(v1, col=c(rep(1, 16), rep(2, 16), rep(3, 16), rep(4, 16), rep(5, 16), rep(6, 16)));
 }
 
+#' @title visualize probabisitic mutaiton signature for the full model
+#' with two 5' and 3' bases
+#' @description Generate visualization of mutation signatures for the model with
+#'   substitution patterns and two 5' and 3' bases represented by the full
+#'   representation.
+#'   
+#' @param v1 a vector for mutation signature
+#' @export
 visPMS_full5 <- function(v1 = rep(1 / 1536, 1536)) {
   barplot(v1, col=c(rep(1, 256), rep(2, 256), rep(3, 256), rep(4, 256), rep(5, 256), rep(6, 256)));
 }

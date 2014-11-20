@@ -13,8 +13,6 @@ convertFromTurbo_F(turboF, fdim, signatureNum, isBackground)
 \item{signatureNum}{the number of mutation signatures}
 
 \item{isBackground}{the logical value showing whether a background mutaiton features is included or not}
-
-\item{sampleNum}{the number of cancer genomes}
 }
 \description{
 Restore the converted parameter F for turboEM

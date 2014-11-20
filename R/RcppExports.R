@@ -57,7 +57,6 @@ convertFromTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
 #' @param turboF F (converted for turboEM)
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
-#' @param sampleNum the number of cancer genomes
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @export
 convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
