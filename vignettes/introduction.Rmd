@@ -1,0 +1,109 @@
+---
+title: "Introduction to pmsignature"
+author: "Yuichi Shiraishi"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+The R package `pmsignature` is developed for extracting characteristic patterns from the set of mutations collected
+typically from cancer genome sequencing data.
+
+Currently, `pmsignature` can only accept tab delimited text files with specialized format. 
+We will improve the program so that it can accept VCF format files.
+
+## Input data
+
+The input data must be a tab-delimited text file.
+An example of input data for `pmsignature` is as follows:
+
+---  --  --  --  --  --  --
+ 26   6  
+  6   4   4   4   4   2   
+  1   4   4   4   3   3   2
+  2   4   3   3   1   1   2
+  3   4   4   3   2   2   2
+  4   3   3   2   3   3   1
+  5   3   4   2   4   4   2
+  6   4   1   4   2   1   2
+  3   2   1   1   1   1   2
+  7   4   2   2   4   3   2
+---  --  --  --  --  --  --
+
+- The first row shows the number of cancer genomes and mutation features
+(here, the number of cancer genome and mutation features are 26 and 6, respectively).
+
+- The second row shows the possible number of values that each mutation feature can take.
+This example actually considers substitution patterns (6 values, C>A, C>G, C>T, T>A, T>C and T>G),
+two 5' and 3' flanking bases (4 values for 4 sites, A, C, G and T) and transcription direction (2 values, + and -).
+
+- The third and later rows show the mutation features for each mutation. The first column shows the index of cancer genome. From the second to last columns shows the value of mutation features.
+
+
+## workflow
+
+### install the package
+
+The easiest way is type
+
+
+```{r, eval=FALSE}
+devtools::install_github("friend1ws/pmsignature");
+```
+
+### prepare input data
+
+First, create the input data from your mutation data.
+
+### reading input data
+
+### estimating the parameters
+
+### visualing the mutation signatures and memberships
+
+
+
+## Vignette Info
+
+Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
+
+## Styles
+
+The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
+
+    output: 
+      rmarkdown::html_vignette:
+        css: mystyles.css
+
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
