@@ -40,7 +40,7 @@ getPMSignature <- function(G, K, fdim, isBG, BG0, numInit) {
     p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(Q), K, N));
     Y <- list(G, fdim, K, N, M, isBG, BG0);  
     
-    res1 <- turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
+    res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
     
     print(c(kkk, res1$itr, res1$runtime[3], res1$value.objfn));
     
@@ -143,7 +143,7 @@ bootPMSignature <- function(G, K, fdim, isBG, BG0, F0, Q0, bootNum) {
     p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(Q0), K, N));
     Y <- list(bootG, fdim, K, N, M, isBG, BG0);  
     
-    res1 <- turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
+    res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
     
     lenF <- varK * (sum(fdim) - length(fdim));
     lenQ <- N * (K - 1);
