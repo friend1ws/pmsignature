@@ -47,16 +47,32 @@ two 5' and 3' flanking bases (4 values for 4 sites, A, C, G and T) and transcrip
 
 ### install the package
 
-The easiest way is type
-
+The easiest way is:
 
 ```{r, eval=FALSE}
 devtools::install_github("friend1ws/pmsignature");
 ```
 
+You need to install the package `devtools`.
+
 ### prepare input data
 
 First, create the input data from your mutation data.
+
+After installing `pmsignature`,
+you can find the example above example file at the directory where pmsignature is installed.
+
+```{r, eval=FALSE}
+paste(.libPaths(), "/pmsignature", sep="");
+```
+
+For converting your own mutation list data,
+we prepared a script which you can find at. 
+
+
+We are now improving the implementation so that the package can handle 
+the most typical format for mutation data is VCF format.
+
 
 ### reading input data
 
