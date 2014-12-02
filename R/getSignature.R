@@ -6,6 +6,9 @@
 #' @param isBG the logical value showing whether a background mutaiton features is included or not
 #' @param BG0 a background mutaiton features
 #' @param numInit the number of performing calculations with different initial values
+#' @useDynLib pmsignature
+#' @importFrom Rcpp sourceCpp
+#' @importFrom turboEM turboem
 #' @export
 getPMSignature <- function(G, K, fdim, isBG, BG0, numInit) {
   

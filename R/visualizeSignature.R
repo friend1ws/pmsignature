@@ -26,8 +26,8 @@ visPMS_ind5 <- function(vF = matrix(0, 5, 6)) {
   
   num2base <- c("A", "C", "G", "T");
   
-  # plot.window(xlim=c(-0.25, 6.5), ylim=c(-0.25, 3.25));
-  plot.window(xlim=c(0, 6.25), ylim=c(0, 3));
+  plot.window(xlim=c(-0.25, 6.5), ylim=c(-0.25, 3.25));
+  # plot.window(xlim=c(0, 6.25), ylim=c(0, 3));
   
   # tcols <- c(4, 7, 3, 2);
   # tcols <- c("#7fc97f", "#beaed4", "#fdc086", "#ffff99");

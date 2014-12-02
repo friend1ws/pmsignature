@@ -9,11 +9,23 @@ vignette: >
   %\usepackage[utf8]{inputenc}
 ---
 
-The R package `pmsignature` is developed for extracting characteristic patterns from the set of mutations collected
-typically from cancer genome sequencing data.
+The R package `pmsignature` is developed 
+for efficiently extracting characteristic mutation patterns (mutation signatures) 
+from the set of mutations collected typically from cancer genome sequencing data.
+
+For extracting mutation signatures, 
+principal component analysis or nonnegative matrix factorization have been popular.
+Compared to these existing approaches, the `pmsignature` has following advantages:
+
+1. `pmsignature` can perform robust estimation of mutation signatures even taking account for many mutation features such as two bases 5' and 3' to the mutated sites.
+1. `pmsignature` provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
 
 Currently, `pmsignature` can only accept tab delimited text files with specialized format. 
 We will improve the program so that it can accept VCF format files.
+
+## Paper
+
+> Shiraishi et al. Extraction of Latent Probabilistic Mutational Signature in Cancer Genomes, submitted.
 
 ## Input data
 
@@ -37,89 +49,98 @@ An example of input data for `pmsignature` is as follows:
 (here, the number of cancer genome and mutation features are 26 and 6, respectively).
 
 - The second row shows the possible number of values that each mutation feature can take.
-This example actually considers substitution patterns (6 values, C>A, C>G, C>T, T>A, T>C and T>G),
-two 5' and 3' flanking bases (4 values for 4 sites, A, C, G and T) and transcription direction (2 values, + and -).
+In this example, they consider substitution patterns (6 values, C>A, C>G, C>T, T>A, T>C and T>G),
+two 5' and 3' flanking bases (4 values for each 4 site, A, C, G and T)
+and transcription direction (2 values, + and -).
 
 - The third and later rows show the mutation features for each mutation. The first column shows the index of cancer genome. From the second to last columns shows the value of mutation features.
 
+mutation feature
+: elements used for categorize the mutations. 
+Typically 6 substitutions (C>A, C>G, C>T, T>A, T>C and T>G), 
+5' and 3' flanking bases (A, C, G and T), and transcription direction.
 
-## workflow
 
-### install the package
+## Workflow
 
-The easiest way is:
+### Install the package
 
-```{r, eval=FALSE}
+The easiest way is to use the package `devtools`:
+
+```
 devtools::install_github("friend1ws/pmsignature");
 ```
 
-You need to install the package `devtools`.
 
-### prepare input data
+
+### Prepare input data
 
 First, create the input data from your mutation data.
 
 After installing `pmsignature`,
-you can find the example above example file at the directory where pmsignature is installed.
+you can find the above example file at the directory where pmsignature is installed.
 
-```{r, eval=FALSE}
-paste(.libPaths(), "/pmsignature", sep="");
+```
+inputFile <- paste(.libPaths(), "/pmsignature/extdata/hoang_ind5_dir.txt", sep="");
 ```
 
 For converting your own mutation list data,
-we prepared a script which you can find at. 
-
+the [script](https://twitter.com/hadleywickham/status/504368538874703872) 
+we prepared might be helpful.
 
 We are now improving the implementation so that the package can handle 
 the most typical format for mutation data is VCF format.
 
+Also, you might want to use the background signature files.
+The background data used in the original paper can be found at:
 
-### reading input data
-
-### estimating the parameters
-
-### visualing the mutation signatures and memberships
-
-
-
-## Vignette Info
-
-Note the various macros within the `vignette` setion of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the `title` field and the `\VignetteIndexEntry` to match the title of your vignette.
-
-## Styles
-
-The `html_vignette` template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:
-
-    output: 
-      rmarkdown::html_vignette:
-        css: mystyles.css
-
-## Figures
-
-The figure sizes have been customised so that you can easily put two images side-by-side. 
-
-```{r, fig.show='hold'}
-plot(1:10)
-plot(10:1)
+```
+bgFile <- paste(.libPaths(), "/pmsignature/bgdata/bg_ind5_dir.txt", sep="");
 ```
 
-You can enable figure captions by `fig_caption: yes` in YAML:
+### Read input data
 
-    output:
-      rmarkdown::html_vignette:
-        fig_caption: yes
-
-Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
-
-## More Examples
-
-You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
-
-```{r, echo=FALSE, results='asis'}
-knitr::kable(head(mtcars, 10))
+Type the following commands:
+```
+G <- readRawMutFile(inputFile);
 ```
 
-Also a quote using `>`:
+Also, you want to read the background signature files as follow:
 
-> "He who gives up [code] safety for [code] speed deserves neither."
-([via](https://twitter.com/hadleywickham/status/504368538874703872))
+```
+BG0 <- readBGFile(bgFile);
+```
+
+### Estimate the parameters
+
+After setting the number of mutation signature (e.g., 3),
+
+```
+K <- 3
+```
+
+type the following command:
+
+```
+pms_param <- getPMSignature(G, K, fdim);
+```
+
+If you want to add the background signature, then type
+
+```
+pms_param <- getPMSignature(G, K, fdim, isBG=TRUE, BG0=BG0);
+```
+
+In default, we repeat the estimation 10 times by changing the initial value.
+If you want to changet the repeat number, then
+
+```
+pms_param <- getPMSignature(G, K, fdim, isBG=TRUE, BG0=BG0, numInit=20);
+```
+
+
+### Visualing the mutation signatures and memberships
+
+Currently, we have provided 
+
+
