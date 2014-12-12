@@ -10,6 +10,7 @@ vignette: >
 ---
 
 
+
 The R package `pmsignature` is developed 
 for efficiently extracting characteristic mutation patterns (mutation signatures) 
 from the set of mutations collected typically from cancer genome sequencing data.
@@ -82,7 +83,7 @@ After installing `pmsignature`,
 you can find the above example file at the directory where pmsignature is installed.
 
 ```
-inputFile <- paste(.libPaths(), "/pmsignature/extdata/hoang_ind5_dir.txt", sep="");
+inputFile <- system.file("extdata", "hoang.ind5_dir.txt", package="pmsignature");
 ```
 
 For converting your own mutation list data,
@@ -96,7 +97,7 @@ Also, you might want to use the background signature files.
 The background data used in the original paper can be found at:
 
 ```
-bgFile <- paste(.libPaths(), "/pmsignature/bgdata/bg_ind5_dir.txt", sep="");
+bgFile <- system.file("bgdata", "bg.ind5_dir.txt", package="pmsignature");
 ```
 
 ### Read input data

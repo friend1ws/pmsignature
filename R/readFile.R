@@ -24,3 +24,14 @@ readRawMutFile <- function(infile) {
   return(G);
 
 }
+
+#' Read and format the background vector data
+#' 
+#' @param bgfile the path for the background mutation signature file
+#' @export
+readBGFile <- function(bgfile) {
+  
+  adata <- read.table(bgfile, sep="\t");
+  return(adata[,2]);
+
+}
