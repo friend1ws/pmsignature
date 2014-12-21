@@ -63,6 +63,18 @@ convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
     .Call('pmsignature_convertFromTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum, isBackground)
 }
 
+updateTheta_NormalizedSparseC <- function(patternList, sparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
+    .Call('pmsignature_updateTheta_NormalizedSparseC', PACKAGE = 'pmsignature', patternList, sparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
+}
+
+updateMstepFSparseC <- function(patternList, sparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground) {
+    .Call('pmsignature_updateMstepFSparseC', PACKAGE = 'pmsignature', patternList, sparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground)
+}
+
+updateMstepQC <- function(patternList, sparseCount, nTheta, signatureNum, sampleNum, patternNum) {
+    .Call('pmsignature_updateMstepQC', PACKAGE = 'pmsignature', patternList, sparseCount, nTheta, signatureNum, sampleNum, patternNum)
+}
+
 #' Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step)
 #' 
 #' @param vF F (converted to a vector)

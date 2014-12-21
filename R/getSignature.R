@@ -10,7 +10,7 @@
 #' @importFrom Rcpp sourceCpp
 #' @importFrom turboEM turboem
 #' @export
-getPMSignature <- function(G, K, fdim, isBG, BG0, numInit) {
+getPMSignature <- function(G, K, fdim, isBG, BG0, numInit = 10) {
   
   if (isBG) {
     varK <- K - 1;
