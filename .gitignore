@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 inst/doc
+.DS_Store
+R/.DS_Store
+man/.DS_Store
+src/.DS_Store

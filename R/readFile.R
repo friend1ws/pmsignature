@@ -39,6 +39,8 @@ readRawMutfeatFile <- function(infile) {
 #' @param infile the path for the input file for the mutation data.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
+#' 
+#' VariantAnnotation::VRanges
 #' @export
 readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
 
@@ -61,7 +63,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
 
   gr = GenomicRanges::granges(vr) ## drop mcols
 
-  ranges = resize(gr, numBases, fix = "center")
+  ranges = GenomicRanges::resize(gr, numBases, fix = "center")
   context = Biostrings::getSeq(BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, ranges);
 
   ref_base = Biostrings::DNAStringSet(VariantAnnotation::ref(vr));
@@ -141,10 +143,10 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
     if (baseInd == centerInd) {
       next;
     }
-    mutFeatures[which(subseq(context, start = baseInd, end = baseInd) == "A"), columnInd] <- 1;
-    mutFeatures[which(subseq(context, start = baseInd, end = baseInd) == "C"), columnInd] <- 2;
-    mutFeatures[which(subseq(context, start = baseInd, end = baseInd) == "G"), columnInd] <- 3;
-    mutFeatures[which(subseq(context, start = baseInd, end = baseInd) == "T"), columnInd] <- 4;
+    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "A"), columnInd] <- 1;
+    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), columnInd] <- 2;
+    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), columnInd] <- 3;
+    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), columnInd] <- 4;
     columnInd <- columnInd + 1;
   }
 
@@ -153,9 +155,9 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
     mutFeatures[which(strandInfo == "-"), length(fdim)] <- 2;    
   }
 
-  suSampleStr <- sort(unique(sampleNames(vr)));
+  suSampleStr <- sort(unique(VariantAnnotation::sampleNames(vr)));
   lookupSampleInd <- 1:length(suSampleStr);
-  sampleIDs = lookupSampleInd[sampleNames(vr)];
+  sampleIDs = lookupSampleInd[VariantAnnotation::sampleNames(vr)];
 
 
   featStr <- apply(mutFeatures, 1, paste0, collapse=",");
