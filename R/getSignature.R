@@ -17,17 +17,14 @@ getPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, numInit = 10) {
     varK <- K;
   }
 
-  N <- G[[1]];
+  sampleNum <- G[[1]];
   fdim <- G[[2]];
-  # M <- prod(fdim);
-  # N <- nrow(G);
   
   tempL <- -Inf;
   tempPar <- c();
   for (kkk in 1:numInit) {
     
     F <- array(0, c(varK, length(fdim), max(fdim)));
-    Q <- matrix(0, K, N);
     
     for (k in 1:varK) {
       for (kk in 1:length(fdim)) {
@@ -37,10 +34,10 @@ getPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, numInit = 10) {
     }
     
 
-    Q <- matrix(rgamma(N * K, 1, 1), K, N);
+    Q <- matrix(rgamma(sampleNum * K, 1, 1), K, sampleNum);
     Q <- sweep(Q, 2, apply(Q, 2, sum), `/`)
     
-    p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, N));
+    p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, sampleNum));
     Y <- list(G, K, isBG, BG0);  
     
     res1 <- turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
@@ -55,11 +52,11 @@ getPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, numInit = 10) {
   }
   
   lenF <- varK * (sum(fdim) - length(fdim));
-  lenQ <- N * (K - 1);
+  lenQ <- sampleNum * (K - 1);
   F <- convertFromTurbo_F(tempPar[1:lenF], fdim, K, isBG);
-  Q <- convertFromTurbo_Q(tempPar[(lenF + 1):(lenF + lenQ)], K, N);
+  Q <- convertFromTurbo_Q(tempPar[(lenF + 1):(lenF + lenQ)], K, sampleNum);
   dim(F) <- c(varK, length(fdim), max(fdim));
-  dim(Q) <- c(N, K);
+  dim(Q) <- c(sampleNum, K);
   
   return(list(F, Q, tempL))
   
@@ -84,7 +81,7 @@ bootPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, F0, Q0, bootNum = 0) {
     varK <- K;
   }
   
-  N <- G[[1]];
+  sampleNum <- G[[1]];
   fdim <- G[[2]];
   
   sqF <- array(0, c(bootNum, varK, length(fdim), max(fdim)));
@@ -92,21 +89,24 @@ bootPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, F0, Q0, bootNum = 0) {
   
   for (bbb in 1:bootNum) {
     
-    bootG <- matrix(0, N, M);
-    for (n in 1:N) {
+    ##########
+    # This part is under construction!!!!
+    bootG <- matrix(0, sampleNum, M);
+    for (n in 1:sampleNum) {
       tempG <- table(sample(1:M, sum(G[n,]), replace=TRUE, prob=G[n,] / sum(G[n,])));
       bootG[n,as.integer(names(tempG))] <- as.integer(tempG);
     }
+    ##########
     
-    p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(Q0), K, N));
+    p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(Q0), K, sampleNum));
     Y <- list(bootG, fdim, K, N, M, isBG, BG0);  
     
     res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
     
     lenF <- varK * (sum(fdim) - length(fdim));
-    lenQ <- N * (K - 1);
+    lenQ <- sampleNum * (K - 1);
     F <- convertFromTurbo_F(res1$par[1:lenF], fdim, K, isBG);
-    Q <- convertFromTurbo_Q(res1$par[(lenF + 1):(lenF + lenQ)], K, N);
+    Q <- convertFromTurbo_Q(res1$par[(lenF + 1):(lenF + lenQ)], K, sampleNum);
     dim(F) <- c(varK, length(fdim), max(fdim));
     dim(Q) <- c(N, K);
     
@@ -114,7 +114,7 @@ bootPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, F0, Q0, bootNum = 0) {
       sqF[bbb,k,,] <- (F[k,,] - F0[k,,])^2;
     }
     
-    for (n in 1:N) {
+    for (n in 1:sampleNum) {
       sqQ[bbb,,] <- (Q[n,] - Q0[n,])^2;
     }
     
@@ -154,11 +154,11 @@ updatePMSParam <- function(p, y) {
   }
   
   lenF <- varK * (sum(fdim) - length(fdim));
-  lenQ <- (K - 1) * N;
+  lenQ <- (K - 1) * sampleNum;
   F <- convertFromTurbo_F(p[1:lenF], fdim, K, isBG);
-  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, N);
+  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum);
   
-  dim(Q) <- c(N, K);
+  dim(Q) <- c(sampleNum, K);
   Q <- t(Q);
   ####################
   # E-step
@@ -170,12 +170,12 @@ updatePMSParam <- function(p, y) {
   F_Q <- updateMstepFQC(as.vector(patternList), as.vector(sparseCount), as.vector(Theta), fdim, K, sampleNum, patternNum, samplePatternNum, isBG);
   #########################################
   F <- F_Q[1:(varK * length(fdim) * max(fdim))];
-  Q <- F_Q[(varK * length(fdim) * max(fdim) + 1):(varK * length(fdim) * max(fdim) + K * N)];
+  Q <- F_Q[(varK * length(fdim) * max(fdim) + 1):(varK * length(fdim) * max(fdim) + K * sampleNum)];
   dim(F) <- c(varK, length(fdim), max(fdim));
-  dim(Q) <- c(K, N);
+  dim(Q) <- c(K, sampleNum);
   Q <- t(Q);
   
-  return(c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(Q), K, N)));
+  return(c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(Q), K, sampleNum)));
   
 }
 
@@ -207,11 +207,11 @@ calcPMSLikelihood <- function(p, y) {
   }
   
   lenF <- varK * (sum(fdim) - length(fdim));
-  lenQ <- (K - 1) * N;
+  lenQ <- (K - 1) * sampleNum;
   F <- convertFromTurbo_F(p[1:lenF], fdim, K, isBG);
-  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, N);
+  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum);
   
-  dim(Q) <- c(N, K);
+  dim(Q) <- c(sampleNum, K);
   Q <- t(Q);
   ####################
   
