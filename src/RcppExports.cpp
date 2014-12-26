@@ -109,90 +109,25 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// updateTheta_NormalizedSparseC
-NumericVector updateTheta_NormalizedSparseC(NumericVector patternList, NumericVector sparseCount, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground, NumericVector vF0);
-RcppExport SEXP pmsignature_updateTheta_NormalizedSparseC(SEXP patternListSEXP, SEXP sparseCountSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type patternList(patternListSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type sparseCount(sparseCountSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type vF(vFSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type vQ(vQSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type fdim(fdimSEXP );
-        Rcpp::traits::input_parameter< int >::type signatureNum(signatureNumSEXP );
-        Rcpp::traits::input_parameter< int >::type sampleNum(sampleNumSEXP );
-        Rcpp::traits::input_parameter< int >::type patternNum(patternNumSEXP );
-        Rcpp::traits::input_parameter< int >::type samplePatternNum(samplePatternNumSEXP );
-        Rcpp::traits::input_parameter< bool >::type isBackground(isBackgroundSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type vF0(vF0SEXP );
-        NumericVector __result = updateTheta_NormalizedSparseC(patternList, sparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// updateMstepFSparseC
-NumericVector updateMstepFSparseC(NumericVector patternList, NumericVector sparseCount, NumericVector nTheta, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground);
-RcppExport SEXP pmsignature_updateMstepFSparseC(SEXP patternListSEXP, SEXP sparseCountSEXP, SEXP nThetaSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type patternList(patternListSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type sparseCount(sparseCountSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type nTheta(nThetaSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type fdim(fdimSEXP );
-        Rcpp::traits::input_parameter< int >::type signatureNum(signatureNumSEXP );
-        Rcpp::traits::input_parameter< int >::type sampleNum(sampleNumSEXP );
-        Rcpp::traits::input_parameter< int >::type patternNum(patternNumSEXP );
-        Rcpp::traits::input_parameter< int >::type samplePatternNum(samplePatternNumSEXP );
-        Rcpp::traits::input_parameter< bool >::type isBackground(isBackgroundSEXP );
-        NumericVector __result = updateMstepFSparseC(patternList, sparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// updateMstepQC
-NumericVector updateMstepQC(NumericVector patternList, NumericVector sparseCount, NumericVector nTheta, int signatureNum, int sampleNum, int patternNum);
-RcppExport SEXP pmsignature_updateMstepQC(SEXP patternListSEXP, SEXP sparseCountSEXP, SEXP nThetaSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type patternList(patternListSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type sparseCount(sparseCountSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type nTheta(nThetaSEXP );
-        Rcpp::traits::input_parameter< int >::type signatureNum(signatureNumSEXP );
-        Rcpp::traits::input_parameter< int >::type sampleNum(sampleNumSEXP );
-        Rcpp::traits::input_parameter< int >::type patternNum(patternNumSEXP );
-        NumericVector __result = updateMstepQC(patternList, sparseCount, nTheta, signatureNum, sampleNum, patternNum);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // updateTheta_NormalizedC
-NumericVector updateTheta_NormalizedC(NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, bool isBackground, NumericVector vF0);
-RcppExport SEXP pmsignature_updateTheta_NormalizedC(SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
+NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground, NumericVector vF0);
+RcppExport SEXP pmsignature_updateTheta_NormalizedC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< NumericVector >::type vPatternList(vPatternListSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type vSparseCount(vSparseCountSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type vF(vFSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type vQ(vQSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type fdim(fdimSEXP );
         Rcpp::traits::input_parameter< int >::type signatureNum(signatureNumSEXP );
         Rcpp::traits::input_parameter< int >::type sampleNum(sampleNumSEXP );
         Rcpp::traits::input_parameter< int >::type patternNum(patternNumSEXP );
+        Rcpp::traits::input_parameter< int >::type samplePatternNum(samplePatternNumSEXP );
         Rcpp::traits::input_parameter< bool >::type isBackground(isBackgroundSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type vF0(vF0SEXP );
-        NumericVector __result = updateTheta_NormalizedC(vF, vQ, fdim, signatureNum, sampleNum, patternNum, isBackground, vF0);
+        NumericVector __result = updateTheta_NormalizedC(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -200,62 +135,47 @@ BEGIN_RCPP
 END_RCPP
 }
 // getLogLikelihoodC
-double getLogLikelihoodC(NumericVector vG, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, bool isBackground, NumericVector vF0);
-RcppExport SEXP pmsignature_getLogLikelihoodC(SEXP vGSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
+double getLogLikelihoodC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground, NumericVector vF0);
+RcppExport SEXP pmsignature_getLogLikelihoodC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type vG(vGSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type vPatternList(vPatternListSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type vSparseCount(vSparseCountSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type vF(vFSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type vQ(vQSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type fdim(fdimSEXP );
         Rcpp::traits::input_parameter< int >::type signatureNum(signatureNumSEXP );
         Rcpp::traits::input_parameter< int >::type sampleNum(sampleNumSEXP );
         Rcpp::traits::input_parameter< int >::type patternNum(patternNumSEXP );
+        Rcpp::traits::input_parameter< int >::type samplePatternNum(samplePatternNumSEXP );
         Rcpp::traits::input_parameter< bool >::type isBackground(isBackgroundSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type vF0(vF0SEXP );
-        double __result = getLogLikelihoodC(vG, vF, vQ, fdim, signatureNum, sampleNum, patternNum, isBackground, vF0);
+        double __result = getLogLikelihoodC(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP
 }
-// updateMstepFC
-NumericVector updateMstepFC(NumericVector vTheta, NumericVector vG, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, bool isBackground);
-RcppExport SEXP pmsignature_updateMstepFC(SEXP vThetaSEXP, SEXP vGSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP isBackgroundSEXP) {
+// updateMstepFQC
+NumericVector updateMstepFQC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector nTheta, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground);
+RcppExport SEXP pmsignature_updateMstepFQC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP nThetaSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type vTheta(vThetaSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type vG(vGSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type vPatternList(vPatternListSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type vSparseCount(vSparseCountSEXP );
+        Rcpp::traits::input_parameter< NumericVector >::type nTheta(nThetaSEXP );
         Rcpp::traits::input_parameter< NumericVector >::type fdim(fdimSEXP );
         Rcpp::traits::input_parameter< int >::type signatureNum(signatureNumSEXP );
         Rcpp::traits::input_parameter< int >::type sampleNum(sampleNumSEXP );
         Rcpp::traits::input_parameter< int >::type patternNum(patternNumSEXP );
+        Rcpp::traits::input_parameter< int >::type samplePatternNum(samplePatternNumSEXP );
         Rcpp::traits::input_parameter< bool >::type isBackground(isBackgroundSEXP );
-        NumericVector __result = updateMstepFC(vTheta, vG, fdim, signatureNum, sampleNum, patternNum, isBackground);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
-// updateMstepQC
-NumericVector updateMstepQC(NumericVector vTheta, NumericVector vG, int signatureNum, int sampleNum, int patternNum);
-RcppExport SEXP pmsignature_updateMstepQC(SEXP vThetaSEXP, SEXP vGSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< NumericVector >::type vTheta(vThetaSEXP );
-        Rcpp::traits::input_parameter< NumericVector >::type vG(vGSEXP );
-        Rcpp::traits::input_parameter< int >::type signatureNum(signatureNumSEXP );
-        Rcpp::traits::input_parameter< int >::type sampleNum(sampleNumSEXP );
-        Rcpp::traits::input_parameter< int >::type patternNum(patternNumSEXP );
-        NumericVector __result = updateMstepQC(vTheta, vG, signatureNum, sampleNum, patternNum);
+        NumericVector __result = updateMstepFQC(vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

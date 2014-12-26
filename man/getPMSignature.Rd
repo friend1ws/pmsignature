@@ -3,14 +3,12 @@
 \alias{getPMSignature}
 \title{Obtain the parameters for mutation signatures and memberships}
 \usage{
-getPMSignature(G, K, fdim, isBG, BG0, numInit)
+getPMSignature(G, K, isBG = FALSE, BG0 = 0, numInit = 10)
 }
 \arguments{
-\item{G}{the matrix of mutation feature data}
+\item{G}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}
 
 \item{K}{the number of mutation signatures}
-
-\item{fdim}{a vector specifying the number of possible values for each mutation signature}
 
 \item{isBG}{the logical value showing whether a background mutaiton features is included or not}
 

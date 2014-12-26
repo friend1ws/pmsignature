@@ -63,72 +63,57 @@ convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
     .Call('pmsignature_convertFromTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum, isBackground)
 }
 
-updateTheta_NormalizedSparseC <- function(patternList, sparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
-    .Call('pmsignature_updateTheta_NormalizedSparseC', PACKAGE = 'pmsignature', patternList, sparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
-}
-
-updateMstepFSparseC <- function(patternList, sparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground) {
-    .Call('pmsignature_updateMstepFSparseC', PACKAGE = 'pmsignature', patternList, sparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground)
-}
-
-updateMstepQC <- function(patternList, sparseCount, nTheta, signatureNum, sampleNum, patternNum) {
-    .Call('pmsignature_updateMstepQC', PACKAGE = 'pmsignature', patternList, sparseCount, nTheta, signatureNum, sampleNum, patternNum)
-}
-
 #' Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step)
 #' 
+#' @param vPatternList The list of possible mutation features (converted to a vector)
+#' @param vSparseCount The table showing (mutation feature, sample, the number of mutation) (converted to a vector)
 #' @param vF F (converted to a vector)
 #' @param vQ Q (converted to a vector)
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
 #' @param patternNum the number of possible combinations of all the mutation features
+#' @param samplePatternNum the number of possible combination of samples and mutation patternns
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
 #' @export
-updateTheta_NormalizedC <- function(vF, vQ, fdim, signatureNum, sampleNum, patternNum, isBackground, vF0) {
-    .Call('pmsignature_updateTheta_NormalizedC', PACKAGE = 'pmsignature', vF, vQ, fdim, signatureNum, sampleNum, patternNum, isBackground, vF0)
+updateTheta_NormalizedC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
+    .Call('pmsignature_updateTheta_NormalizedC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
 }
 
 #' Calculate the value of the log-likelihood for given parameters
 #' 
-#' @param vG the matrix of mutation feature data
-#' @param vF the parameter F (converted to a vector)
-#' @param vQ the parameter Q (converted to a vector)
+#' @param vPatternList The list of possible mutation features (converted to a vector)
+#' @param vSparseCount The table showing (mutation feature, sample, the number of mutation) (converted to a vector)
+#' @param vF F (converted to a vector)
+#' @param vQ Q (converted to a vector)
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
 #' @param patternNum the number of possible combinations of all the mutation features
+#' @param samplePatternNum the number of possible combination of samples and mutation patternns
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
 #' @export
-getLogLikelihoodC <- function(vG, vF, vQ, fdim, signatureNum, sampleNum, patternNum, isBackground, vF0) {
-    .Call('pmsignature_getLogLikelihoodC', PACKAGE = 'pmsignature', vG, vF, vQ, fdim, signatureNum, sampleNum, patternNum, isBackground, vF0)
+getLogLikelihoodC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
+    .Call('pmsignature_getLogLikelihoodC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
 }
 
-#' Update the parameter F (M-step in the EM-algorithm)
+#' Update the parameter F and Q (M-step in the EM-algorithm)
 #' 
-#' @param vTheta theparameter Theta (converted to a vector)
-#' @param vG the matrix of mutation feature data
+#' @param vPatternList The list of possible mutation features (converted to a vector)
+#' @param vSparseCount The table showing (mutation feature, sample, the number of mutation) (converted to a vector)
+#' @param vF F (converted to a vector)
+#' @param vQ Q (converted to a vector)
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
 #' @param patternNum the number of possible combinations of all the mutation features
+#' @param samplePatternNum the number of possible combination of samples and mutation patternns
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
+#' @param vF0 a background mutaiton features
 #' @export
-updateMstepFC <- function(vTheta, vG, fdim, signatureNum, sampleNum, patternNum, isBackground) {
-    .Call('pmsignature_updateMstepFC', PACKAGE = 'pmsignature', vTheta, vG, fdim, signatureNum, sampleNum, patternNum, isBackground)
-}
-
-#' Update the parameter Q (M-step in the EM-algorithm)
-#' 
-#' @param vTheta theparameter Theta (converted to a vector)
-#' @param vG the matrix of mutation feature data
-#' @param signatureNum the number of mutation signatures
-#' @param sampleNum the number of cancer genomes
-#' @param patternNum the number of possible combinations of all the mutation features
-#' @export
-updateMstepQC <- function(vTheta, vG, signatureNum, sampleNum, patternNum) {
-    .Call('pmsignature_updateMstepQC', PACKAGE = 'pmsignature', vTheta, vG, signatureNum, sampleNum, patternNum)
+updateMstepFQC <- function(vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground) {
+    .Call('pmsignature_updateMstepFQC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground)
 }
 

@@ -17,7 +17,9 @@ BugReports: https://github.com/friend1ws/pmsignature/issues
 LazyData: true
 Imports:
     turboEM,
-    Rcpp
+    Rcpp,
+    VariantAnnotation,
+    BSgenome.Hsapiens.UCSC.hg19
 LinkingTo: Rcpp
 Suggests:
     knitr
