@@ -55,20 +55,20 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
 
   mutFile <- read.table(infile, sep="\t", header=FALSE);
 
-  vr = VariantAnnotation::VRanges(mutFile[,2], IRanges::IRanges(mutFile[,3], mutFile[,3]),
+  vr <- VariantAnnotation::VRanges(mutFile[,2], IRanges::IRanges(mutFile[,3], mutFile[,3]),
                ref = mutFile[,4],
                alt = mutFile[,5],
                sampleNames = mutFile[,1]
                 )
 
-  gr = GenomicRanges::granges(vr) ## drop mcols
+  gr <- GenomicRanges::granges(vr) ## drop mcols
 
-  ranges = GenomicRanges::resize(gr, numBases, fix = "center")
-  context = Biostrings::getSeq(BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, ranges);
+  ranges <- GenomicRanges::resize(gr, numBases, fix = "center")
+  context <- Biostrings::getSeq(BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, ranges);
 
-  ref_base = Biostrings::DNAStringSet(VariantAnnotation::ref(vr));
-  alt_base = Biostrings::DNAStringSet(VariantAnnotation::alt(vr));
-
+  ref_base <- Biostrings::DNAStringSet(VariantAnnotation::ref(vr));
+  alt_base <- Biostrings::DNAStringSet(VariantAnnotation::alt(vr));
+  sampleName_str <- VariantAnnotation::sampleNames(vr);
 
   removeInd <- which(XVector::subseq(context, start = centerInd, end = centerInd) != ref_base);
   if (sum(removeInd) > 0) {
@@ -76,6 +76,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
     context <- context[-removeInd];
     ref_base <- ref_base[-removeInd];
     alt_base <- alt_base[-removeInd];
+    sampleName_str <- sampleName_str[-removeInd];
   }
 
   alphabetFreq <- Biostrings::alphabetFrequency(alt_base);
@@ -85,15 +86,17 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
     context <- context[-removeInd];
     ref_base <- ref_base[-removeInd];
     alt_base <- alt_base[-removeInd];
+    sampleName_str <- sampleName_str[-removeInd];
   }
 
   alphabetFreq <- Biostrings::alphabetFrequency(context);
-  removedInd <- which(rowSums(alphabetFreq[,1:4]) != numBases);
+  removeInd <- which(alphabetFreq[,"A"] + alphabetFreq[,"C"] + alphabetFreq[,"G"] + alphabetFreq[,"T"] != numBases);
   if (sum(removeInd) > 0) {
     context <- context[-removeInd];
     ref_base <- ref_base[-removeInd];
     alt_base <- alt_base[-removeInd];
-    warning(paste("The characters other than (A, C, G, T) are included in flanking bases of", sum(removeInd), "mutations. We have removed them."));
+    sampleName_str <- sampleName_str[-removeInd];
+    warning(paste("The characters other than (A, C, G, T) are included in flanking bases of", length(removeInd), "mutations. We have removed them."));
   }
 
   revCompInd <- which(as.character(XVector::subseq(context, start = centerInd, end = centerInd)) %in% c("A", "G"));
@@ -125,6 +128,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
     ref_base <- ref_base[strandInfo != "*"];
     alt_base <- alt_base[strandInfo != "*"];
     strandInfo <- strandInfo[strandInfo != "*"];
+    sampleName_str <- sampleName_str[strandInfo != "*"];
     
   }
   
@@ -155,9 +159,9 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
     mutFeatures[which(strandInfo == "-"), length(fdim)] <- 2;    
   }
 
-  suSampleStr <- sort(unique(VariantAnnotation::sampleNames(vr)));
+  suSampleStr <- sort(unique(sampleName_str));
   lookupSampleInd <- 1:length(suSampleStr);
-  sampleIDs = lookupSampleInd[VariantAnnotation::sampleNames(vr)];
+  sampleIDs = lookupSampleInd[sampleName_str];
 
 
   featStr <- apply(mutFeatures, 1, paste0, collapse=",");
