@@ -1,6 +1,6 @@
 #' Obtain the parameters for mutation signatures and memberships
 #' 
-#' @param G the mutation data processed in the function (readMutFile or readRawMutfeatFile)
+#' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
 #' @param K the number of mutation signatures
 #' @param isBG the logical value showing whether a background mutaiton features is included or not
 #' @param BG0 a background mutaiton features
@@ -9,7 +9,7 @@
 #' @importFrom Rcpp sourceCpp
 #' @importFrom turboEM turboem
 #' @export
-getPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, numInit = 10) {
+getPMSignature <- function(mutationFeatureData, K, isBG = FALSE, BG0 = 0, numInit = 10) {
   
   if (isBG) {
     varK <- K - 1;
@@ -17,8 +17,8 @@ getPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, numInit = 10) {
     varK <- K;
   }
 
-  sampleNum <- G[[1]];
-  fdim <- G[[2]];
+  sampleNum <- length(slot(mutationFeatureData, "sampleList"));
+  fdim <- slot(mutationFeatureData, "possibleFeatures");
   
   tempL <- -Inf;
   tempPar <- c();
@@ -38,7 +38,7 @@ getPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, numInit = 10) {
     Q <- sweep(Q, 2, apply(Q, 2, sum), `/`)
     
     p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, sampleNum));
-    Y <- list(G, K, isBG, BG0);  
+    Y <- list(list(sampleNum, fdim, slot(G, "featureVectorList"), slot(G, "countData")), K, isBG, BG0);  
     
     res1 <- turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4,  maxiter = 3000));
     
@@ -58,8 +58,19 @@ getPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, numInit = 10) {
   dim(F) <- c(varK, length(fdim), max(fdim));
   dim(Q) <- c(sampleNum, K);
   
-  return(list(F, Q, tempL))
-  
+  # return(list(F, Q, tempL))
+  return(new(Class = "EstimatedParameters", 
+             type = slot(mutationFeatureData, "type"),
+             flankingBasesNum = slot(mutationFeatureData, "flankingBasesNum"),
+             transcriptionDirection = slot(mutationFeatureData, "transcriptionDirection"),
+             possibleFeatures = slot(mutationFeatureData, "possibleFeatures"),
+             sampleList = slot(mutationFeatureData, "sampleList"),
+             SignatureNum = as.integer(K),
+             isBackGround = isBG,
+             signatureFeatureDistribution = F,
+             sampleSignatureDistibution = Q)
+  )
+ 
 }
 
 

@@ -44,9 +44,6 @@ readRawMutfeatFile <- function(infile) {
 #' @export
 readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
 
-  # library(VariantAnnotation);
-  # library(BSgenome.Hsapiens.UCSC.hg19);
-
   fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
   if (numBases %% 2 != 1) {
     stop("numBases should be odd numbers");
@@ -68,7 +65,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
 
   ref_base <- Biostrings::DNAStringSet(VariantAnnotation::ref(vr));
   alt_base <- Biostrings::DNAStringSet(VariantAnnotation::alt(vr));
-  sampleName_str <- VariantAnnotation::sampleNames(vr);
+  sampleName_str <- as.character(VariantAnnotation::sampleNames(vr));
 
   removeInd <- which(XVector::subseq(context, start = centerInd, end = centerInd) != ref_base);
   if (sum(removeInd) > 0) {
@@ -161,6 +158,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
 
   suSampleStr <- sort(unique(sampleName_str));
   lookupSampleInd <- 1:length(suSampleStr);
+  names(lookupSampleInd) <- suSampleStr;
   sampleIDs = lookupSampleInd[sampleName_str];
 
 
@@ -178,9 +176,20 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
 
   mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(5)));
   rownames(mutFeatList) <- NULL;
+  rownames(procCount) <- NULL;
 
-  return(list(length(suSampleStr), fdim, t(mutFeatList), t(procCount)));
-  
+  # return(list(length(suSampleStr), fdim, t(mutFeatList), t(procCount)));
+  return(new(Class = "MutationFeatureData", 
+             type = "independent",
+             flankingBasesNum = as.integer(numBases),
+             transcriptionDirection = trDir,
+             possibleFeatures = as.integer(fdim),
+             featureVectorList = t(mutFeatList),
+             sampleList = suSampleStr,
+             countData = t(procCount)
+             )
+  )
+
 }
 
 

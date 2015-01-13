@@ -1,3 +1,79 @@
+setGeneric("visPMSignature", function(object, K, baseCol) {
+  standardGeneric("visPMSignature")
+})
+
+setMethod("visPMSignature", signature(object = "EstimatedParameters"), 
+          function(object, K = 1, baseCol = c(4, 7, 3, 1)) {
+
+            vF <- object@signatureFeatureDistribution[K,,];
+            numBases <- object@flankingBasesNum;
+            centerBase <- (1 + numBases) / 2;
+  
+            v1 <- vF[1,1:6];
+            V2 <- vF[2:(numBases),1:4];
+            A <- matrix(0, numBases, 4);
+            B <- matrix(0, 4, 4);
+  
+            for (l in 1:numBases) {
+              if (l < centerBase) {
+                A[l, ] <- V2[l, ];
+              } else if (l > centerBase) {
+                A[l, ] <- V2[l - 1, ];
+              }
+            }
+            A[centerBase,2] <- sum(v1[1:3]);
+            A[centerBase,4] <- sum(v1[4:6]);
+  
+            B[2, c(1, 3, 4)] <- v1[1:3] / sum(v1[1:3]);
+            B[4, c(1, 2, 3)] <- v1[4:6] / sum(v1[4:6]);
+
+            num2base <- c("A", "C", "G", "T");
+  
+            frame();
+            plot.window(xlim=c(-0.25, 1.25 * numBases + 0.25), ylim=c(-0.25, 3.25));
+ 
+            startx <- 0;
+            for(l in 1:numBases) {
+    
+              for(w in 1:4) {
+                endx <- startx + A[l,w]
+                polygon(c(startx, endx, endx, startx), c(0, 0, 1, 1), col=baseCol[w], border=F);
+                if (endx - startx > 1 / 4) {
+                  text(0.5 * (endx + startx), 0.5, num2base[w], col="white", cex=1.2)
+                }
+                startx <- endx;
+              }
+              startx <- startx + 0.25;
+            }
+  
+            startx <- (centerBase - 1) * 1.25;
+            for (w in 1:4) {
+              starty <- 2;
+              endx <- startx + A[3,w];
+              for(ww in 1:4) {
+                endy <- starty + B[w,ww];
+                polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[ww], border=F);
+                if ((endy - starty > 1 / 4) & (endx - startx > 1 / 4)) {
+                  text(0.5 * (endx + startx), 0.5 * (endy + starty), num2base[ww], col="white", cex=1.2)
+                }
+                starty <- endy;
+              }
+              startx <- endx
+              starty <- endy;
+            }
+  
+           ##########
+           # draw arrow
+            xs <- c(1 /3, 2 / 3, 2 / 3, 5 / 6, 1 / 2, 1 / 6, 1 / 3, 1 / 3) + (centerBase - 1) * 1.25;
+            ys <- c(1 / 4, 1 / 4, 1 / 2, 1 / 2, 3 / 4, 1 / 2, 1 / 2, 1 / 4) + 1;
+  
+            polygon(xs, ys, col=8, border=F);
+            ##########
+  
+          }
+)
+
+  
 #' @title visualize probabisitic mutaiton signature for the independent model
 #' with two 5' and 3' bases 
 #' @description Generate visualization of mutation signatures for the model with
