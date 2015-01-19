@@ -49,7 +49,7 @@ setMethod("visPMSignature", signature(object = "EstimatedParameters"),
             startx <- (centerBase - 1) * 1.25;
             for (w in 1:4) {
               starty <- 2;
-              endx <- startx + A[3,w];
+              endx <- startx + A[centerBase,w];
               for(ww in 1:4) {
                 endy <- starty + B[w,ww];
                 polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[ww], border=F);

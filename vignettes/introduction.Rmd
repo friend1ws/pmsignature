@@ -34,7 +34,7 @@ We will improve the program so that it can accept VCF format files.
 The input data must be a tab-delimited text file.
 An example of input data for `pmsignature` is as follows:
 
-
+  1 | 2 | 3 | 4 | 5 | 6 | 7 |
 ----|---|---|---|---|---|---|
  26 | 6 |   |   |   |   |   |
   6 | 4 | 4 | 4 | 4 | 2 |   |
