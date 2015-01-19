@@ -174,7 +174,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
   w <- which(tableCount > 0, arr.ind=TRUE);
   procCount <- cbind(w[,2], w[,1], tableCount[w]);
 
-  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(5)));
+  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases)));
   rownames(mutFeatList) <- NULL;
   rownames(procCount) <- NULL;
 

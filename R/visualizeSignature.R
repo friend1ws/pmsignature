@@ -37,7 +37,7 @@ setMethod("visPMSignature", signature(object = "EstimatedParameters"),
     
               for(w in 1:4) {
                 endx <- startx + A[l,w]
-                polygon(c(startx, endx, endx, startx), c(0, 0, 1, 1), col=baseCol[w], border=F);
+                polygon(c(startx, endx, endx, startx), c(0, 0, 1, 1), col = baseCol[w], border=F);
                 if (endx - startx > 1 / 4) {
                   text(0.5 * (endx + startx), 0.5, num2base[w], col="white", cex=1.2)
                 }
