@@ -19,8 +19,14 @@ Imports:
     turboEM,
     Rcpp,
     VariantAnnotation,
+    GenomicRanges,
+    S4Vectors,
+    IRanges,
+    XVector,
+    Biostrings,
     BSgenome.Hsapiens.UCSC.hg19
 LinkingTo: Rcpp
 Suggests:
+    TxDb.Hsapiens.UCSC.hg19.knownGene,
     knitr
 VignetteBuilder: knitr

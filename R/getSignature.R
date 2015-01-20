@@ -7,7 +7,6 @@
 #' @param numInit the number of performing calculations with different initial values
 #' @useDynLib pmsignature
 #' @importFrom Rcpp sourceCpp
-#' @importFrom turboEM turboem
 #' @export
 getPMSignature <- function(mutationFeatureData, K, isBG = FALSE, BG0 = 0, numInit = 10) {
   
@@ -40,7 +39,7 @@ getPMSignature <- function(mutationFeatureData, K, isBG = FALSE, BG0 = 0, numIni
     p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, sampleNum));
     Y <- list(list(sampleNum, fdim, slot(G, "featureVectorList"), slot(G, "countData")), K, isBG, BG0);  
     
-    res1 <- turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4,  maxiter = 20000));
+    res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4,  maxiter = 20000));
     
     print(c(kkk, res1$itr, res1$runtime[3], res1$value.objfn));
     

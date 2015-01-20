@@ -107,7 +107,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent
   if (trDir == TRUE) {
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene;
     vr_txdb <- VariantAnnotation::locateVariants(vr, txdb, VariantAnnotation::AllVariants(), ignore.strand=TRUE);
-    vr_strand <- cbind(mcols(vr_txdb)@listData$QUERYID, as.vector(strand(vr_txdb)));
+    vr_strand <- cbind(S4Vectors::mcols(vr_txdb)@listData$QUERYID, as.character(S4Vectors::as.data.frame(strand(vr_txdb))$value));
     uvr_strand <- unique(vr_strand[vr_strand[, 2] != "*" ,], MARGIN=1);
     rmdup_uvr_strand <- uvr_strand[!duplicated(uvr_strand[, 1]), ];
     txdb_plus_vr_ind <- as.integer(rmdup_uvr_strand[rmdup_uvr_strand[, 2] == "+", 1]);
@@ -124,8 +124,8 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent
     context <- context[strandInfo != "*"];
     ref_base <- ref_base[strandInfo != "*"];
     alt_base <- alt_base[strandInfo != "*"];
-    strandInfo <- strandInfo[strandInfo != "*"];
     sampleName_str <- sampleName_str[strandInfo != "*"];
+    strandInfo <- strandInfo[strandInfo != "*"];
     
   }
   
@@ -159,7 +159,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent
   suSampleStr <- sort(unique(sampleName_str));
   lookupSampleInd <- 1:length(suSampleStr);
   names(lookupSampleInd) <- suSampleStr;
-  sampleIDs = lookupSampleInd[sampleName_str];
+  sampleIDs <- lookupSampleInd[sampleName_str];
 
 
   featStr <- apply(mutFeatures, 1, paste0, collapse=",");
@@ -174,7 +174,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent
   w <- which(tableCount > 0, arr.ind=TRUE);
   procCount <- cbind(w[,2], w[,1], tableCount[w]);
 
-  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases)));
+  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases + as.integer(trDir))));
   rownames(mutFeatList) <- NULL;
   rownames(procCount) <- NULL;
 
