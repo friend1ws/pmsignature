@@ -42,7 +42,7 @@ readRawMutfeatFile <- function(infile) {
 #' 
 #' VariantAnnotation::VRanges
 #' @export
-readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
+readMutFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
 
   fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
   if (numBases %% 2 != 1) {
@@ -107,7 +107,7 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE) {
   if (trDir == TRUE) {
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene;
     vr_txdb <- VariantAnnotation::locateVariants(vr, txdb, VariantAnnotation::AllVariants(), ignore.strand=TRUE);
-    vr_strand <- cbind(vr_txdb@elementMetadata@listData$QUERYID, as.vector(vr_txdb@strand));
+    vr_strand <- cbind(mcols(vr_txdb)@listData$QUERYID, as.vector(strand(vr_txdb)));
     uvr_strand <- unique(vr_strand[vr_strand[, 2] != "*" ,], MARGIN=1);
     rmdup_uvr_strand <- uvr_strand[!duplicated(uvr_strand[, 1]), ];
     txdb_plus_vr_ind <- as.integer(rmdup_uvr_strand[rmdup_uvr_strand[, 2] == "+", 1]);
