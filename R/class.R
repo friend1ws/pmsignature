@@ -84,17 +84,17 @@ setClass(
       }
     }
     # check for estimated sample signature distribution
-    if (any(object@sampleSignatureDistibution < 0) || any(object@sampleSignatureDistibution > 1)) {
+    if (any(object@sampleSignatureDistribution < 0) || any(object@sampleSignatureDistribution > 1)) {
       errors <- c(errors, "The estimated signature feature distribution value should be between 0 to 1");    
     }    
-    if (nrow(object@sampleSignatureDistibution) != length(object@sampleList)) {
+    if (nrow(object@sampleSignatureDistribution) != length(object@sampleList)) {
       errors <- c(errors, "Inconsistency in the number of samples and the estimated sample signature distibution");
     }
-    if (ncol(object@sampleSignatureDistibution) != object@SignatureNum) {
+    if (ncol(object@sampleSignatureDistribution) != object@SignatureNum) {
       errors <- c(errors, "Inconsistency in the number of signatures and the estimated sample signature distibution");
     }
-    for (n in 1:nrow(object@sampleSignatureDistibution)) {
-      if (abs(sum(object@sampleSignatureDistibution[n, ]) - 1) > 1e-10) {
+    for (n in 1:nrow(object@sampleSignatureDistribution)) {
+      if (abs(sum(object@sampleSignatureDistibutrion[n, ]) - 1) > 1e-10) {
         errors <- c(errors, paste("The estimated values should sum to 1 at the ", n, "-th sample", sep=""));
       }
     }      
