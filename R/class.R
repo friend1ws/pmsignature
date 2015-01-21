@@ -94,7 +94,7 @@ setClass(
       errors <- c(errors, "Inconsistency in the number of signatures and the estimated sample signature distibution");
     }
     for (n in 1:nrow(object@sampleSignatureDistribution)) {
-      if (abs(sum(object@sampleSignatureDistibutrion[n, ]) - 1) > 1e-10) {
+      if (abs(sum(object@sampleSignatureDistributrion[n, ]) - 1) > 1e-10) {
         errors <- c(errors, paste("The estimated values should sum to 1 at the ", n, "-th sample", sep=""));
       }
     }      
