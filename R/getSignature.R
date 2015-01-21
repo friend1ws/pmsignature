@@ -67,7 +67,7 @@ getPMSignature <- function(mutationFeatureData, K, isBG = FALSE, BG0 = 0, numIni
              SignatureNum = as.integer(K),
              isBackGround = isBG,
              signatureFeatureDistribution = F,
-             sampleSignatureDistibution = Q)
+             sampleSignatureDistribution = Q)
   )
  
 }
