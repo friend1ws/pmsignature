@@ -1,3 +1,4 @@
+#' @export
 setGeneric("visPMSignature", function(object, K = 1, baseCol) {
   standardGeneric("visPMSignature")
 })

@@ -1,3 +1,9 @@
+#' An S4 class to represent a mutation meta information common to many data types
+#'
+#'  @slot type type of data format (independent, full, custom)
+#'  @slot flankingBasesNum the number of flanking bases to consider (only apprecable for independent and full types)
+#'  @slot transcriptionDirection the flag representing whether transcription direction is considered or not
+#'  @slot possibleFeatures a vector representing the numbers of possible values for each mutation feature
 setClass("MetaInformation",
          representation = representation(
            "VIRTUAL",
@@ -8,15 +14,20 @@ setClass("MetaInformation",
          )
 )
            
-
+#' An S4 class representing the mutation data
+#' 
+#' @slot featureVectorList a list of feature vectors actually observed in the input mutation data
+#' @slot sampleList a list of sample names observed in the input mutation data
+#' @slot countData a matrix representing the number of mutations and samples.
+#'  The (first, second, third) colums are for (mutation pattern indice, sample indice, frequencies).
 setClass(
   Class = "MutationFeatureData",
   contains = "MetaInformation",
   representation = representation(
     featureVectorList = "matrix",
     sampleList = "character",
-    countData = "matrix" # The (first, second, third) colums are  for (mutation pattern indice, sample indice, frequencies).
-  ),
+    countData = "matrix"
+    ),
   validity = function(object) {
     errors <- character();
     # check for the consistency about the possible feature vector.
@@ -41,7 +52,13 @@ setClass(
   }
 )
 
-
+#' An S4 class representing the estimated parameters
+#' 
+#' @slot sampleList a list of sample names observed in the input mutation data
+#' @slot SignatureNum the number of mutation signatures specified at the time of estimation
+#' @slot isBackGround the flag showing whether the background signature data is used or not.
+#' @slot signatureFeatureDistribution estimated parameters for mutation signatures
+#' @slot sampleSignatureDistribution estimated parameters for memberships of mutation signatures for each sample
 setClass(
   Class = "EstimatedParameters",
   contains = "MetaInformation",
@@ -50,7 +67,7 @@ setClass(
     SignatureNum = "integer",
     isBackGround = "logical",
     signatureFeatureDistribution = "array",
-    sampleSignatureDistibution = "matrix"
+    sampleSignatureDistribution = "matrix"
   ),
   validity = function(object) {
     errors <- character();
