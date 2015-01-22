@@ -24,10 +24,10 @@ setMethod("visPMSignature",
             centerBase <- (1 + numBases) / 2;
             
             # soft colors
-            # visPMS_ind(vF, numBases, c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256)));
+            visPMS_ind(vF, numBases, c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256)));
 
             # humble colors
-            visPMS_ind(vF, numBases, c(rgb(0, 148, 83, max = 256), rgb(19, 110, 171, max = 256), rgb(223, 210, 56, max = 256), rgb(202, 71, 92, max = 256)));
+            # visPMS_ind(vF, numBases, c(rgb(0, 148, 83, max = 256), rgb(19, 110, 171, max = 256), rgb(223, 210, 56, max = 256), rgb(202, 71, 92, max = 256)));
             
           }
 )
