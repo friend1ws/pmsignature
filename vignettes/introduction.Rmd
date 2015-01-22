@@ -71,8 +71,8 @@ Currently, *pmsignature* can accept following two formats of tab-delimited text 
 
 * The 1st column shows the name of samples 
 * From the 2nd to the last column show the value of mutation features.
-* In this example, substitution patterns (6 values, C>A, C>G, C>T, T>A, T>C and T>G), two 5' and 3' flanking bases (4 values for each 4 site, A, C, G and T)
-and transcription direction (2 values, + and -) are considered.
+* In this example, substitution patterns (1 to 6 values, C>A, C>G, C>T, T>A, T>C and T>G), two 5' and 3' flanking bases (1 to 4 values for each 4 site, A, C, G and T)
+and transcription direction (1 to 2 values, + and -) are considered.
 
 
 ## Workflow
@@ -92,6 +92,7 @@ install.pakages("devtools")
 The easiest way for installing *pmsignature* is to use the package *devtools*:
 
 ```
+library(devtools)
 devtools::install_github("friend1ws/pmsignature")
 ```
 
@@ -104,8 +105,14 @@ First, create the input data from your mutation data.
 After installing *pmsignature*,
 you can find the above example file at the directory where pmsignature is installed.
 
+* Mutation Position Format
 ```
-inputFile <- system.file("extdata", "hoang.ind5_dir.txt", package="pmsignature");
+inputFile <- system.file("extdata", "Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature");
+```
+
+* Mutation Feature Vector Format
+```
+inputFile <- system.file("extdata", "Hoang_MFVF.txt", package="pmsignature");
 ```
 
 Also, you might want to use the background signature files.
@@ -122,7 +129,7 @@ Type the following commands:
 G <- readMutFile(inputFile, numBases = 5);
 ```
 
-Here, *inputFile* is the path for the input file. *numBases* is the number of flanking bases to consider (if you want to consider two 5' and 3' bases, then set 5).
+Here, *inputFile* is the path for the input file. *numBases* is the number of flanking bases to consider including the central base (if you want to consider two 5' and 3' bases, then set 5).
 
 Also, you want to read the background signature files as follow:
 
@@ -132,29 +139,25 @@ BG0 <- readBGFile(bgFile);
 
 ### Estimate the parameters
 
-After setting the number of mutation signature (e.g., 3),
+
+When you want to set the number of mutation signature as 3, type the following command:
 
 ```
-K <- 3
-```
-
-type the following command:
-
-```
-pms_param <- getPMSignature(G, K, fdim);
+Param <- getPMSignature(G, K = 3);
 ```
 
 If you want to add the background signature, then type
 
 ```
-pms_param <- getPMSignature(G, K, fdim, isBG=TRUE, BG0=BG0);
+Param <- getPMSignature(G, K = 3, BG0=BG0);
 ```
 
-In default, we repeat the estimation 10 times by changing the initial value.
+In default, we repeat the estimation 10 times by changing the initial value,
+and select the parameter with maximum likelihood.
 If you want to changet the repeat number, then
 
 ```
-pms_param <- getPMSignature(G, K, fdim, isBG=TRUE, BG0=BG0, numInit=20);
+Param <- getPMSignature(G, K = 3, BG0=BG0, numInit=20);
 ```
 
 

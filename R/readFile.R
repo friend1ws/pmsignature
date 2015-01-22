@@ -1,48 +1,119 @@
 
 
-#' Read the raw mutation data with the mutation feature format.
+#' Read the raw mutation data with the mutation feature vector format.
 #' 
 #' @param infile the path for the input file for the mutation feature data.
+#' @param infile the path for the input file for the mutation data.
+#' @param numBases the number of upstream and downstream flanking bases
+#' (including the mutated base) to take into account.
+#' @param trDir the index representing whether transcription direction is considered or not
+#' @param type this argument can take either independent, full, or custom.
 #' @export
-readRawMutfeatFile <- function(infile) {
+readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
   
-  adata <- read.table(infile, sep="\t", header=FALSE, fill=TRUE);
-  N <- adata[1,1];
-  fdim <- as.integer(adata[2,1:adata[1,2]]);
-  M <- prod(fdim);
-  L <- length(fdim);
+  if (!(type %in% c("independent", "full", "custom"))) {
+    stop('The argument type should be eigher "independent", "full" or "custom"');
+  }
+  
+  if (type == "custom") {
+    if (!missing(numBases)) {
+      warning('the argument numBaeses is applicable only when type = "custom"');
+    }
+    if (!missing(trDir)) {
+      warning('the argument trDir is applicable only when type = "custom"');
+    }    
+  }
 
-  sampleIDs <- as.integer(adata[3:nrow(adata),1]);
-  mutFeatures <- adata[3:nrow(adata),2:(length(fdim) + 1)];
+  mutFile <- read.table(infile, sep="\t", header=FALSE);
+  sampleName_str <- as.character(mutFile[,1]);
+  mutFeatures <- mutFile[,2:ncol(mutFile)];
+  fdim <- unname(apply(mutFeatures, 2, max));
+  
+  if (type == "independent") {
 
-  featStr <- apply(mutFeatures, 1, paste, collapse=",");
+    if (numBases %% 2 != 1) {
+      stop("numBases should be odd numbers");
+    }
+    
+    # check the dimension of the mutation feature vector
+    if (ncol(mutFeatures) < numBases + as.integer(trDir)) {
+      stop('When type = "independent", the dimension of feature vectors should be at least (numBases + as.integer(trDir))');
+    }
+    
+    # check the 1-st column of the input feature vector (substitution type, should be 1:6)
+    if (any(!(mutFeatures[,1] %in% 1:6))) {
+      stop(paste('When type = "independent", the 1st feature values should be 1 to 6\n',
+                 'In the 1st column, the following rows have values other than 1 to 6;\n',
+                 paste0(which(!(mutFeatures[,1] %in% 1:6)), collapse = ","), sep=""));
+    }
+    
+    # check the 2nd to (numBases)-th columns of the input feature vector (flanking bases, should be 1:4)
+    for (i in 2:numBases) {
+      if (any(!(mutFeatures[,i] %in% 1:4))) {
+        stop(paste('When type = "independent", the 2 to (numBases)-th feature values should be 1 to 4\n',
+                   'In the ', i, '-th column, the following rows have values other than 1 to 4;\n', 
+                   paste0(which(!(mutFeatures[,i] %in% 1:4)), collapse= ","), sep=""));
+      }
+    }
+    
+    # check the (numBases + 1)-th column of the input feature vector (the flag for transcription direction, should be 1:2)
+    if (trDir == TRUE) {
+      if (any(!(mutFeatures[,numBases + 1] %in% 1:2))) {
+        stop(paste('When type = "independent" and trDir = TRUE, ', 
+                   'the (numBases + 1)-th feature values should be 1 to 2\n',
+                   'In the ', (numBases + 1), '-th column, following rows have values other than 1 to 2;\n', 
+                   paste0(which(!(mutFeatures[,numBases + 1] %in% 1:2)), collapse = ","), sep=""));
+      }
+    }
+
+  }
+    
+  suSampleStr <- sort(unique(sampleName_str));
+  lookupSampleInd <- 1:length(suSampleStr);
+  names(lookupSampleInd) <- suSampleStr;
+  sampleIDs <- lookupSampleInd[sampleName_str];
+  
+  
+  featStr <- apply(mutFeatures, 1, paste0, collapse=",");
+  
   suFeatStr <- sort(unique(featStr));
   lookupFeatInd <- 1:length(suFeatStr);
   names(lookupFeatInd) <- suFeatStr;
-
-  rawCount <- data.frame(sample = sampleIDs, mutInds = lookupFeatInd[apply(mutFeatures, 1, paste, collapse=",")]);
-
+  
+  rawCount <- data.frame(sample = sampleIDs, mutInds = lookupFeatInd[featStr]);
+  
   tableCount <- table(rawCount);
   w <- which(tableCount > 0, arr.ind=TRUE);
   procCount <- cbind(w[,2], w[,1], tableCount[w]);
-
-  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(6)));
+  
+  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(length(fdim))));
   rownames(mutFeatList) <- NULL;
+  rownames(procCount) <- NULL;
 
-  return(list(N, fdim, t(mutFeatList), t(procCount)));
-
+  
+  return(new(Class = "MutationFeatureData", 
+             type = type,
+             flankingBasesNum = as.integer(numBases),
+             transcriptionDirection = trDir,
+             possibleFeatures = as.integer(fdim),
+             featureVectorList = t(mutFeatList),
+             sampleList = suSampleStr,
+             countData = t(procCount)
+  ))
+  
 }
 
 
-#' Read the raw mutation data.
+#' Read the raw mutation data of mutation position format.
 #' 
 #' @param infile the path for the input file for the mutation data.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
+#' @param trDir the index representing whether transcription direction is considered or not
+#' @param type this argument can take either independent, full, or custom.
 #' 
-#' VariantAnnotation::VRanges
 #' @export
-readMutFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
+readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
 
   fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
   if (numBases %% 2 != 1) {
@@ -178,7 +249,6 @@ readMutFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent
   rownames(mutFeatList) <- NULL;
   rownames(procCount) <- NULL;
 
-  # return(list(length(suSampleStr), fdim, t(mutFeatList), t(procCount)));
   return(new(Class = "MutationFeatureData", 
              type = "independent",
              flankingBasesNum = as.integer(numBases),
