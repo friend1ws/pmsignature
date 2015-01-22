@@ -37,7 +37,7 @@ getPMSignature <- function(mutationFeatureData, K, isBG = FALSE, BG0 = 0, numIni
     Q <- sweep(Q, 2, apply(Q, 2, sum), `/`)
     
     p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, sampleNum));
-    Y <- list(list(sampleNum, fdim, slot(G, "featureVectorList"), slot(G, "countData")), K, isBG, BG0);  
+    Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), slot(mutationFeatureData, "countData")), K, isBG, BG0);  
     
     res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4,  maxiter = 20000));
     
