@@ -163,6 +163,12 @@ Param <- getPMSignature(G, K = 3, BG0=BG0, numInit=20);
 
 ### Visualing the mutation signatures and memberships
 
-Currently, we have provided 
+You can check the mutation signature by typing
+
+```
+visPMSignature(Param, 1)
+visPMSignature(Param, 2)
+visPMSignature(Param, 3)
+```
 
 
