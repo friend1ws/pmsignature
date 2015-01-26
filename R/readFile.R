@@ -263,8 +263,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] + tempDigits * 5;
       
     if (trDir == TRUE) {
-      tempDigits <- tempDigits * 2;
-      mutFeatures[which(strandInfo == "-"), 1] <- mutFeatures[which(strandInfo == "-"), 1] * tempDigits * 1;
+      tempDigits <- tempDigits * 6;
+      mutFeatures[which(strandInfo == "-"), 1] <- mutFeatures[which(strandInfo == "-"), 1] + tempDigits * 1;
     }
   
   }
