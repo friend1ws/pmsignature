@@ -15,8 +15,9 @@ License: GPL-3
 URL: https://github.com/friend1ws/pmsignature
 BugReports: https://github.com/friend1ws/pmsignature/issues
 LazyData: true
+Depends:
+  ggplot2
 Imports:
-    ggplot2,
     turboEM,
     Rcpp,
     VariantAnnotation,

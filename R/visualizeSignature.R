@@ -194,7 +194,7 @@ visPMS_full <- function(Fvec, numBases, trDir) {
   }
   
   
-  gp <- ggplot2::ggplot(X, aes(x=flank, y=probability, fill=subtype)) +
+  gp <- ggplot(X, aes(x=flank, y=probability, fill=subtype)) +
     geom_bar(stat="identity", position="identity", width = 0.8) + 
     theme_bw() + 
     theme(axis.text.x = element_blank(),
