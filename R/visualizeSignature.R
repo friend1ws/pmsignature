@@ -119,6 +119,7 @@ visPMS_ind <- function(vF, numBases, baseCol, trDir) {
   ##########
 
   ##########
+  if (trDir == TRUE) {
   # draw direction bias
   # startx <- (numBases - 1) * 1.25 + 0.5;
   # endx <- (numBases - 1) * 1.25 + 0.75;
@@ -153,6 +154,8 @@ visPMS_ind <- function(vF, numBases, baseCol, trDir) {
   polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[6], border=F);
   if (endy - starty > 1 / 8) {
     text(0.5 * (startx + endx), 0.5 * (starty + endy), "-", col="white", cex=1.2)
+  }
+  
   }
   ##########
   
