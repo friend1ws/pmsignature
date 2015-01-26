@@ -298,7 +298,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   rownames(procCount) <- NULL;
 
   return(new(Class = "MutationFeatureData", 
-             type = "independent",
+             type = type,
              flankingBasesNum = as.integer(numBases),
              transcriptionDirection = trDir,
              possibleFeatures = as.integer(fdim),

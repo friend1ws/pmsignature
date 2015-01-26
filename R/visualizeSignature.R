@@ -9,9 +9,12 @@ setMethod("visPMSignature",
 
             vF <- object@signatureFeatureDistribution[K,,];
             numBases <- object@flankingBasesNum;
-            centerBase <- (1 + numBases) / 2;
+            if (object@type == "independent") {
+              visPMS_ind(vF, numBases, baseCol);
+            } else if (object@type == "full") {
+              visPMS_full(vF, numBases, object@transcriptionDirection);
+            }
             
-            visPMS_ind(vF, numBases, baseCol);
           }
 )
 
@@ -24,10 +27,15 @@ setMethod("visPMSignature",
             centerBase <- (1 + numBases) / 2;
             
             # soft colors
-            visPMS_ind(vF, numBases, c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256)));
-
+            baseCol = c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256));
             # humble colors
-            # visPMS_ind(vF, numBases, c(rgb(0, 148, 83, max = 256), rgb(19, 110, 171, max = 256), rgb(223, 210, 56, max = 256), rgb(202, 71, 92, max = 256)));
+            # baseCol = c(rgb(0, 148, 83, max = 256), rgb(19, 110, 171, max = 256), rgb(223, 210, 56, max = 256), rgb(202, 71, 92, max = 256));
+            
+            if (object@type == "independent") {
+              visPMS_ind(vF, numBases, baseCol);
+            } else if (object@type == "full") {
+              visPMS_full(vF, numBases, object@transcriptionDirection);
+            }
             
           }
 )
@@ -108,7 +116,15 @@ visPMS_ind <- function(vF, numBases, baseCol) {
 }
 
 
-vispMS_full <- function(Fvec, numBases, trDir) {
+#' @title visualize probabisitic mutaiton signature for the full model
+#' @description Generate visualization of mutation signatures for the model with
+#'   substitution patterns and flanking bases represented by the full
+#'   representation.
+#'   
+#' @param vF a vector for mutation signature
+#' @param numBases the number of flanking bases 
+#' @param trDir the index showing whether the transcription direction is used or not
+visPMS_full <- function(Fvec, numBases, trDir) {
   
   flankingPatternNum <- 4^(numBases - 1);
   subPattern <- c(rep("C>A", flankingPatternNum), 
@@ -135,7 +151,7 @@ vispMS_full <- function(Fvec, numBases, trDir) {
   # X$flank <- rep(as.vector(rbind(1:flankingPatternNum, 1:flankingPatternNum)), 6);
   
   gp <- ggplot(X, aes(x=flank, y=probability, fill=subtype)) +
-    geom_bar(stat="identity", position="identity") + 
+    geom_bar(stat="identity", position="identity", width = 0.8) + 
     theme_bw() + 
     theme(axis.text.x = element_blank(),
           axis.ticks.x = element_blank(),
