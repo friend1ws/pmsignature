@@ -27,12 +27,13 @@ setMethod("visPMSignature",
             centerBase <- (1 + numBases) / 2;
             
             # soft colors
-            baseCol = c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256));
+            baseCol = c("#39A869", "#4784BF", "#F2E55C", "#DD6673", "#E8AC51", "#00AEE0");
+            # baseCol = c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256));
             # humble colors
             # baseCol = c(rgb(0, 148, 83, max = 256), rgb(19, 110, 171, max = 256), rgb(223, 210, 56, max = 256), rgb(202, 71, 92, max = 256));
             
             if (object@type == "independent") {
-              visPMS_ind(vF, numBases, baseCol);
+              visPMS_ind(vF, numBases, baseCol, object@transcriptionDirection);
             } else if (object@type == "full") {
               visPMS_full(vF, numBases, object@transcriptionDirection);
             }
@@ -48,7 +49,7 @@ setMethod("visPMSignature",
 #' @param vF a matrix for mutation signature
 #' @param numBases the number of flanking bases 
 #' @param centerBases the number of flanking bases
-visPMS_ind <- function(vF, numBases, baseCol) {
+visPMS_ind <- function(vF, numBases, baseCol, trDir) {
   
   centerBase <- (1 + numBases) / 2;
   
@@ -56,6 +57,10 @@ visPMS_ind <- function(vF, numBases, baseCol) {
   V2 <- vF[2:(numBases),1:4];
   A <- matrix(0, numBases, 4);
   B <- matrix(0, 4, 4);
+  
+  if (trDir == TRUE) {
+    v3 <- vF[6,1:2];
+  }
   
   for (l in 1:numBases) {
     if (l < centerBase) {
@@ -112,6 +117,44 @@ visPMS_ind <- function(vF, numBases, baseCol) {
   
   polygon(xs, ys, col=8, border=F);
   ##########
+
+  ##########
+  # draw direction bias
+  # startx <- (numBases - 1) * 1.25 + 0.5;
+  # endx <- (numBases - 1) * 1.25 + 0.75;
+  # starty <- 1.9;
+  # endy <- starty + v3[1];
+  # polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[5], border=F);
+  
+  # if (endy - starty > 1 / 8) {
+  #   text(0.5 * (startx + endx), 0.5 * (starty + endy), "+", col="white", cex=1.2)
+  # }
+  # starty <- endy;
+  # endy <- 2.9;
+  # polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[6], border=F);
+  # if (endy - starty > 1 / 8) {
+  #   text(0.5 * (startx + endx), 0.5 * (starty + endy), "-", col="white", cex=1.2)
+  # } 
+  
+  # draw direction bias
+  startx <- (numBases - 1) * 1.25 + 0.24;
+  endx <- (numBases - 1) * 1.25 + 0.49;
+  starty <- 2;
+  endy <- starty + v3[1];
+  polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[5], border=F);
+  if (endy - starty > 1 / 8) {
+    text(0.5 * (startx + endx), 0.5 * (starty + endy), "+", col="white", cex=1.2)
+  }
+  
+  startx <- (numBases - 1) * 1.25 + 0.51;
+  endx <- (numBases - 1) * 1.25 + 0.76;
+  starty <- 2;
+  endy <- starty + v3[2];
+  polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[6], border=F);
+  if (endy - starty > 1 / 8) {
+    text(0.5 * (startx + endx), 0.5 * (starty + endy), "-", col="white", cex=1.2)
+  }
+  ##########
   
 }
 
@@ -147,10 +190,8 @@ visPMS_full <- function(Fvec, numBases, trDir) {
     X$flank <- 1:flankingPatternNum
   }
   
-  # X$flank <- rep(1:flankingPatternNum, 2);              
-  # X$flank <- rep(as.vector(rbind(1:flankingPatternNum, 1:flankingPatternNum)), 6);
   
-  gp <- ggplot(X, aes(x=flank, y=probability, fill=subtype)) +
+  gp <- ggplot2::ggplot(X, aes(x=flank, y=probability, fill=subtype)) +
     geom_bar(stat="identity", position="identity", width = 0.8) + 
     theme_bw() + 
     theme(axis.text.x = element_blank(),
