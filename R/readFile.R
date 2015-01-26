@@ -115,7 +115,14 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 #' @export
 readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
 
-  fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
+  if (type == "independent") {
+    fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
+  } else if (type == "full") {
+    fdim <- c(6 * 4^(numBases - 1) * 2^(as.integer(trDir)));
+  } else {
+    stop('for reading mutation position format, the type argument has to be "independent" or "full"');
+  }
+
   if (numBases %% 2 != 1) {
     stop("numBases should be odd numbers");
   }
@@ -200,33 +207,68 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     
   }
   
-  
-  mutFeatures <- matrix(0, length(ref_base), length(fdim));
+  if (type == "independent") {
+    
+    mutFeatures <- matrix(0, length(ref_base), length(fdim));
 
-  mutFeatures[which(ref_base == "C" & alt_base == "A"), 1] <- 1;
-  mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] <- 2;
-  mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] <- 3;
-  mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] <- 4;
-  mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- 5;
-  mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- 6;
+    mutFeatures[which(ref_base == "C" & alt_base == "A"), 1] <- 1;
+    mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] <- 2;
+    mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] <- 3;
+    mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] <- 4;
+    mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- 5;
+    mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- 6;
 
-  columnInd <- 2;
-  for (baseInd in 1:numBases) {
-    if (baseInd == centerInd) {
-      next;
+    columnInd <- 2;
+    for (baseInd in 1:numBases) {
+      if (baseInd == centerInd) {
+        next;
+      }
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "A"), columnInd] <- 1;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), columnInd] <- 2;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), columnInd] <- 3;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), columnInd] <- 4;
+      columnInd <- columnInd + 1;
     }
-    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "A"), columnInd] <- 1;
-    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), columnInd] <- 2;
-    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), columnInd] <- 3;
-    mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), columnInd] <- 4;
-    columnInd <- columnInd + 1;
-  }
 
-  if (trDir == TRUE) {
-    mutFeatures[which(strandInfo == "+"), length(fdim)] <- 1;
-    mutFeatures[which(strandInfo == "-"), length(fdim)] <- 2;    
-  }
+    if (trDir == TRUE) {
+      mutFeatures[which(strandInfo == "+"), length(fdim)] <- 1;
+      mutFeatures[which(strandInfo == "-"), length(fdim)] <- 2;    
+    }
+  
+  } else {
+    
+    mutFeatures <- matrix(1, length(ref_base), length(fdim));
+    
+    tempDigits <- 1;
+    for (i in 1:((numBases - 1) / 2)) {
+      
+      baseInd <- numBases + 1 - i;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] + tempDigits * 1;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] + tempDigits * 2;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] + tempDigits * 3;
 
+      tempDigits <- tempDigits * 4;
+      baseInd <- i;      
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] + tempDigits * 1;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] + tempDigits * 2;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] + tempDigits * 3;
+
+      tempDigits <- tempDigits * 4;
+    }
+ 
+    mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] + tempDigits * 1;
+    mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] <- mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] + tempDigits * 2;
+    mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] + tempDigits * 3;
+    mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] + tempDigits * 4;
+    mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] + tempDigits * 5;
+      
+    if (trDir == TRUE) {
+      tempDigits <- tempDigits * 2;
+      mutFeatures[which(strandInfo == "-"), 1] <- mutFeatures[which(strandInfo == "-"), 1] * tempDigits * 1;
+    }
+  
+  }
+    
   suSampleStr <- sort(unique(sampleName_str));
   lookupSampleInd <- 1:length(suSampleStr);
   names(lookupSampleInd) <- suSampleStr;
@@ -245,7 +287,13 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   w <- which(tableCount > 0, arr.ind=TRUE);
   procCount <- cbind(w[,2], w[,1], tableCount[w]);
 
-  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases + as.integer(trDir))));
+  if (type == "independent") {
+    mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases + as.integer(trDir))));
+  } else if (type == "full") {
+    # mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(1)));
+    mutFeatList <- matrix(as.integer(suFeatStr), length(suFeatStr), 1);
+  }
+  
   rownames(mutFeatList) <- NULL;
   rownames(procCount) <- NULL;
 

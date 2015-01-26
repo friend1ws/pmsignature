@@ -107,3 +107,54 @@ visPMS_ind <- function(vF, numBases, baseCol) {
   
 }
 
+
+vispMS_full <- function(Fvec, numBases, trDir) {
+  
+  flankingPatternNum <- 4^(numBases - 1);
+  subPattern <- c(rep("C>A", flankingPatternNum), 
+                  rep("C>G", flankingPatternNum), 
+                  rep("C>T", flankingPatternNum), 
+                  rep("T>A", flankingPatternNum), 
+                  rep("T>C", flankingPatternNum), 
+                  rep("T>G", flankingPatternNum)
+                  );
+  
+  X <- data.frame(probability = Fvec);
+  # X$strand <- factor(rep(c("plus", "minus"), 1536), levels=c("plus", "minus"));
+  
+  if (trDir == TRUE) {
+    X$strand <- factor(c(rep("plus", flankingPatternNum * 6), rep("minus", flankingPatternNum * 6)), levels=c("plus", "minus"));
+    X$subtype <- factor(rep(subPattern, 2), levels=c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G"));
+    X$flank <- rep(1:flankingPatternNum, 2);
+  } else {
+    X$subtype <- factor(subPattern, levels=c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G"));
+    X$flank <- 1:flankingPatternNum
+  }
+  
+  # X$flank <- rep(1:flankingPatternNum, 2);              
+  # X$flank <- rep(as.vector(rbind(1:flankingPatternNum, 1:flankingPatternNum)), 6);
+  
+  gp <- ggplot(X, aes(x=flank, y=probability, fill=subtype)) +
+    geom_bar(stat="identity", position="identity") + 
+    theme_bw() + 
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.text.y = element_text(size=rel(1.2)),
+          axis.title.y = element_text(size=rel(1.2)),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          strip.text= element_text(face="bold", size=rel(1.2))) +
+    guides(fill=FALSE);
+  
+  if (trDir == TRUE) {
+    gp <- gp + facet_grid(strand ~ subtype);
+  } else {
+    gp <- gp + facet_grid(. ~ subtype);
+  }
+  
+  gp
+  
+}
+
+
