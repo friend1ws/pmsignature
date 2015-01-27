@@ -59,7 +59,7 @@ visPMS_ind <- function(vF, numBases, baseCol, trDir) {
   B <- matrix(0, 4, 4);
   
   if (trDir == TRUE) {
-    v3 <- vF[6,1:2];
+    v3 <- vF[(numBases + 1),1:2];
   }
   
   for (l in 1:numBases) {

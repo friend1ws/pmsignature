@@ -314,12 +314,31 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
 #' Read and format the background vector data
 #' 
-#' @param bgfile the path for the background mutation signature file
 #' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
 #' @export
-readBGFile <- function(bgfile, mutationFeatureData) {
+readBGFile <- function(mutationFeatureData) {
   
-  bdata <- read.table(bgfile, sep="\t");
+  if (slot(mutationFeatureData, "type") == "independent") {
+    tempType <- "ind";
+  } else if (slot(mutationFeatureData, "type") == "full") {
+    tempType <- "full";
+  } else {
+    stop('Background data for types other than "independent" or "full" is not available');
+  }
+  
+  if (slot(mutationFeatureData, "flankingBasesNum") %in% c(3, 5)) {
+    tempNumBase <- slot(mutationFeatureData, "flankingBasesNum");
+  } else {
+    stop('Background data whose number of flanking bases is other than 3 or 5 is not available');
+  }
+  
+  if (slot(mutationFeatureData, "transcriptionDirection") == TRUE) {
+    bgfile <- paste("bgdata/bg.", tempType, tempNumBase, "_dir.txt", sep="");
+  } else {
+    bgfile <- paste("bgdata/bg.", tempType, tempNumBase, ".txt", sep="");
+  }
+  
+  bdata <- read.table(system.file(bgfile, package = "pmsignature"), sep="\t");
   
   tempFeatureVectorList <- apply(slot(mutationFeatureData, "featureVectorList"), 2, paste0, collapse=",");
   bprob <- bdata[,2];
@@ -328,7 +347,7 @@ readBGFile <- function(bgfile, mutationFeatureData) {
   if (!all(tempFeatureVectorList %in% names(bprob))) {
     noNameInd <- which(! (tempFeatureVectorList %in% names(bprob)));
     stop(paste('The information of following mutation features are not included in the specified background file:\n', 
-               paste0(tempFeatureVectorList[noNameInd], collapse= ","), sep=""));
+               paste0(tempFeatureVectorList[noNameInd], collapse= ","), sep=" "));
   }
   
   return(bprob[tempFeatureVectorList]);

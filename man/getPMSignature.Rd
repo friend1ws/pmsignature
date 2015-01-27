@@ -4,19 +4,18 @@
 \alias{getPMSignature}
 \title{Obtain the parameters for mutation signatures and memberships}
 \usage{
-getPMSignature(mutationFeatureData, K, isBG = FALSE, BG0 = 0,
-  numInit = 10)
+getPMSignature(mutationFeatureData, K, BG, numInit = 10)
 }
 \arguments{
 \item{mutationFeatureData}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}
 
 \item{K}{the number of mutation signatures}
 
+\item{numInit}{the number of performing calculations with different initial values}
+
 \item{isBG}{the logical value showing whether a background mutaiton features is included or not}
 
 \item{BG0}{a background mutaiton features}
-
-\item{numInit}{the number of performing calculations with different initial values}
 }
 \description{
 Obtain the parameters for mutation signatures and memberships

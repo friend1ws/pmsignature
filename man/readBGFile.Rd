@@ -4,10 +4,10 @@
 \alias{readBGFile}
 \title{Read and format the background vector data}
 \usage{
-readBGFile(bgfile)
+readBGFile(mutationFeatureData)
 }
 \arguments{
-\item{bgfile}{the path for the background mutation signature file}
+\item{mutationFeatureData}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}
 }
 \description{
 Read and format the background vector data
