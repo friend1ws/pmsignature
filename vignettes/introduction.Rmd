@@ -107,20 +107,14 @@ you can find the above example file at the directory where pmsignature is instal
 
 * Mutation Position Format
 ```
-inputFile <- system.file("extdata", "Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature");
+inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature");
 ```
 
 * Mutation Feature Vector Format
 ```
-inputFile <- system.file("extdata", "Hoang_MFVF.txt", package="pmsignature");
+inputFile <- system.file("extdata/Hoang_MFVF.txt", package="pmsignature");
 ```
 
-Also, you might want to use the background signature files.
-The background data used in the original paper can be found at:
-
-```
-bgFile <- system.file("bgdata", "bg.ind5_dir.txt", package="pmsignature");
-```
 
 ### Read input data
 
@@ -130,11 +124,16 @@ G <- readMutFile(inputFile, numBases = 5);
 ```
 
 Here, *inputFile* is the path for the input file. *numBases* is the number of flanking bases to consider including the central base (if you want to consider two 5' and 3' bases, then set 5).
-
-Also, you want to read the background signature files as follow:
+You can rformat the data as the full model by typing 
 
 ```
-BG0 <- readBGFile(bgFile);
+G <- readMutFile(inputFile, numBases = 5, type = "full");
+```
+
+
+Also, you can add transcription direction information by typing 
+```
+G <- readMutFile(inputFile, numBases = 5, trDir = TRUE);
 ```
 
 ### Estimate the parameters
@@ -146,10 +145,12 @@ When you want to set the number of mutation signature as 3, type the following c
 Param <- getPMSignature(G, K = 3);
 ```
 
-If you want to add the background signature, then type
+If you want to add the background signature, then after obtaining the background probability, perform the estimation.
+Currently, we only provide the background data for the "independent" and "full" model with 3 and 5 flanking bases.
 
 ```
-Param <- getPMSignature(G, K = 3, BG0=BG0);
+BG_prob <- readBGFile(G);
+Param <- getPMSignature(G, K = 3, BG = BG_prob);
 ```
 
 In default, we repeat the estimation 10 times by changing the initial value,
@@ -157,7 +158,7 @@ and select the parameter with maximum likelihood.
 If you want to changet the repeat number, then
 
 ```
-Param <- getPMSignature(G, K = 3, BG0=BG0, numInit=20);
+Param <- getPMSignature(G, K = 3, numInit=20);
 ```
 
 
