@@ -315,10 +315,22 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 #' Read and format the background vector data
 #' 
 #' @param bgfile the path for the background mutation signature file
+#' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
 #' @export
-readBGFile <- function(bgfile) {
+readBGFile <- function(bgfile, mutationFeatureData) {
   
-  adata <- read.table(bgfile, sep="\t");
-  return(adata[,2]);
+  bdata <- read.table(bgfile, sep="\t");
+  
+  tempFeatureVectorList <- apply(slot(mutationFeatureData, "featureVectorList"), 2, paste0, collapse=",");
+  bprob <- bdata[,2];
+  names(bprob) <- bdata[,1];
+  
+  if (!all(tempFeatureVectorList %in% names(bprob))) {
+    noNameInd <- which(! (tempFeatureVectorList %in% names(bprob)));
+    stop(paste('The information of following mutation features are not included in the specified background file:\n', 
+               paste0(tempFeatureVectorList[noNameInd], collapse= ","), sep=""));
+  }
+  
+  return(bprob[tempFeatureVectorList]);
 
 }
