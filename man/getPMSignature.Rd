@@ -4,7 +4,7 @@
 \alias{getPMSignature}
 \title{Obtain the parameters for mutation signatures and memberships}
 \usage{
-getPMSignature(mutationFeatureData, K, BG, numInit = 10)
+getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10)
 }
 \arguments{
 \item{mutationFeatureData}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}

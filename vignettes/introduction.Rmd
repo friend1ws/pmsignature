@@ -86,7 +86,7 @@ Also, *devtools* may be necessary for ease of installation.
 ```
 source("http://bioconductor.org/biocLite.R")
 biocLite(c("VariantAnnotation", "BSgenome.Hsapiens.UCSC.hg19"))
-install.pakages("devtools")
+install.packages("devtools")
 ```
 
 The easiest way for installing *pmsignature* is to use the package *devtools*:
@@ -119,21 +119,24 @@ inputFile <- system.file("extdata/Hoang_MFVF.txt", package="pmsignature");
 ### Read input data
 
 Type the following commands:
-```
-G <- readMutFile(inputFile, numBases = 5);
-```
 
+* Mutation Position Format
+```
+G <- readMPFile(inputFile, numBases = 5);
+```
 Here, *inputFile* is the path for the input file. *numBases* is the number of flanking bases to consider including the central base (if you want to consider two 5' and 3' bases, then set 5).
 You can rformat the data as the full model by typing 
-
 ```
-G <- readMutFile(inputFile, numBases = 5, type = "full");
+G <- readMPFile(inputFile, numBases = 5, type = "full");
 ```
-
-
 Also, you can add transcription direction information by typing 
 ```
-G <- readMutFile(inputFile, numBases = 5, trDir = TRUE);
+G <- readMPFile(inputFile, numBases = 5, trDir = TRUE);
+```
+
+* Mutation Feature Vector Format
+```
+G <- readMFVFile(inputFile, numBases = 5);
 ```
 
 ### Estimate the parameters

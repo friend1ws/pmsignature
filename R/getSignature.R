@@ -8,13 +8,13 @@
 #' @useDynLib pmsignature
 #' @importFrom Rcpp sourceCpp
 #' @export
-getPMSignature <- function(mutationFeatureData, K, BG, numInit = 10) {
+getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10) {
   
-  if (!missing(BG)) {
+  if (!is.null(BG)) {
     isBG <- TRUE;
     varK <- K - 1;
   } else {
-    isbg <- FALSE;
+    isBG <- FALSE;
     varK <- K;
   }
 
@@ -144,6 +144,7 @@ bootPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, F0, Q0, bootNum = 0) {
 #' @param p this variable includes the parameters for mutation signatures and membership parameters
 #' @param y this variable includes the information on the mutation features, 
 #' the number of mutation signatures specified and so on
+#' @export
 updatePMSParam <- function(p, y) {
   
   sampleNum <- y[[1]][[1]];
@@ -196,6 +197,7 @@ updatePMSParam <- function(p, y) {
 #' @param p this variable includes the parameters for mutation signatures and membership parameters
 #' @param y this variable includes the information on the mutation features, 
 #' the number of mutation signatures specified and so on
+#' @export
 calcPMSLikelihood <- function(p, y) {
   
   sampleNum <- y[[1]][[1]];
@@ -234,6 +236,7 @@ calcPMSLikelihood <- function(p, y) {
 #' 
 #' @param y this variable includes the information on the mutation features, 
 #' the number of mutation signatures specified and so on
+#' @export
 PMSboundary <- function(y) {
   
   sampleNum <- y[[1]][[1]];
