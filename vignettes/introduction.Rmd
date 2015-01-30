@@ -108,17 +108,19 @@ you can find the above example file at the directory where pmsignature is instal
 * Mutation Position Format
 ```
 inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature");
+head(inputFile);
 ```
 
 * Mutation Feature Vector Format
 ```
 inputFile <- system.file("extdata/Hoang_MFVF.txt", package="pmsignature");
+head(inputFile);
 ```
 
 
 ### Read input data
 
-Type the following commands:
+Type the following commands (*inputFile* is the path of the data you want to analyze):
 
 * Mutation Position Format
 ```
