@@ -16,6 +16,7 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10) {
   } else {
     isBG <- FALSE;
     varK <- K;
+    BG <- 0;
   }
 
   sampleNum <- length(slot(mutationFeatureData, "sampleList"));
