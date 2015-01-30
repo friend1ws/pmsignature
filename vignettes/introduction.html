@@ -195,7 +195,7 @@
 <p>First, the R packages <em>VariantAnnotation</em> and <em>BSgenome.Hsapiens.UCSC.hg19</em>, which <em>pmsignature</em> depends has to be installed. Also, <em>devtools</em> may be necessary for ease of installation.</p>
 <pre><code>source(&quot;http://bioconductor.org/biocLite.R&quot;)
 biocLite(c(&quot;VariantAnnotation&quot;, &quot;BSgenome.Hsapiens.UCSC.hg19&quot;))
-install.pakages(&quot;devtools&quot;)</code></pre>
+install.packages(&quot;devtools&quot;)</code></pre>
 <p>The easiest way for installing <em>pmsignature</em> is to use the package <em>devtools</em>:</p>
 <pre><code>library(devtools)
 devtools::install_github(&quot;friend1ws/pmsignature&quot;)</code></pre>
@@ -206,14 +206,16 @@ devtools::install_github(&quot;friend1ws/pmsignature&quot;)</code></pre>
 <p>After installing <em>pmsignature</em>, you can find the above example file at the directory where pmsignature is installed.</p>
 <ul>
 <li><p>Mutation Position Format</p>
-<pre><code>inputFile &lt;- system.file(&quot;extdata/Nik_Zainal_2012.mutationPositionFormat.txt&quot;, package=&quot;pmsignature&quot;);</code></pre></li>
+<pre><code>inputFile &lt;- system.file(&quot;extdata/Nik_Zainal_2012.mutationPositionFormat.txt&quot;, package=&quot;pmsignature&quot;);
+print(inputFile);</code></pre></li>
 <li><p>Mutation Feature Vector Format</p>
-<pre><code>inputFile &lt;- system.file(&quot;extdata/Hoang_MFVF.txt&quot;, package=&quot;pmsignature&quot;);</code></pre></li>
+<pre><code>inputFile &lt;- system.file(&quot;extdata/Hoang_MFVF.txt&quot;, package=&quot;pmsignature&quot;);
+print(inputFile);</code></pre></li>
 </ul>
 </div>
 <div id="read-input-data" class="section level3">
 <h3>Read input data</h3>
-<p>Type the following commands:</p>
+<p>Type the following commands (<em>inputFile</em> is the path of the data you want to analyze):</p>
 <ul>
 <li><p>Mutation Position Format</p>
 <pre><code>G &lt;- readMPFile(inputFile, numBases = 5);</code></pre>
