@@ -121,14 +121,14 @@ print(inputFile);
 
 ### Read input data
 
-Type the following commands (*inputFile* is the path of the data you want to analyze):
+Type the following commands:
 
 * Mutation Position Format
 ```
 G <- readMPFile(inputFile, numBases = 5);
 ```
 Here, *inputFile* is the path for the input file. *numBases* is the number of flanking bases to consider including the central base (if you want to consider two 5' and 3' bases, then set 5).
-You can rformat the data as the full model by typing 
+You can format the data as the full model by typing 
 ```
 G <- readMPFile(inputFile, numBases = 5, type = "full");
 ```
