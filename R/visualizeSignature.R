@@ -27,10 +27,15 @@ setMethod("visPMSignature",
             centerBase <- (1 + numBases) / 2;
             
             # soft colors
-            baseCol = c("#39A869", "#4784BF", "#F2E55C", "#DD6673", "#E8AC51", "#00AEE0");
+            # baseCol = c("#39A869", "#4784BF", "#F2E55C", "#DD6673", "#E8AC51", "#00AEE0");
             # baseCol = c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256));
             # humble colors
             # baseCol = c(rgb(0, 148, 83, max = 256), rgb(19, 110, 171, max = 256), rgb(223, 210, 56, max = 256), rgb(202, 71, 92, max = 256));
+            
+            # ggplot2 default colors 
+           gg_color_hue6 <- hcl(h = seq(15, 375, length = 7), l=65, c=100)[1:6]
+           baseCol <- c(gg_color_hue6[3], gg_color_hue6[5], gg_color_hue6[2], gg_color_hue6[1], gg_color_hue6[4], gg_color_hue6[6]);
+            
             
             if (object@type == "independent") {
               visPMS_ind(vF, numBases, baseCol, object@transcriptionDirection);
