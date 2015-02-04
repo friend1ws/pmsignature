@@ -94,6 +94,7 @@ The easiest way for installing *pmsignature* is to use the package *devtools*:
 ```
 library(devtools)
 devtools::install_github("friend1ws/pmsignature")
+library(pmsignature)
 ```
 
 
