@@ -17,10 +17,10 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
   
   if (type == "custom") {
     if (!missing(numBases)) {
-      warning('the argument numBaeses is applicable only when type = "custom"');
+      warning('the argument numBases is applicable only when type = "independent", or "full"');
     }
     if (!missing(trDir)) {
-      warning('the argument trDir is applicable only when type = "custom"');
+      warning('the argument trDir is applicable only when type = "independent", or "full"');
     }    
   }
 

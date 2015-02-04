@@ -138,7 +138,7 @@ G <- readMPFile(inputFile, numBases = 5, trDir = TRUE);
 
 * Mutation Feature Vector Format
 ```
-G <- readMFVFile(inputFile, numBases = 5);
+G <- readMFVFile(inputFile, numBases = 5, type="independent", trDir=TRUE)
 ```
 
 ### Estimate the parameters
