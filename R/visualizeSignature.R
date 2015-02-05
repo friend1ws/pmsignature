@@ -3,48 +3,27 @@ setGeneric("visPMSignature", function(object, K = 1, baseCol) {
   standardGeneric("visPMSignature")
 })
 
-setMethod("visPMSignature", 
-          signature = c(object = "EstimatedParameters", K = "numeric", baseCol = "numeric"), 
-          function(object, K = 1, baseCol) {
-
-            vF <- object@signatureFeatureDistribution[K,,];
-            numBases <- object@flankingBasesNum;
-            if (object@type == "independent") {
-              visPMS_ind(vF, numBases, baseCol);
-            } else if (object@type == "full") {
-              visPMS_full(vF, numBases, object@transcriptionDirection);
-            }
-            
-          }
-)
+#' @export
+setGeneric("visPMSignature", function(object, K = 1, ...) {
+  standardGeneric("visPMSignature")
+})
 
 setMethod("visPMSignature", 
           signature = c(object = "EstimatedParameters", K = "numeric"), 
-          function(object, K = 1) {
+          function(object, K = 1, ...) {
             
             vF <- object@signatureFeatureDistribution[K,,];
-            numBases <- object@flankingBasesNum;
-            centerBase <- (1 + numBases) / 2;
-            
-            # soft colors
-            # baseCol = c("#39A869", "#4784BF", "#F2E55C", "#DD6673", "#E8AC51", "#00AEE0");
-            # baseCol = c(rgb(57, 168, 105, max = 256), rgb(71, 132, 191, max = 256), rgb(242, 229, 92, max = 256), rgb(221, 102, 115, max = 256));
-            # humble colors
-            # baseCol = c(rgb(0, 148, 83, max = 256), rgb(19, 110, 171, max = 256), rgb(223, 210, 56, max = 256), rgb(202, 71, 92, max = 256));
-            
-            # ggplot2 default colors 
-           gg_color_hue6 <- hcl(h = seq(15, 375, length = 7), l=65, c=100)[1:6]
-           baseCol <- c(gg_color_hue6[3], gg_color_hue6[5], gg_color_hue6[2], gg_color_hue6[1], gg_color_hue6[4], gg_color_hue6[6]);
-            
             
             if (object@type == "independent") {
-              visPMS_ind(vF, numBases, baseCol, object@transcriptionDirection);
+              visPMS_ind(vF, numBases = object@flankingBasesNum, trDir = object@transcriptionDirection, ...);
             } else if (object@type == "full") {
               visPMS_full(vF, numBases, object@transcriptionDirection);
             }
             
           }
 )
+
+
 
 #' @title visualize probabisitic mutaiton signature for the independent model
 #' @description Generate visualization of mutation signatures for the model with
@@ -54,7 +33,12 @@ setMethod("visPMSignature",
 #' @param vF a matrix for mutation signature
 #' @param numBases the number of flanking bases 
 #' @param centerBases the number of flanking bases
-visPMS_ind <- function(vF, numBases, baseCol, trDir) {
+visPMS_ind <- function(vF, numBases, baseCol = NA, trDir, charSize = 1.2) {
+  
+  if (is.na(baseCol)) {
+    gg_color_hue6 <- hcl(h = seq(15, 375, length = 7), l=65, c=100)[1:6]
+    baseCol <- c(gg_color_hue6[3], gg_color_hue6[5], gg_color_hue6[2], gg_color_hue6[1], gg_color_hue6[4], gg_color_hue6[6]);
+  }
   
   centerBase <- (1 + numBases) / 2;
   
@@ -92,7 +76,7 @@ visPMS_ind <- function(vF, numBases, baseCol, trDir) {
       endx <- startx + A[l,w]
       polygon(c(startx, endx, endx, startx), c(0, 0, 1, 1), col = baseCol[w], border=F);
       if (endx - startx > 1 / 4) {
-        text(0.5 * (endx + startx), 0.5, num2base[w], col="white", cex=1.2)
+        text(0.5 * (endx + startx), 0.5, num2base[w], col="white", cex=charSize)
       }
       startx <- endx;
     }
@@ -107,7 +91,7 @@ visPMS_ind <- function(vF, numBases, baseCol, trDir) {
       endy <- starty + B[w,ww];
       polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[ww], border=F);
       if ((endy - starty > 1 / 4) & (endx - startx > 1 / 4)) {
-        text(0.5 * (endx + startx), 0.5 * (endy + starty), num2base[ww], col="white", cex=1.2)
+        text(0.5 * (endx + startx), 0.5 * (endy + starty), num2base[ww], col="white", cex=charSize)
       }
       starty <- endy;
     }
@@ -149,7 +133,7 @@ visPMS_ind <- function(vF, numBases, baseCol, trDir) {
   endy <- starty + v3[1];
   polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[5], border=F);
   if (endy - starty > 1 / 8) {
-    text(0.5 * (startx + endx), 0.5 * (starty + endy), "+", col="white", cex=1.2)
+    text(0.5 * (startx + endx), 0.5 * (starty + endy), "+", col="white", cex=charSize)
   }
   
   startx <- (numBases - 1) * 1.25 + 0.51;
@@ -158,7 +142,7 @@ visPMS_ind <- function(vF, numBases, baseCol, trDir) {
   endy <- starty + v3[2];
   polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[6], border=F);
   if (endy - starty > 1 / 8) {
-    text(0.5 * (startx + endx), 0.5 * (starty + endy), "-", col="white", cex=1.2)
+    text(0.5 * (startx + endx), 0.5 * (starty + endy), "-", col="white", cex=charSize)
   }
   
   }
