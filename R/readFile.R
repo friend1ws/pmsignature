@@ -146,7 +146,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   sampleName_str <- as.character(VariantAnnotation::sampleNames(vr));
 
   removeInd <- which(XVector::subseq(context, start = centerInd, end = centerInd) != ref_base);
-  if (sum(removeInd) > 0) {
+  if (length(removeInd) > 0) {
     warning(paste("The central bases are inconsistent in", length(removeInd), "mutations. We have removed them."));
     context <- context[-removeInd];
     ref_base <- ref_base[-removeInd];
@@ -156,7 +156,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
   alphabetFreq <- Biostrings::alphabetFrequency(alt_base);
   removeInd <- which(rowSums(alphabetFreq[,1:4]) != 1);
-  if (sum(removeInd) > 0) {
+  if (length(removeInd) > 0) {
     warning(paste("The characters other than (A, C, G, T) are included in alternate bases of", length(removeInd), "mutations. We have removed them."));
     context <- context[-removeInd];
     ref_base <- ref_base[-removeInd];
@@ -166,7 +166,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
   alphabetFreq <- Biostrings::alphabetFrequency(context);
   removeInd <- which(alphabetFreq[,"A"] + alphabetFreq[,"C"] + alphabetFreq[,"G"] + alphabetFreq[,"T"] != numBases);
-  if (sum(removeInd) > 0) {
+  if (length(removeInd) > 0) {
     context <- context[-removeInd];
     ref_base <- ref_base[-removeInd];
     alt_base <- alt_base[-removeInd];
