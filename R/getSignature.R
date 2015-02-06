@@ -44,7 +44,11 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10) {
     
     res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4,  maxiter = 20000));
     
-    print(c(kkk, res1$itr, res1$runtime[3], res1$value.objfn));
+    cat(paste("#trial: ", sprintf("%2d", kkk), 
+                "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
+                "; time(s): ", sprintf("%4.2f", res1$runtime[3]), 
+                "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
+                ));
     
     if (res1$value.objfn > tempL) {
       tempL <- res1$value.objfn;
@@ -139,8 +143,11 @@ bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10) {
       sqQ[bbb,,] <- (Q[n,] - Q0[n,])^2;
     }
     
-    print(c(bbb, res1$itr, res1$runtime[3], res1$value.objfn));
-    
+    cat(paste("#trial: ", sprintf("%2d", bbb), 
+              "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
+              "; time(s): ", sprintf("%4.2f", res1$runtime[3]), 
+              "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
+    ));
   }
   
   return(list(sqF, sqQ))
