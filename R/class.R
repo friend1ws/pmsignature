@@ -55,23 +55,25 @@ setClass(
 #' An S4 class representing the estimated parameters
 #' 
 #' @slot sampleList a list of sample names observed in the input mutation data
-#' @slot SignatureNum the number of mutation signatures specified at the time of estimation
+#' @slot signatureNum the number of mutation signatures specified at the time of estimation
 #' @slot isBackGround the flag showing whether the background signature data is used or not.
 #' @slot signatureFeatureDistribution estimated parameters for mutation signatures
 #' @slot sampleSignatureDistribution estimated parameters for memberships of mutation signatures for each sample
+#' @slot loglikelihood the loglikelihood about the estimated parameters
 setClass(
   Class = "EstimatedParameters",
   contains = "MetaInformation",
   representation = representation(
     sampleList = "character",
-    SignatureNum = "integer",
+    signatureNum = "integer",
     isBackGround = "logical",
     signatureFeatureDistribution = "array",
-    sampleSignatureDistribution = "matrix"
+    sampleSignatureDistribution = "matrix",
+    loglikelihood = "numeric"
   ),
   validity = function(object) {
     errors <- character();
-    variantSignatureNum = object@SignatureNum - as.integer(object@isBackGround);
+    variantSignatureNum = object@signatureNum - as.integer(object@isBackGround);
     # check for the estimated signature feature distribution
     if (any(object@signatureFeatureDistribution < 0) || any(object@signatureFeatureDistribution > 1)) {
       errors <- c(errors, "The estimated signature feature distribution value should be between 0 to 1");    
@@ -90,7 +92,7 @@ setClass(
     if (nrow(object@sampleSignatureDistribution) != length(object@sampleList)) {
       errors <- c(errors, "Inconsistency in the number of samples and the estimated sample signature distibution");
     }
-    if (ncol(object@sampleSignatureDistribution) != object@SignatureNum) {
+    if (ncol(object@sampleSignatureDistribution) != object@signatureNum) {
       errors <- c(errors, "Inconsistency in the number of signatures and the estimated sample signature distibution");
     }
     for (n in 1:nrow(object@sampleSignatureDistribution)) {

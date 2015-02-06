@@ -67,10 +67,11 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10) {
              transcriptionDirection = slot(mutationFeatureData, "transcriptionDirection"),
              possibleFeatures = slot(mutationFeatureData, "possibleFeatures"),
              sampleList = slot(mutationFeatureData, "sampleList"),
-             SignatureNum = as.integer(K),
+             signatureNum = as.integer(K),
              isBackGround = isBG,
              signatureFeatureDistribution = F,
-             sampleSignatureDistribution = Q)
+             sampleSignatureDistribution = Q,
+             loglikelihood = tempL)
   )
  
 }
@@ -86,17 +87,30 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10) {
 #' @param Q0 the initial value for the parameter of memberships used for bootstraped parameter estimations
 #' @param bootNum the number of performing bootstrap calculations
 #' @export
-bootPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, F0, Q0, bootNum = 0) {
+bootPMSignature <- function(mutationFeatureData, Param0, K, BG = NULL, numInit = 10, Param0, bootNum = 10) {
   
-  if (isBG) {
+  
+  K <- slot(Param0, "signatureNum");
+  isBG <- slot(Param0, "isBackGround");
+ 
+  if (!is.null(BG)) {
     varK <- K - 1;
   } else {
     varK <- K;
+    BG <- 0;
   }
   
-  sampleNum <- G[[1]];
-  fdim <- G[[2]];
+  sampleNum <- length(slot(mutationFeatureData, "sampleList"));
+  fdim <- slot(mutationFeatureData, "possibleFeatures");
+  countData_org <- slot(mutationFeatureData, "countData");
+  bootData <- countData_org;
   
+  F0 <- slot(Param0, "signatureFeatureDistribution");
+  Q0 <- slot(Param0, "sampleSignatureDistribution");
+  
+  tempL <- -Inf;
+  tempPar <- c();
+
   sqF <- array(0, c(bootNum, varK, length(fdim), max(fdim)));
   sqQ <- array(0, c(bootNum, N, K));
   
@@ -104,15 +118,12 @@ bootPMSignature <- function(G, K, isBG = FALSE, BG0 = 0, F0, Q0, bootNum = 0) {
     
     ##########
     # This part is under construction!!!!
-    bootG <- matrix(0, sampleNum, M);
-    for (n in 1:sampleNum) {
-      tempG <- table(sample(1:M, sum(G[n,]), replace=TRUE, prob=G[n,] / sum(G[n,])));
-      bootG[n,as.integer(names(tempG))] <- as.integer(tempG);
-    }
+    tempG <- table(sample(1:length(countData_org[3,]), sum(countData_org[3,]), replace=TRUE, prob= countData_org[3,] / sum(countData_org[3,]) ));
+    bootData[3, as.integer(names(tempG))] <- tempG;
     ##########
     
-    p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(Q0), K, sampleNum));
-    Y <- list(bootG, fdim, K, N, M, isBG, BG0);  
+    p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q0)), K, sampleNum));
+    Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), bootData), K, isBG, BG); 
     
     res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
     
