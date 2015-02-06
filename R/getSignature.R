@@ -80,20 +80,16 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10) {
 #' Obtain the standard error estimates for parameters for mutation signatures and memberships
 #' 
 #' @param G the matrix of mutation feature data
-#' @param K the number of mutation signatures
-#' @param isBG the logical value showing whether a background mutaiton features is included or not
-#' @param BG0 a background mutaiton features
-#' @param F0 the initial value for the parameter of mutation signatures used for bootstraped parameter estimations
-#' @param Q0 the initial value for the parameter of memberships used for bootstraped parameter estimations
+#' @param Param0 the initial value for the parameter of memberships used for bootstraped parameter estimations
 #' @param bootNum the number of performing bootstrap calculations
 #' @export
-bootPMSignature <- function(mutationFeatureData, Param0, K, BG = NULL, numInit = 10, Param0, bootNum = 10) {
+bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10) {
   
   
   K <- slot(Param0, "signatureNum");
   isBG <- slot(Param0, "isBackGround");
  
-  if (!is.null(BG)) {
+  if (isBG == TRUE) {
     varK <- K - 1;
   } else {
     varK <- K;
@@ -112,7 +108,7 @@ bootPMSignature <- function(mutationFeatureData, Param0, K, BG = NULL, numInit =
   tempPar <- c();
 
   sqF <- array(0, c(bootNum, varK, length(fdim), max(fdim)));
-  sqQ <- array(0, c(bootNum, N, K));
+  sqQ <- array(0, c(bootNum, nrow(Q0), ncol(Q0)));
   
   for (bbb in 1:bootNum) {
     
@@ -127,12 +123,13 @@ bootPMSignature <- function(mutationFeatureData, Param0, K, BG = NULL, numInit =
     
     res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
     
+    tempPar <- res1$par;
     lenF <- varK * (sum(fdim) - length(fdim));
     lenQ <- sampleNum * (K - 1);
     F <- convertFromTurbo_F(res1$par[1:lenF], fdim, K, isBG);
     Q <- convertFromTurbo_Q(res1$par[(lenF + 1):(lenF + lenQ)], K, sampleNum);
     dim(F) <- c(varK, length(fdim), max(fdim));
-    dim(Q) <- c(N, K);
+    dim(Q) <- c(sampleNum, K);
     
     for (k in 1:varK) {
       sqF[bbb,k,,] <- (F[k,,] - F0[k,,])^2;

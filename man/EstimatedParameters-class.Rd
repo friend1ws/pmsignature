@@ -12,12 +12,14 @@ An S4 class representing the estimated parameters
 \describe{
 \item{\code{sampleList}}{a list of sample names observed in the input mutation data}
 
-\item{\code{SignatureNum}}{the number of mutation signatures specified at the time of estimation}
+\item{\code{signatureNum}}{the number of mutation signatures specified at the time of estimation}
 
 \item{\code{isBackGround}}{the flag showing whether the background signature data is used or not.}
 
 \item{\code{signatureFeatureDistribution}}{estimated parameters for mutation signatures}
 
 \item{\code{sampleSignatureDistribution}}{estimated parameters for memberships of mutation signatures for each sample}
+
+\item{\code{loglikelihood}}{the loglikelihood about the estimated parameters}
 }}
 
