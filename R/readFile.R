@@ -26,7 +26,7 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 
   mutFile <- read.table(infile, sep="\t", header=FALSE);
   sampleName_str <- as.character(mutFile[,1]);
-  mutFeatures <- mutFile[,2:ncol(mutFile)];
+  mutFeatures <- mutFile[,2:ncol(mutFile), drop = FALSE];
   fdim <- unname(apply(mutFeatures, 2, max));
   
   if (type == "independent") {
