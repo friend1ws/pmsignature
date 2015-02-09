@@ -86,7 +86,12 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
   w <- which(tableCount > 0, arr.ind=TRUE);
   procCount <- cbind(w[,2], w[,1], tableCount[w]);
   
-  mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(length(fdim))));
+  if (length(fdim) == 1) {
+    mutFeatList <- matrix(as.integer(suFeatStr), length(suFeatStr), 1);
+  } else {
+    mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(length(fdim))));
+  }
+  
   rownames(mutFeatList) <- NULL;
   rownames(procCount) <- NULL;
 
@@ -287,13 +292,13 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   w <- which(tableCount > 0, arr.ind=TRUE);
   procCount <- cbind(w[,2], w[,1], tableCount[w]);
 
-  if (type == "independent") {
-    mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases + as.integer(trDir))));
-  } else if (type == "full") {
+  if (length(fdim) == 1) {
     # mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(1)));
     mutFeatList <- matrix(as.integer(suFeatStr), length(suFeatStr), 1);
   }
-  
+    mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases + as.integer(trDir))));
+  } 
+
   rownames(mutFeatList) <- NULL;
   rownames(procCount) <- NULL;
 
