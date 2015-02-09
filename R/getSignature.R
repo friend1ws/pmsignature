@@ -129,6 +129,7 @@ bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL
     ##########
     # This part is under construction!!!!
     tempG <- table(sample(1:length(countData_org[3,]), sum(countData_org[3,]), replace=TRUE, prob= countData_org[3,] / sum(countData_org[3,]) ));
+    bootData[3, ] <- 0;
     bootData[3, as.integer(names(tempG))] <- tempG;
     ##########
     
