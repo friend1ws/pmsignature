@@ -86,16 +86,26 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10) {
 #' @param G the matrix of mutation feature data
 #' @param Param0 the initial value for the parameter of memberships used for bootstraped parameter estimations
 #' @param bootNum the number of performing bootstrap calculations
+#' @param BG the background signature used for estimating Param0
 #' @export
-bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10) {
+bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL) {
   
   
   K <- slot(Param0, "signatureNum");
   isBG <- slot(Param0, "isBackGround");
  
   if (isBG == TRUE) {
-    varK <- K - 1;
+    if (!is.null(BG)) {
+      varK <- K - 1;
+    } else {
+      stop(paste("The input parameter is estimated using a background signature.\n",
+                 "Please specify the same background signature."));
+    }
   } else {
+    if (!is.null(BG)) {      
+      warning(paste("The input parameter is estimated without using a background signature.\n",
+                    "Specified background signature is ignored."));
+    }
     varK <- K;
     BG <- 0;
   }
