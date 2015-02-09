@@ -295,7 +295,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   if (length(fdim) == 1) {
     # mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(1)));
     mutFeatList <- matrix(as.integer(suFeatStr), length(suFeatStr), 1);
-  }
+  } else {
     mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases + as.integer(trDir))));
   } 
 
