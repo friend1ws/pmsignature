@@ -133,10 +133,10 @@ bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL
     
     ##########
     # This part is under construction!!!!
+    # bootData violates the validity rules of the mutation feature class... I don't like this..
     tempG <- table(sample(1:length(countData_org[3,]), sum(countData_org[3,]), replace=TRUE, prob= countData_org[3,] / sum(countData_org[3,]) ));
     bootData[3, ] <- 0;
     bootData[3, as.integer(names(tempG))] <- tempG;
-    bootData <- bootData[,bootData[3,] > 0];
     ##########
     
     p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q0)), K, sampleNum));
