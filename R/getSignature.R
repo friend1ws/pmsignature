@@ -207,9 +207,7 @@ mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
   
   for (iterNum in 1:maxIter) {
     
-    upd1 <- updatePMSParam(p, y);
-    p1 <- upd1[[1]];
-    L1 <- upd1[[2]];
+    p1 <- updatePMSParam(p, y);
     updEvalNum <- updEvalNum + 1;
     if ( any(is.nan(unlist(p1))) ) {
       stop("Error in function evaluation");
@@ -218,43 +216,35 @@ mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
     q1 <- p1 - p;
     sr2 <- crossprod(q1);
     
-    upd2 <- updatePMSParam(p1, y);
-    p2 <- upd2[[1]];
-    L2 <- upd2[[2]];
+    p2 <- updatePMSParam(p1, y);
     updEvalNum <- updEvalNum + 1;
     if ( any(is.nan(unlist(p2))) ) {
       stop("Error in function evaluation");
     }
     
-    q2 <- p2 - p1;
-    sq2 <- sqrt(crossprod(q2));
-    sv2 <- crossprod(q2 - q1);
-    srv <- crossprod(q1, q2 - q1);
+    q2 <- p2 - p1
+    sq2 <- sqrt(crossprod(q2))
+    sv2 <- crossprod(q2 - q1)
+    srv <- crossprod(q1, q2 - q1)
     
     # alpha <- switch(ctrl$version, -srv/sv2, -sr2/srv, sqrt(sr2/sv2))
     alpha <- -srv/sv2;
     alpha <- max(step.min, min(step.max, alpha));
     p.new <- p + 2 * alpha * q1 + alpha^2 * (q2 - q1);
     
-    newFlag <- 0;
     # This step is done in the original turboEM code...
     # but I cannot understand why this step is necessary....
     if (isTRUE(abs(alpha - 1) > 0.01) ) {
-      upd3 <- updatePMSParam(p.new, y);
-      p.new <- upd3[[1]];
-      newL <- upd3[[2]];  
+      p.new <- updatePMSParam(p.new, y);
       updEvalNum <- updEvalNum + 1;
-      newFlag <- 1;
-    } else {
-      p.new <- p2;
-      newL <- L2;
     }
     
     # when p.new has some problems...
     if (any(is.nan(p.new)) | !PMSboundary(y)(p.new) ) {
       
       p.new <- p2;
-      newL <- L2;
+      newL <- calcPMSLikelihood(p2, y);
+      LEvalNum  <- LEvalNum + 1;
       
       # since there was a problem, consider to reduce the amount of step max
       if (isTRUE(all.equal(alpha, step.max))) {
@@ -263,28 +253,28 @@ mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
       alpha <- 1
       
       # when p.new is O.K....
-    } else if (newFlag == 1) {
+    } else {
       
-        # upd4 <- updatePMSParam(p.new, y);
-        # p.new <- upd4[[1]];
-        # newL <- upd4[[2]];     
+      newL <- calcPMSLikelihood(p.new, y);
+      LEvalNum  <- LEvalNum + 1;
+      
+      # when the calculated log-likelihood has some problems
+      # or the difference betwen the calculated log-likelihood is large...
+      if (is.nan(newL) | (newL > prevL + objfn.inc)) {
         
-        # when the calculated log-likelihood has some problems
-        # or the difference betwen the calculated log-likelihood is large...
-        if (is.nan(newL) | (newL > prevL + objfn.inc)) {
+        p.new <- p2
+        lnew <- calcPMSLikelihood(p2, y);
+        LEvalNum  <- LEvalNum + 1;
         
-          p.new <- p2
-          newL <- L2;
-        
-          # since there was a problem, consider to reduce the amount of step max
-          if (alpha == step.max) {
-            step.max <- max(step.max0, step.max / mstep);
-          }
-          alpha <- 1
-        
-        } else {
-          useSquareEM <- useSquareEM + 1;
+        # since there was a problem, consider to reduce the amount of step max
+        if (alpha == step.max) {
+          step.max <- max(step.max0, step.max / mstep);
         }
+        alpha <- 1
+        
+      } else {
+        useSquareEM <- useSquareEM + 1;
+      }
       
     }
     

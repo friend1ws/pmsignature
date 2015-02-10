@@ -61,7 +61,7 @@ NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector 
   int patternInd;
   
 
-  NumericVector nTheta_L(signatureNum * samplePatternNum);
+  NumericVector nTheta(signatureNum * samplePatternNum);
   for (int nm = 0; nm < samplePatternNum; nm++) {
  
     patternInd = vSparseCount[0 + nm * 3] - 1;
@@ -76,11 +76,11 @@ NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector 
     if (tempSum > 1e-10) {
       invTempSum = 1 / tempSum;
       for(int k = 0; k < signatureNum; k++) {
-        nTheta_L[k + nm * signatureNum] = vTheta[k + nm * signatureNum] * invTempSum;
+        nTheta[k + nm * signatureNum] = vTheta[k + nm * signatureNum] * invTempSum;
       }
     } else {
       for(int k = 0; k < signatureNum; k++) {
-        nTheta_L[k + nm * signatureNum] = 1 / signatureNum;
+        nTheta[k + nm * signatureNum] = 1 / signatureNum;
       }
     }
        
