@@ -63,7 +63,8 @@ convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
     .Call('pmsignature_convertFromTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum, isBackground)
 }
 
-#' Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step)
+#' Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step),
+#' also calculate the current log-likelihood value
 #' 
 #' @param vPatternList The list of possible mutation features (converted to a vector)
 #' @param vSparseCount The table showing (mutation feature, sample, the number of mutation) (converted to a vector)
@@ -79,6 +80,25 @@ convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
 #' @export
 updateTheta_NormalizedC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
     .Call('pmsignature_updateTheta_NormalizedC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
+}
+
+#' Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step),
+#' also calculate the current log-likelihood value
+#' 
+#' @param vPatternList The list of possible mutation features (converted to a vector)
+#' @param vSparseCount The table showing (mutation feature, sample, the number of mutation) (converted to a vector)
+#' @param vF F (converted to a vector)
+#' @param vQ Q (converted to a vector)
+#' @param fdim a vector specifying the number of possible values for each mutation signature
+#' @param signatureNum the number of mutation signatures
+#' @param sampleNum the number of cancer genomes
+#' @param patternNum the number of possible combinations of all the mutation features
+#' @param samplePatternNum the number of possible combination of samples and mutation patternns
+#' @param isBackground the logical value showing whether a background mutaiton features is included or not
+#' @param vF0 a background mutaiton features
+#' @export
+updateTheta_NormalizedC_new <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
+    .Call('pmsignature_updateTheta_NormalizedC_new', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
 }
 
 #' Calculate the value of the log-likelihood for given parameters
