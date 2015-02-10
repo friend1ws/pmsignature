@@ -52,7 +52,7 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
     #           "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
     # ));
     
-    res1 <- mySquareEM_(p0, Y, tol = tol, maxIter = maxIter);
+    res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter);
     cat(paste("#trial: ", sprintf("%2d", kkk), 
               "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
               "; time(s): ", sprintf("%4.2f", res1$elapsed.time), 
@@ -184,7 +184,6 @@ bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL
 #' @param tol tolerance for the estimation
 #' (when the difference of log-likelihoods become below this value, stop the estimation)
 #' @param maxIter the maximum number of iteration of estimation
-#' @export
 mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
   
   prevL <- -Inf;
@@ -318,7 +317,6 @@ mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
 #' @param p this variable includes the parameters for mutation signatures and membership parameters
 #' @param y this variable includes the information on the mutation features, 
 #' the number of mutation signatures specified and so on
-#' @export
 updatePMSParam <- function(p, y) {
   
   sampleNum <- y[[1]][[1]];
@@ -372,7 +370,6 @@ updatePMSParam <- function(p, y) {
 #' @param p this variable includes the parameters for mutation signatures and membership parameters
 #' @param y this variable includes the information on the mutation features, 
 #' the number of mutation signatures specified and so on
-#' @export
 calcPMSLikelihood <- function(p, y) {
   
   sampleNum <- y[[1]][[1]];
@@ -411,7 +408,6 @@ calcPMSLikelihood <- function(p, y) {
 #' 
 #' @param y this variable includes the information on the mutation features, 
 #' the number of mutation signatures specified and so on
-#' @export
 PMSboundary <- function(y) {
   
   sampleNum <- y[[1]][[1]];

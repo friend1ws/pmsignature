@@ -4,18 +4,18 @@
 \alias{mySquareEM}
 \title{A function for estimating parameters using Squared EM algorithm}
 \usage{
-mySquareEM(p, Y, tol = 1e-04, maxIter = 10000)
+mySquareEM(p, y, tol = 1e-04, maxIter = 10000)
 }
 \arguments{
 \item{p}{this variable includes the parameters for mutation signatures and membership parameters}
+
+\item{y}{this variable includes the information on the mutation features,
+the number of mutation signatures specified and so on}
 
 \item{tol}{tolerance for the estimation
 (when the difference of log-likelihoods become below this value, stop the estimation)}
 
 \item{maxIter}{the maximum number of iteration of estimation}
-
-\item{y}{this variable includes the information on the mutation features,
-the number of mutation signatures specified and so on}
 }
 \description{
 A function for estimating parameters using Squared EM algorithm

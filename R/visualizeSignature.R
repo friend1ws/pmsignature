@@ -17,7 +17,7 @@ setMethod("visPMSignature",
             if (object@type == "independent") {
               visPMS_ind(vF, numBases = object@flankingBasesNum, trDir = object@transcriptionDirection, ...);
             } else if (object@type == "full") {
-              visPMS_full(vF, numBases, object@transcriptionDirection);
+              visPMS_full(vF, numBases = object@flankingBasesNum, object@transcriptionDirection);
             }
             
           }
