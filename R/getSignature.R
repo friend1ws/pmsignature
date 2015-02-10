@@ -52,7 +52,7 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
     #           "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
     # ));
     
-    res1 <- mySquareEM_new(p0, Y, tol = tol, maxIter = maxIter);
+    res1 <- mySquareEM_(p0, Y, tol = tol, maxIter = maxIter);
     cat(paste("#trial: ", sprintf("%2d", kkk), 
               "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
               "; time(s): ", sprintf("%4.2f", res1$elapsed.time), 
