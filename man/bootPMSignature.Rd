@@ -4,12 +4,14 @@
 \alias{bootPMSignature}
 \title{Obtain the standard error estimates for parameters for mutation signatures and memberships}
 \usage{
-bootPMSignature(mutationFeatureData, Param0, bootNum = 10)
+bootPMSignature(mutationFeatureData, Param0, bootNum = 10, BG = NULL)
 }
 \arguments{
 \item{Param0}{the initial value for the parameter of memberships used for bootstraped parameter estimations}
 
 \item{bootNum}{the number of performing bootstrap calculations}
+
+\item{BG}{the background signature used for estimating Param0}
 
 \item{G}{the matrix of mutation feature data}
 }

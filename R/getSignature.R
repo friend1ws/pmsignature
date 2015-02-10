@@ -52,7 +52,7 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
     #           "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
     # ));
     
-    res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter);
+    res1 <- mySquareEM_new(p0, Y, tol = tol, maxIter = maxIter);
     cat(paste("#trial: ", sprintf("%2d", kkk), 
               "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
               "; time(s): ", sprintf("%4.2f", res1$elapsed.time), 
@@ -200,9 +200,7 @@ mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
   convFlag <- FALSE;
   startTime <- proc.time();
   
-  upd <- updatePMSParam(p, y);
-  p <- upd[[1]];
-  newL <- upd[[2]];
+  newL <- calcPMSLikelihood(p, y);
   LEvalNum <- LEvalNum + 1;
   
   for (iterNum in 1:maxIter) {
@@ -364,9 +362,7 @@ updatePMSParam <- function(p, y) {
   dim(Q) <- c(K, sampleNum);
   Q <- t(Q);
   
-  return(c(convertToTurbo_F(as.vector(F), fdim, K, isBG), 
-                convertToTurbo_Q(as.vector(Q), K, sampleNum)
-                ));
+  return(c(convertToTurbo_F(as.vector(F), fdim, K, isBG),  convertToTurbo_Q(as.vector(Q), K, sampleNum)));
   
 }
 

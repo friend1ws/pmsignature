@@ -4,7 +4,8 @@
 \alias{getPMSignature}
 \title{Obtain the parameters for mutation signatures and memberships}
 \usage{
-getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10)
+getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10,
+  tol = 1e-04, maxIter = 10000)
 }
 \arguments{
 \item{mutationFeatureData}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}
@@ -12,6 +13,11 @@ getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10)
 \item{K}{the number of mutation signatures}
 
 \item{numInit}{the number of performing calculations with different initial values}
+
+\item{tol}{tolerance for the estimation
+(when the difference of log-likelihoods become below this value, stop the estimation)}
+
+\item{maxIter}{the maximum number of iteration of estimation}
 
 \item{isBG}{the logical value showing whether a background mutaiton features is included or not}
 

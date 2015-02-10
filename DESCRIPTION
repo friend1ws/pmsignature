@@ -18,7 +18,6 @@ LazyData: true
 Depends:
   ggplot2
 Imports:
-    turboEM,
     Rcpp,
     VariantAnnotation,
     GenomicRanges,

@@ -2,7 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{updateTheta_NormalizedC}
 \alias{updateTheta_NormalizedC}
-\title{Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step)}
+\title{Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step),
+also calculate the current log-likelihood value}
 \usage{
 updateTheta_NormalizedC(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum,
   sampleNum, patternNum, samplePatternNum, isBackground, vF0)
@@ -31,6 +32,7 @@ updateTheta_NormalizedC(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum,
 \item{vF0}{a background mutaiton features}
 }
 \description{
-Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step)
+Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step),
+also calculate the current log-likelihood value
 }
 

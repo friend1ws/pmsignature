@@ -7,7 +7,7 @@
 #' (when the difference of log-likelihoods become below this value, stop the estimation)
 #' @param maxIter the maximum number of iteration of estimation
 #' @export
-mySquareEM_new <- function(p, y, tol = 1e-4, maxIter = 10000) {
+mySquareEM_test <- function(p, y, tol = 1e-4, maxIter = 10000) {
   
   prevL <- -Inf;
   step.min <- 1;
@@ -22,14 +22,14 @@ mySquareEM_new <- function(p, y, tol = 1e-4, maxIter = 10000) {
   convFlag <- FALSE;
   startTime <- proc.time();
   
-  upd <- updatePMSParam(p, y);
+  upd <- updatePMSParam_test(p, y);
   p <- upd[[1]];
   newL <- upd[[2]];
   LEvalNum <- LEvalNum + 1;
   
   for (iterNum in 1:maxIter) {
     
-    upd1 <- updatePMSParam(p, y);
+    upd1 <- updatePMSParam_test(p, y);
     p1 <- upd1[[1]];
     L1 <- upd1[[2]];
     updEvalNum <- updEvalNum + 1;
@@ -40,7 +40,7 @@ mySquareEM_new <- function(p, y, tol = 1e-4, maxIter = 10000) {
     q1 <- p1 - p;
     sr2 <- crossprod(q1);
     
-    upd2 <- updatePMSParam(p1, y);
+    upd2 <- updatePMSParam_test(p1, y);
     p2 <- upd2[[1]];
     L2 <- upd2[[2]];
     updEvalNum <- updEvalNum + 1;
@@ -62,7 +62,7 @@ mySquareEM_new <- function(p, y, tol = 1e-4, maxIter = 10000) {
     # This step is done in the original turboEM code...
     # but I cannot understand why this step is necessary....
     if (isTRUE(abs(alpha - 1) > 0.01) ) {
-      upd3 <- updatePMSParam(p.new, y);
+      upd3 <- updatePMSParam_test(p.new, y);
       p.new <- upd3[[1]];
       newL <- upd3[[2]];  
       updEvalNum <- updEvalNum + 1;
@@ -87,7 +87,7 @@ mySquareEM_new <- function(p, y, tol = 1e-4, maxIter = 10000) {
       # when p.new is O.K....
     } else if (newFlag == 1) {
       
-      # upd4 <- updatePMSParam(p.new, y);
+      # upd4 <- updatePMSParam_test(p.new, y);
       # p.new <- upd4[[1]];
       # newL <- upd4[[2]];     
       
@@ -152,7 +152,7 @@ mySquareEM_new <- function(p, y, tol = 1e-4, maxIter = 10000) {
 #' @param y this variable includes the information on the mutation features, 
 #' the number of mutation signatures specified and so on
 #' @export
-updatePMSParam_new <- function(p, y) {
+updatePMSParam_test <- function(p, y) {
   
   sampleNum <- y[[1]][[1]];
   fdim <- y[[1]][[2]];
@@ -181,7 +181,7 @@ updatePMSParam_new <- function(p, y) {
   Q <- t(Q);
   ####################
   # E-step
-  Theta_L <- updateTheta_NormalizedC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, F0);
+  Theta_L <- updateTheta_NormalizedC_new(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, F0);
   Theta <- Theta_L[-length(Theta_L)];
   L <- Theta_L[length(Theta_L)];
   
