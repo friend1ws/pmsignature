@@ -7,7 +7,6 @@ using namespace Rcpp;
 //' @param vQ Q (converted to a vector)
 //' @param signatureNum the number of mutation signatures
 //' @param sampleNum the number of cancer genomes
-//' @export
 // [[Rcpp::export]]
 NumericVector convertToTurbo_Q(NumericVector vQ, int signatureNum, int sampleNum) {
   
@@ -32,7 +31,6 @@ NumericVector convertToTurbo_Q(NumericVector vQ, int signatureNum, int sampleNum
 //' @param fdim a vector specifying the number of possible values for each mutation signature
 //' @param signatureNum the number of mutation signatures
 //' @param isBackground the logical value showing whether a background mutaiton features is included or not
-//' @export
 // [[Rcpp::export]]
 NumericVector convertToTurbo_F(NumericVector vF, NumericVector fdim, int signatureNum, bool isBackground) {
   
@@ -67,7 +65,6 @@ NumericVector convertToTurbo_F(NumericVector vF, NumericVector fdim, int signatu
 //' @param turboQ Q (converted for turboEM)
 //' @param signatureNum the number of mutation signatures
 //' @param sampleNum the number of cancer genomes
-//' @export
 // [[Rcpp::export]]
 NumericVector convertFromTurbo_Q(NumericVector turboQ, int signatureNum, int sampleNum) {
   
@@ -100,7 +97,6 @@ NumericVector convertFromTurbo_Q(NumericVector turboQ, int signatureNum, int sam
 //' @param fdim a vector specifying the number of possible values for each mutation signature
 //' @param signatureNum the number of mutation signatures
 //' @param isBackground the logical value showing whether a background mutaiton features is included or not
-//' @export
 // [[Rcpp::export]]
 NumericVector convertFromTurbo_F(NumericVector turboF, NumericVector fdim, int signatureNum, bool isBackground) {
   

@@ -45,13 +45,6 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
     p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, sampleNum));
     Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), slot(mutationFeatureData, "countData")), K, isBG, BG);  
     
-    # res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4,  maxiter = 20000));
-    # cat(paste("#trial: ", sprintf("%2d", kkk), 
-    #           "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
-    #           "; time(s): ", sprintf("%4.2f", res1$runtime[3]), 
-    #           "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
-    # ));
-    
     res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter);
     cat(paste("#trial: ", sprintf("%2d", kkk), 
               "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
@@ -97,8 +90,10 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
 #' @param Param0 the initial value for the parameter of memberships used for bootstraped parameter estimations
 #' @param bootNum the number of performing bootstrap calculations
 #' @param BG the background signature used for estimating Param0
+#' @param numInit the number of performing calculations with different initial values
+#' @param tol tolerance for the estimation
 #' @export
-bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL) {
+bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL, tol = 1e-2, maxIter = 10000) {
   
   
   K <- slot(Param0, "signatureNum");
@@ -141,12 +136,19 @@ bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL
     tempG <- table(sample(1:length(countData_org[3,]), sum(countData_org[3,]), replace=TRUE, prob= countData_org[3,] / sum(countData_org[3,]) ));
     bootData[3, ] <- 0;
     bootData[3, as.integer(names(tempG))] <- tempG;
+    bootData <- bootData[,bootData[3,] > 0];
     ##########
     
     p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q0)), K, sampleNum));
     Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), bootData), K, isBG, BG); 
     
-    res1 <- turboEM::turboem(par=p0, y=Y, fixptfn=updatePMSParam, objfn=calcPMSLikelihood, method=c("squarem"), pconstr=PMSboundary(Y), control.run = list(convtype = "objfn", tol = 1e-4));
+    res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter);
+    cat(paste("#trial: ", sprintf("%2d", bbb), 
+              "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
+              "; time(s): ", sprintf("%4.2f", res1$elapsed.time), 
+              "; convergence: ", res1$convergence,
+              "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
+    ));
     
     tempPar <- res1$par;
     lenF <- varK * (sum(fdim) - length(fdim));
@@ -164,11 +166,7 @@ bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL
       sqQ[bbb,,] <- (Q[n,] - Q0[n,])^2;
     }
     
-    cat(paste("#trial: ", sprintf("%2d", bbb), 
-              "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
-              "; time(s): ", sprintf("%4.2f", res1$runtime[3]), 
-              "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
-    ));
+
   }
   
   return(list(sqF, sqQ))

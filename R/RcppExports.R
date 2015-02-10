@@ -6,7 +6,6 @@
 #' @param turboF F (converted for turboEM)
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
-#' @export
 boundaryTurbo_F <- function(turboF, fdim, signatureNum) {
     .Call('pmsignature_boundaryTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum)
 }
@@ -16,7 +15,6 @@ boundaryTurbo_F <- function(turboF, fdim, signatureNum) {
 #' @param turboQ Q (converted for turboEM)
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
-#' @export
 boundaryTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
     .Call('pmsignature_boundaryTurbo_Q', PACKAGE = 'pmsignature', turboQ, signatureNum, sampleNum)
 }
@@ -26,7 +24,6 @@ boundaryTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
 #' @param vQ Q (converted to a vector)
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
-#' @export
 convertToTurbo_Q <- function(vQ, signatureNum, sampleNum) {
     .Call('pmsignature_convertToTurbo_Q', PACKAGE = 'pmsignature', vQ, signatureNum, sampleNum)
 }
@@ -37,7 +34,6 @@ convertToTurbo_Q <- function(vQ, signatureNum, sampleNum) {
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
-#' @export
 convertToTurbo_F <- function(vF, fdim, signatureNum, isBackground) {
     .Call('pmsignature_convertToTurbo_F', PACKAGE = 'pmsignature', vF, fdim, signatureNum, isBackground)
 }
@@ -47,7 +43,6 @@ convertToTurbo_F <- function(vF, fdim, signatureNum, isBackground) {
 #' @param turboQ Q (converted for turboEM)
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
-#' @export
 convertFromTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
     .Call('pmsignature_convertFromTurbo_Q', PACKAGE = 'pmsignature', turboQ, signatureNum, sampleNum)
 }
@@ -58,7 +53,6 @@ convertFromTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
-#' @export
 convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
     .Call('pmsignature_convertFromTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum, isBackground)
 }
@@ -77,7 +71,6 @@ convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
 #' @param samplePatternNum the number of possible combination of samples and mutation patternns
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
-#' @export
 updateTheta_NormalizedC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
     .Call('pmsignature_updateTheta_NormalizedC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
 }
@@ -95,7 +88,6 @@ updateTheta_NormalizedC <- function(vPatternList, vSparseCount, vF, vQ, fdim, si
 #' @param samplePatternNum the number of possible combination of samples and mutation patternns
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
-#' @export
 getLogLikelihoodC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
     .Call('pmsignature_getLogLikelihoodC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
 }
@@ -113,7 +105,6 @@ getLogLikelihoodC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatur
 #' @param samplePatternNum the number of possible combination of samples and mutation patternns
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
-#' @export
 updateMstepFQC <- function(vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground) {
     .Call('pmsignature_updateMstepFQC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground)
 }

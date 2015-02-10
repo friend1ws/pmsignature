@@ -7,7 +7,6 @@ using namespace Rcpp;
 //' @param turboF F (converted for turboEM)
 //' @param fdim a vector specifying the number of possible values for each mutation signature
 //' @param signatureNum the number of mutation signatures
-//' @export
 // [[Rcpp::export]]
 bool boundaryTurbo_F(NumericVector turboF, NumericVector fdim, int signatureNum) {
   
@@ -49,7 +48,6 @@ bool boundaryTurbo_F(NumericVector turboF, NumericVector fdim, int signatureNum)
 //' @param turboQ Q (converted for turboEM)
 //' @param signatureNum the number of mutation signatures
 //' @param sampleNum the number of cancer genomes
-//' @export
 // [[Rcpp::export]]
 bool boundaryTurbo_Q(NumericVector turboQ, int signatureNum, int sampleNum) {
   

@@ -16,7 +16,6 @@ using namespace Rcpp;
 //' @param samplePatternNum the number of possible combination of samples and mutation patternns
 //' @param isBackground the logical value showing whether a background mutaiton features is included or not
 //' @param vF0 a background mutaiton features
-//' @export
 // [[Rcpp::export]]
 NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground, NumericVector vF0) {
 
@@ -105,7 +104,6 @@ NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector 
 //' @param samplePatternNum the number of possible combination of samples and mutation patternns
 //' @param isBackground the logical value showing whether a background mutaiton features is included or not
 //' @param vF0 a background mutaiton features
-//' @export
 // [[Rcpp::export]]
 double getLogLikelihoodC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground, NumericVector vF0) {
 
@@ -165,8 +163,9 @@ double getLogLikelihoodC(NumericVector vPatternList, NumericVector vSparseCount,
       std::cout << nm << "\t" << tempSum << "\t" << vSparseCount[2 + nm * 3] << "\t" << logLikelihood << "\n";
     }
     */ 
-    
-    logLikelihood = logLikelihood + log(tempSum) * vSparseCount[2 + nm * 3];
+    if (tempSum > 1e-10 and vSparseCount[2 + nm * 3] > 0) {
+      logLikelihood = logLikelihood + log(tempSum) * vSparseCount[2 + nm * 3];
+    }
        
   }
 
@@ -188,7 +187,6 @@ double getLogLikelihoodC(NumericVector vPatternList, NumericVector vSparseCount,
 //' @param samplePatternNum the number of possible combination of samples and mutation patternns
 //' @param isBackground the logical value showing whether a background mutaiton features is included or not
 //' @param vF0 a background mutaiton features
-//' @export
 // [[Rcpp::export]]
 NumericVector updateMstepFQC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector nTheta, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground) {
 

@@ -4,7 +4,8 @@
 \alias{bootPMSignature}
 \title{Obtain the standard error estimates for parameters for mutation signatures and memberships}
 \usage{
-bootPMSignature(mutationFeatureData, Param0, bootNum = 10, BG = NULL)
+bootPMSignature(mutationFeatureData, Param0, bootNum = 10, BG = NULL,
+  tol = 0.01, maxIter = 10000)
 }
 \arguments{
 \item{Param0}{the initial value for the parameter of memberships used for bootstraped parameter estimations}
@@ -13,7 +14,11 @@ bootPMSignature(mutationFeatureData, Param0, bootNum = 10, BG = NULL)
 
 \item{BG}{the background signature used for estimating Param0}
 
+\item{tol}{tolerance for the estimation}
+
 \item{G}{the matrix of mutation feature data}
+
+\item{numInit}{the number of performing calculations with different initial values}
 }
 \description{
 Obtain the standard error estimates for parameters for mutation signatures and memberships
