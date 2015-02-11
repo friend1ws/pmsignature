@@ -73,6 +73,6 @@ getMembershipParam <- function(mutationFeatureData, Param, BG = NULL) {
 }
 
 
-ggplot(a, aes(x = plotCoordinate, y = sampleID, color = factor(maxSig), alpha = entropy)) + geom_point(position = position_jitter(width=0, height=0.3), size = rel(1)) + scale_alpha(range = c(0, 1), limits = c(0, 1.6), trans = "reverse");
+# ggplot(a, aes(x = plotCoordinate, y = sampleID, color = factor(maxSig), alpha = entropy)) + geom_point(position = position_jitter(width=0, height=0.3), size = rel(1)) + scale_alpha(range = c(0, 1), limits = c(0, 1.6), trans = "reverse");
 
 
