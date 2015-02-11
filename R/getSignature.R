@@ -323,7 +323,7 @@ updatePMSParam <- function(p, y) {
   sparseCount <- y[[1]][[4]];
   K <- y[[2]];
   isBG <- y[[3]];
-  F0 <- y[[4]];  
+  BG0 <- y[[4]];  
   
   patternNum <- ncol(patternList);
   samplePatternNum <- ncol(sparseCount);
@@ -344,7 +344,7 @@ updatePMSParam <- function(p, y) {
   Q <- t(Q);
   ####################
   # E-step
-  Theta <- updateTheta_NormalizedC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, F0);
+  Theta <- updateTheta_NormalizedC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0);
 
   dim(Theta) <- c(K, samplePatternNum);
   
@@ -376,7 +376,7 @@ calcPMSLikelihood <- function(p, y) {
   sparseCount <- y[[1]][[4]];
   K <- y[[2]];
   isBG <- y[[3]];
-  F0 <- y[[4]];  
+  BG0 <- y[[4]];  
   
   patternNum <- ncol(patternList);
   samplePatternNum <- ncol(sparseCount);
@@ -397,7 +397,7 @@ calcPMSLikelihood <- function(p, y) {
   Q <- t(Q);
   ####################
   
-  return(getLogLikelihoodC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, F0));
+  return(getLogLikelihoodC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0));
 
 }
 

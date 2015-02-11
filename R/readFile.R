@@ -103,7 +103,8 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
              possibleFeatures = as.integer(fdim),
              featureVectorList = t(mutFeatList),
              sampleList = suSampleStr,
-             countData = t(procCount)
+             countData = t(procCount),
+             mutationPosition = NULL
   ))
   
 }
@@ -135,7 +136,10 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
   mutFile <- read.table(infile, sep="\t", header=FALSE);
 
-  vr <- VariantAnnotation::VRanges(mutFile[,2], IRanges::IRanges(mutFile[,3], mutFile[,3]),
+  chrInfo <- mutFile[,2];
+  posInfo <- mutFile[,3];
+  
+  vr <- VariantAnnotation::VRanges(chrInfo, IRanges::IRanges(posInfo, posInfo),
                ref = mutFile[,4],
                alt = mutFile[,5],
                sampleNames = mutFile[,1]
@@ -157,6 +161,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     ref_base <- ref_base[-removeInd];
     alt_base <- alt_base[-removeInd];
     sampleName_str <- sampleName_str[-removeInd];
+    chrInfo <- chrInfo[-removeInd];
+    posInfo <- posInfo[-removeInd];
   }
 
   alphabetFreq <- Biostrings::alphabetFrequency(alt_base);
@@ -167,6 +173,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     ref_base <- ref_base[-removeInd];
     alt_base <- alt_base[-removeInd];
     sampleName_str <- sampleName_str[-removeInd];
+    chrInfo <- chrInfo[-removeInd];
+    posInfo <- posInfo[-removeInd];
   }
 
   alphabetFreq <- Biostrings::alphabetFrequency(context);
@@ -176,6 +184,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     ref_base <- ref_base[-removeInd];
     alt_base <- alt_base[-removeInd];
     sampleName_str <- sampleName_str[-removeInd];
+    chrInfo <- chrInfo[-removeInd];
+    posInfo <- posInfo[-removeInd];
     warning(paste("The characters other than (A, C, G, T) are included in flanking bases of", length(removeInd), "mutations. We have removed them."));
   }
 
@@ -209,7 +219,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     alt_base <- alt_base[strandInfo != "*"];
     sampleName_str <- sampleName_str[strandInfo != "*"];
     strandInfo <- strandInfo[strandInfo != "*"];
-    
+    chrInfo <- chrInfo[strandInfo != "*"];
+    posInfo <- posInfo[strandInfo != "*"];
   }
   
   if (type == "independent") {
@@ -288,10 +299,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
   rawCount <- data.frame(sample = sampleIDs, mutInds = lookupFeatInd[featStr]);
 
-  tableCount <- table(rawCount);
-  w <- which(tableCount > 0, arr.ind=TRUE);
-  procCount <- cbind(w[,2], w[,1], tableCount[w]);
-
+  
   if (length(fdim) == 1) {
     # mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(1)));
     mutFeatList <- matrix(as.integer(suFeatStr), length(suFeatStr), 1);
@@ -309,7 +317,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
              possibleFeatures = as.integer(fdim),
              featureVectorList = t(mutFeatList),
              sampleList = suSampleStr,
-             countData = t(procCount)
+             countData = t(procCount),
+             mutationPosition = data.frame(chr = chrInfo, pos = posInfo, sampleID = unname(sampleIDs), mutID = unname(lookupFeatInd[featStr]), stringsAsFactors = FALSE)
              )
   )
 

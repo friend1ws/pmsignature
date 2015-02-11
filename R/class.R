@@ -26,7 +26,8 @@ setClass(
   representation = representation(
     featureVectorList = "matrix",
     sampleList = "character",
-    countData = "matrix"
+    countData = "matrix",
+    mutationPosition = "data.frame"
     ),
   validity = function(object) {
     errors <- character();
