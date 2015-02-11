@@ -299,6 +299,10 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
   rawCount <- data.frame(sample = sampleIDs, mutInds = lookupFeatInd[featStr]);
 
+  tableCount <- table(rawCount);
+  w <- which(tableCount > 0, arr.ind=TRUE);
+  procCount <- cbind(w[,2], w[,1], tableCount[w]);
+  
   
   if (length(fdim) == 1) {
     # mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(1)));

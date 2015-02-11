@@ -57,7 +57,7 @@ getMembershipParam <- function(mutationFeatureData, Param, BG = NULL) {
   # obtaining the coordinate for the plot
   genome <- BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19;
   startCoordinate <- cumsum(seqlengths(genome) / 100) - seqlengths(genome) / 100;
-  plotCoordinate <- startPos[mutationPosition[,1]] + mutationPosition[,2] / 100;
+  plotCoordinate <- startCoordinate[mutationPosition[,1]] + mutationPosition[,2] / 100;
   names(plotCoordinate) <- NULL;
   
 
