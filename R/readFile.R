@@ -404,7 +404,7 @@ readBGFile <- function(mutationFeatureData) {
     bgfile <- paste("bgdata/bg.", tempType, tempNumBase, ".txt", sep="");
   }
   
-  bdata <- read.table(system.file(bgfile, package = "pmsignature"), sep="\t");
+  bdata <- read.table(system.file(bgfile, package = "pmsignature"), header = FALSE, sep="\t");
   
   tempFeatureVectorList <- apply(slot(mutationFeatureData, "featureVectorList"), 2, paste0, collapse=",");
   bprob <- bdata[,2];

@@ -52,9 +52,13 @@ getBackgroudSignature <- function(type = "independent", numBases = 3, trDir = FA
                                             start = start_trial, 
                                             end = end_trial), ignore.strand = TRUE);
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene;
-    exons_txdb <- exons(txdb);
-    gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE)
-    gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(exons_txdb[gr_txdb@subjectHits]))));
+    # exons_txdb <- GenomicFeatures::exons(txdb);
+    # gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE);
+    # gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(exons_txdb[gr_txdb@subjectHits]))));
+    txdb_bed <- GenomicFeatures::asBED(txdb);
+    gr_txdb <- GenomicRanges::findOverlaps(gr, txdb_bed, ignore.strand = FALSE)
+    gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(txdb_bed[gr_txdb@subjectHits]))));
+    
     ugr_strand <- unique(gr_strand[gr_strand[, 2] != "*" ,], MARGIN=1);
   
     rmdup_ugr_strand <- ugr_strand[!duplicated(ugr_strand[, 1]), ];
