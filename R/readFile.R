@@ -121,6 +121,7 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 #' @export
 readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
 
+  
   if (type == "independent") {
     fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
   } else if (type == "full") {
@@ -142,7 +143,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   alt_base <- Biostrings::DNAStringSet(mutFile[,5]);
   sampleName_str <- as.character(mutFile[,1]);
   
-  gr <- makeGRangesFromDataFrame(data.frame(chr = chrInfo, 
+  gr <- GenomicRanges::makeGRangesFromDataFrame(data.frame(chr = chrInfo, 
                                             start = posInfo, 
                                             end = posInfo), ignore.strand = TRUE);
 
@@ -214,9 +215,9 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     ref_base <- ref_base[strandInfo != "*"];
     alt_base <- alt_base[strandInfo != "*"];
     sampleName_str <- sampleName_str[strandInfo != "*"];
-    strandInfo <- strandInfo[strandInfo != "*"];
     chrInfo <- chrInfo[strandInfo != "*"];
     posInfo <- posInfo[strandInfo != "*"];
+    strandInfo <- strandInfo[strandInfo != "*"];
   }
   
   
@@ -282,7 +283,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 #' @param type the type of mutation feature vecotr (should be "independent" or "full").
 getMutationFeatureVector <- function(context, ref_base, alt_base, strandInfo = NULL, numBases, type) {
   
-  
+  trDir <- !is.null(strandInfo);
   if (type == "independent") {
     fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
   } else if (type == "full") {
@@ -324,7 +325,7 @@ getMutationFeatureVector <- function(context, ref_base, alt_base, strandInfo = N
       columnInd <- columnInd + 1;
     }
     
-    if (!is.null(strandInfo)) {
+    if (trDir ==TRUE) {
       mutFeatures[which(strandInfo == "+"), length(fdim)] <- 1;
       mutFeatures[which(strandInfo == "-"), length(fdim)] <- 2;    
     }
@@ -356,7 +357,7 @@ getMutationFeatureVector <- function(context, ref_base, alt_base, strandInfo = N
     mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] + tempDigits * 4;
     mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] + tempDigits * 5;
     
-    if (!is.null(strandInfo)) {
+    if (trDir ==TRUE) {
       tempDigits <- tempDigits * 6;
       mutFeatures[which(strandInfo == "-"), 1] <- mutFeatures[which(strandInfo == "-"), 1] + tempDigits * 1;
     }
