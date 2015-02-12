@@ -134,25 +134,21 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   }
   centerInd <- (numBases + 1) / 2;
 
-  mutFile <- read.table(infile, sep="\t", header=FALSE);
+  mutFile <- read.table(infile, sep="\t", header=FALSE, stringsAsFactors = FALSE);
 
   chrInfo <- mutFile[,2];
   posInfo <- mutFile[,3];
+  ref_base <- Biostrings::DNAStringSet(mutFile[,4]);
+  alt_base <- Biostrings::DNAStringSet(mutFile[,5]);
+  sampleName_str <- as.character(mutFile[,1]);
   
-  vr <- VariantAnnotation::VRanges(chrInfo, IRanges::IRanges(posInfo, posInfo),
-               ref = mutFile[,4],
-               alt = mutFile[,5],
-               sampleNames = mutFile[,1]
-                )
-
-  gr <- GenomicRanges::granges(vr) ## drop mcols
+  gr <- makeGRangesFromDataFrame(data.frame(chr = chrInfo, 
+                                            start = posInfo, 
+                                            end = posInfo), ignore.strand = TRUE);
 
   ranges <- GenomicRanges::resize(gr, numBases, fix = "center")
   context <- Biostrings::getSeq(BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, ranges);
 
-  ref_base <- Biostrings::DNAStringSet(VariantAnnotation::ref(vr));
-  alt_base <- Biostrings::DNAStringSet(VariantAnnotation::alt(vr));
-  sampleName_str <- as.character(VariantAnnotation::sampleNames(vr));
 
   removeInd <- which(XVector::subseq(context, start = centerInd, end = centerInd) != ref_base);
   if (length(removeInd) > 0) {
@@ -195,25 +191,25 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   alt_base[revCompInd] <- Biostrings::reverseComplement(alt_base[revCompInd]);
 
   # Obtaining transcription strand information using VariantAnnotation packages
-  # I feel it's a bit slow to get the strand information, 
-  # and would like to improve the implementation in near future (Y.S., 20141223)
   if (trDir == TRUE) {
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene;
-    vr_txdb <- VariantAnnotation::locateVariants(vr, txdb, VariantAnnotation::AllVariants(), ignore.strand=TRUE);
-    vr_strand <- cbind(S4Vectors::mcols(vr_txdb)@listData$QUERYID, as.character(S4Vectors::as.data.frame(strand(vr_txdb))$value));
-    uvr_strand <- unique(vr_strand[vr_strand[, 2] != "*" ,], MARGIN=1);
-    rmdup_uvr_strand <- uvr_strand[!duplicated(uvr_strand[, 1]), ];
-    txdb_plus_vr_ind <- as.integer(rmdup_uvr_strand[rmdup_uvr_strand[, 2] == "+", 1]);
-    txdb_minus_vr_ind <- as.integer(rmdup_uvr_strand[rmdup_uvr_strand[, 2] == "-", 1]);
+    exons_txdb <- exons(txdb);
+    gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE)
+    gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(exons_txdb[gr_txdb@subjectHits]))));
+    ugr_strand <- unique(gr_strand[gr_strand[, 2] != "*" ,], MARGIN=1);
     
-    strandInfo <- rep("*", length(vr));
-    strandInfo[setdiff(txdb_plus_vr_ind, revCompInd)] <- "+";
-    strandInfo[intersect(txdb_plus_vr_ind, revCompInd)] <- "-";    
-    strandInfo[setdiff(txdb_minus_vr_ind, revCompInd)] <- "-";
-    strandInfo[intersect(txdb_minus_vr_ind, revCompInd)] <- "+";   
+    rmdup_ugr_strand <- ugr_strand[!duplicated(ugr_strand[, 1]), ];
+    txdb_plus_gr_ind <- as.integer(rmdup_ugr_strand[rmdup_ugr_strand[, 2] == "+", 1]);
+    txdb_minus_gr_ind <- as.integer(rmdup_ugr_strand[rmdup_ugr_strand[, 2] == "-", 1]);
+    
+    strandInfo <- rep("*", length(gr));
+    strandInfo[setdiff(txdb_plus_gr_ind, revCompInd)] <- "+";
+    strandInfo[intersect(txdb_plus_gr_ind, revCompInd)] <- "-";    
+    strandInfo[setdiff(txdb_minus_gr_ind, revCompInd)] <- "-";
+    strandInfo[intersect(txdb_minus_gr_ind, revCompInd)] <- "+";   
     
     warning(paste("Out of", length(context), "mutations, we could obtain transcription direction information for", 
-                  length(txdb_plus_vr_ind) + length(txdb_minus_vr_ind), "mutation. Other mutations are removed."));
+                  length(txdb_plus_gr_ind) + length(txdb_minus_gr_ind), "mutation. Other mutations are removed."));
     context <- context[strandInfo != "*"];
     ref_base <- ref_base[strandInfo != "*"];
     alt_base <- alt_base[strandInfo != "*"];
@@ -223,67 +219,14 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     posInfo <- posInfo[strandInfo != "*"];
   }
   
-  if (type == "independent") {
-    
-    mutFeatures <- matrix(0, length(ref_base), length(fdim));
-
-    mutFeatures[which(ref_base == "C" & alt_base == "A"), 1] <- 1;
-    mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] <- 2;
-    mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] <- 3;
-    mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] <- 4;
-    mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- 5;
-    mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- 6;
-
-    columnInd <- 2;
-    for (baseInd in 1:numBases) {
-      if (baseInd == centerInd) {
-        next;
-      }
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "A"), columnInd] <- 1;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), columnInd] <- 2;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), columnInd] <- 3;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), columnInd] <- 4;
-      columnInd <- columnInd + 1;
-    }
-
-    if (trDir == TRUE) {
-      mutFeatures[which(strandInfo == "+"), length(fdim)] <- 1;
-      mutFeatures[which(strandInfo == "-"), length(fdim)] <- 2;    
-    }
   
-  } else {
-    
-    mutFeatures <- matrix(1, length(ref_base), length(fdim));
-    
-    tempDigits <- 1;
-    for (i in 1:((numBases - 1) / 2)) {
-      
-      baseInd <- numBases + 1 - i;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] + tempDigits * 1;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] + tempDigits * 2;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] + tempDigits * 3;
-
-      tempDigits <- tempDigits * 4;
-      baseInd <- i;      
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] + tempDigits * 1;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] + tempDigits * 2;
-      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] + tempDigits * 3;
-
-      tempDigits <- tempDigits * 4;
-    }
- 
-    mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] + tempDigits * 1;
-    mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] <- mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] + tempDigits * 2;
-    mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] + tempDigits * 3;
-    mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] + tempDigits * 4;
-    mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] + tempDigits * 5;
-      
-    if (trDir == TRUE) {
-      tempDigits <- tempDigits * 6;
-      mutFeatures[which(strandInfo == "-"), 1] <- mutFeatures[which(strandInfo == "-"), 1] + tempDigits * 1;
-    }
-  
+  if (trDir == FALSE) {
+    strandInfo <- NULL;
   }
+  
+  
+  mutFeatures <- getMutationFeatureVector(context, ref_base, alt_base, strandInfo, numBases, type);
+
     
   suSampleStr <- sort(unique(sampleName_str));
   lookupSampleInd <- 1:length(suSampleStr);
@@ -329,6 +272,100 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 }
 
 
+
+#' get mutation feature vector from context sequence data and reference and alternate allele information
+#' @param context the context sequence data around the mutated position. This shoud be Biostrings::DNAStringSet class
+#' @param ref_base the reference bases at the mutated position.
+#' @param alt_base the alternate bases at the mutated position.
+#' @param strandInfo transcribed strand information at the mutated position. (this is optional)
+#' @param numBases the number of flanking bases around the mutated position.
+#' @param type the type of mutation feature vecotr (should be "independent" or "full").
+getMutationFeatureVector <- function(context, ref_base, alt_base, strandInfo = NULL, numBases, type) {
+  
+  
+  if (type == "independent") {
+    fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
+  } else if (type == "full") {
+    fdim <- c(6 * 4^(numBases - 1) * 2^(as.integer(trDir)));
+  } else {
+    stop('the type argument has to be "independent" or "full"');
+  }
+  
+  if (numBases %% 2 != 1) {
+    stop("numBases should be odd numbers");
+  }
+  centerInd <- (numBases + 1) / 2;
+  
+  
+  ##########
+  # whether we should add additional check function for the bases of context sequences, reference and alternate allele...?
+  ##########
+  
+  if (type == "independent") {
+    
+    mutFeatures <- matrix(0, length(ref_base), length(fdim));
+    
+    mutFeatures[which(ref_base == "C" & alt_base == "A"), 1] <- 1;
+    mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] <- 2;
+    mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] <- 3;
+    mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] <- 4;
+    mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- 5;
+    mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- 6;
+    
+    columnInd <- 2;
+    for (baseInd in 1:numBases) {
+      if (baseInd == centerInd) {
+        next;
+      }
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "A"), columnInd] <- 1;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), columnInd] <- 2;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), columnInd] <- 3;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), columnInd] <- 4;
+      columnInd <- columnInd + 1;
+    }
+    
+    if (!is.null(strandInfo)) {
+      mutFeatures[which(strandInfo == "+"), length(fdim)] <- 1;
+      mutFeatures[which(strandInfo == "-"), length(fdim)] <- 2;    
+    }
+    
+  } else {
+    
+    mutFeatures <- matrix(1, length(ref_base), length(fdim));
+    
+    tempDigits <- 1;
+    for (i in 1:((numBases - 1) / 2)) {
+      
+      baseInd <- numBases + 1 - i;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] + tempDigits * 1;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] + tempDigits * 2;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] + tempDigits * 3;
+      
+      tempDigits <- tempDigits * 4;
+      baseInd <- i;      
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "C"), 1] + tempDigits * 1;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "G"), 1] + tempDigits * 2;
+      mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] <- mutFeatures[which(XVector::subseq(context, start = baseInd, end = baseInd) == "T"), 1] + tempDigits * 3;
+      
+      tempDigits <- tempDigits * 4;
+    }
+    
+    mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "C" & alt_base == "G"), 1] + tempDigits * 1;
+    mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] <- mutFeatures[which(ref_base == "C" & alt_base == "T"), 1] + tempDigits * 2;
+    mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "A"), 1] + tempDigits * 3;
+    mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "C"), 1] + tempDigits * 4;
+    mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] <- mutFeatures[which(ref_base == "T" & alt_base == "G"), 1] + tempDigits * 5;
+    
+    if (!is.null(strandInfo)) {
+      tempDigits <- tempDigits * 6;
+      mutFeatures[which(strandInfo == "-"), 1] <- mutFeatures[which(strandInfo == "-"), 1] + tempDigits * 1;
+    }
+    
+  }
+  
+  return(mutFeatures);
+  
+}
 
 #' Read and format the background vector data
 #' 
