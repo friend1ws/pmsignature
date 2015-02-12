@@ -284,6 +284,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
 
 #' get mutation feature vector from context sequence data and reference and alternate allele information
+#'
 #' @param context the context sequence data around the mutated position. This shoud be Biostrings::DNAStringSet class
 #' @param ref_base the reference bases at the mutated position.
 #' @param alt_base the alternate bases at the mutated position.
