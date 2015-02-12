@@ -19,7 +19,6 @@ Depends:
   ggplot2
 Imports:
     Rcpp,
-    VariantAnnotation,
     GenomicRanges,
     S4Vectors,
     IRanges,
