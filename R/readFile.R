@@ -193,6 +193,10 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
   # Obtaining transcription strand information using VariantAnnotation packages
   if (trDir == TRUE) {
+    gr <- GenomicRanges::makeGRangesFromDataFrame(data.frame(chr = chrInfo, 
+                                                             start = posInfo, 
+                                                             end = posInfo), ignore.strand = TRUE);
+    
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene;
     exons_txdb <- exons(txdb);
     gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE)
@@ -211,6 +215,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     
     warning(paste("Out of", length(context), "mutations, we could obtain transcription direction information for", 
                   length(txdb_plus_gr_ind) + length(txdb_minus_gr_ind), "mutation. Other mutations are removed."));
+    
+    # this may be unstable... need to review thoroughly later...
     context <- context[strandInfo != "*"];
     ref_base <- ref_base[strandInfo != "*"];
     alt_base <- alt_base[strandInfo != "*"];
