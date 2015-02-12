@@ -76,6 +76,10 @@ getBackgroudSignature <- function(type = "independent", numBases = 3, trDir = FA
     strandInfo_trial <- strandInfo_trial[strandInfo_trial != "*"];
   }
   
+  if (trDir == FALSE) {
+    strandInfo_trial <- NULL;
+  }
+  
   ref_base_trial <- XVector::subseq(context_trial, start = centerInd, end = centerInd);
   
   alt_base_trial <- sample.int(3, length(ref_base_trial), replace = TRUE);
