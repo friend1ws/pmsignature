@@ -47,17 +47,17 @@ getBackgroudSignature <- function(type = "independent", numBases = 3, trDir = FA
   revCompInd <- which(as.character(XVector::subseq(context_trial, start = centerInd, end = centerInd)) %in% c("A", "G"));
   context_trial[revCompInd] <- Biostrings::reverseComplement(context_trial[revCompInd]);
   
-  if (trDir == TRUE) {
+  # if (trDir == TRUE) {
     gr <- GenomicRanges::makeGRangesFromDataFrame(data.frame(chr = chr_trial, 
                                             start = start_trial, 
                                             end = end_trial), ignore.strand = TRUE);
     txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene;
-    # exons_txdb <- GenomicFeatures::exons(txdb);
-    # gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE);
-    # gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(exons_txdb[gr_txdb@subjectHits]))));
-    txdb_bed <- GenomicFeatures::asBED(txdb);
-    gr_txdb <- GenomicRanges::findOverlaps(gr, txdb_bed, ignore.strand = FALSE)
-    gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(txdb_bed[gr_txdb@subjectHits]))));
+    exons_txdb <- GenomicFeatures::exons(txdb);
+    gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE);
+    gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(exons_txdb[gr_txdb@subjectHits]))));
+    # txdb_bed <- GenomicFeatures::asBED(txdb);
+    # gr_txdb <- GenomicRanges::findOverlaps(gr, txdb_bed, ignore.strand = FALSE)
+    # gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(txdb_bed[gr_txdb@subjectHits]))));
     
     ugr_strand <- unique(gr_strand[gr_strand[, 2] != "*" ,], MARGIN=1);
   
@@ -78,7 +78,7 @@ getBackgroudSignature <- function(type = "independent", numBases = 3, trDir = FA
     start_trial <- start_trial[strandInfo_trial != "*"];
     end_trial <- end_trial[strandInfo_trial != "*"];
     strandInfo_trial <- strandInfo_trial[strandInfo_trial != "*"];
-  }
+  # }
   
   if (trDir == FALSE) {
     strandInfo_trial <- NULL;
