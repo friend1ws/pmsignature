@@ -104,7 +104,7 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
              featureVectorList = t(mutFeatList),
              sampleList = suSampleStr,
              countData = t(procCount),
-             mutationPosition = NULL
+             mutationPosition = data.frame()
   ))
   
 }
