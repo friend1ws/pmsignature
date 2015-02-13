@@ -3,6 +3,7 @@
 export(bootPMSignature)
 export(getBackgroudSignature)
 export(getPMSignature)
+export(makeSimData)
 export(readBGFile)
 export(readMFVFile)
 export(readMPFile)

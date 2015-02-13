@@ -1,5 +1,17 @@
-
-makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3, sampleNum = 10, mutationNum = 100, param_alpha, param_gamma, isBG = FALSE) {
+#' Generate simulation data
+#' 
+#' @param type this argument can take either independent, full
+#' @param numBases the number of upstream and downstream flanking bases
+#' @param trDir the index representing whether transcription direction is considered or not
+#' @param K the number of mutation signature
+#' @param sampleNum the number of cancer genomes in the simulation data
+#' @param mutationNum the number of mutations in each cancer genome
+#' @param param_alpha the parameter of the Dirichlet distribution for the sample signature distribution
+#' @param param_gamma the parameter of the Diriculet distribution for signature feature distribution
+#' @param isBG the logical value showing whether the background signature is used or not
+#'
+#' @export
+makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3, sampleNum = 10, mutationNum = 100, param_alpha = 1, param_gamma = 1, isBG = FALSE) {
 
   if (type == "independent") {
     fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
@@ -13,6 +25,8 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
     stop("numBases should be odd numbers");
   }
   
+  ##########
+  # obtaining background signature
   if (isBG == TRUE) {
     if (numBases > 5 | numBases < 3) {
       stop('Background data whose number of flanking bases is other than 3 or 5 is not available');
@@ -42,9 +56,10 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
     varK <- K;
     BG <- 0;
   }
-  
+  ##########
 
-  
+  ##########
+  # generating the 'true' parameter
   F <- array(0, c(varK, length(fdim), max(fdim)));
   for (k in 1:varK) {
     for (kk in 1:length(fdim)) {
@@ -58,7 +73,11 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
     Q[i,] <- rgamma(K, param_gamma);
     Q[i,] <- Q[i,] / sum(Q[i,]);
   }
+  ##########
   
+  
+  ##########
+  # based on the true parameters above, generate mutation feature for each sample and mutation
   currentInd <- 0;
   sampleName_str <- rep(0, sampleNum * mutationNum);
   mutFeatures <- matrix(0, sampleNum * mutationNum, length(fdim));
@@ -85,6 +104,7 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
     
     currentInd <- currentInd + mutationNum;
   }
+  ##########
   
   
   suSampleStr <- sort(unique(sampleName_str));
