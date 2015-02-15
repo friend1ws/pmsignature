@@ -193,7 +193,7 @@ getCosDistance <- function(F_1, F_2, fdim) {
   M <- prod(fdim);
   
   # I don't like this way of writing... but I have no idea currently... (Y.S. 20150215)
-  for (k in 1:K) {
+  for (k in 1:K_1) {
     for (i in 1:length(fdim)) {
       if (fdim[i] < dim(F_1)[3]) {
         if (any(F_1[k,i,(fdim[i] + 1):dim(F_1)[3]] != 0)) {
@@ -202,7 +202,15 @@ getCosDistance <- function(F_1, F_2, fdim) {
       }
     }
   }
-  
+  for (k in 1:K_2) {
+    for (i in 1:length(fdim)) {
+      if (fdim[i] < dim(F_2)[3]) {
+        if (any(F_2[k,i,(fdim[i] + 1):dim(F_2)[3]] != 0)) {
+          stop("the first input matrix is not consistent to the possible feature vector")
+        }
+      }
+    }
+  }
   
   F_1_mat <- matrix(0, K_1, M);
   F_2_mat <- matrix(0, K_2, M);
