@@ -151,7 +151,10 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
   
 }
 
-
+#' the function for converting the mutation signature matrix to a vector
+#' 
+#' @param Fmat a matrix for mutation signature
+#' @param fdim a vector specifying the number of possible values for each mutation signature
 convertSignatureMatrixToVector <- function(Fmat, fdim) {
   
   M <- prod(fdim);
@@ -173,7 +176,12 @@ convertSignatureMatrixToVector <- function(Fmat, fdim) {
 }
 
 
-
+#' the function for calculating cosine distances between two mutation signature matrices.
+#' 
+#' @param F_1 the first matrix for mutation signature
+#' @param F_2 the second matrix for mutation signature
+#' @param fdim a vector specifying the number of possible values for each mutation signature
+#' @export
 getCosDistance <- function(F_1, F_2, fdim) {
    
   if (any(dim(F_1) != dim(F_2))) {
@@ -227,10 +235,3 @@ getCosDistance <- function(F_1, F_2, fdim) {
   return(tempSims);
   
 }
-
-
-G_sim <- makeSimData(type = "full", numBases = 5, trDir = FALSE, K = 5, sampleNum = 30, mutationNum = 400, isBG = TRUE);
-brprob <- readBGFile(G_sim[[1]]);
-Param_est <- getPMSignature(G_sim[[1]], K = 5, BG = brprob);
-
-getCosDistance(Param_est@signatureFeatureDistribution, G_sim[[2]], Param_est@possibleFeatures)

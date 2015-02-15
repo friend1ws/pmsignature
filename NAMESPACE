@@ -2,6 +2,7 @@
 
 export(bootPMSignature)
 export(getBackgroudSignature)
+export(getCosDistance)
 export(getPMSignature)
 export(makeSimData)
 export(readBGFile)
