@@ -150,3 +150,87 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
   
   
 }
+
+
+convertSignatureMatrixToVector <- function(Fmat, fdim) {
+  
+  M <- prod(fdim);
+  Fvec <- rep(1, M);
+  
+  temp1 <- 1;
+  temp2 <- 1;
+  for (i in 1:length(fdim)) {
+    temp1 <- temp1 * fdim[i];
+    divInd <- (1:M - 1) %% temp1 + 1;
+    for (j in 1:fdim[i]) {
+      targetInd <- divInd > temp2 * (j - 1) & divInd <= temp2 * j
+      Fvec[targetInd] <- Fvec[targetInd] * Fmat[i,j]
+    }
+    temp2 <- temp2 * fdim[i];
+  }
+  
+  return(Fvec)
+}
+
+
+
+getCosDistance <- function(F_1, F_2, fdim) {
+   
+  if (any(dim(F_1) != dim(F_2))) {
+    stop("possible features for the two input parameters are different");
+  }
+  
+  K_1 <- dim(F_1)[1];
+  K_2 <- dim(F_2)[1];
+  M <- prod(fdim);
+  
+  # I don't like this way of writing... but I have no idea currently... (Y.S. 20150215)
+  for (k in 1:K) {
+    for (i in 1:length(fdim)) {
+      if (fdim[i] < dim(F_1)[3]) {
+        if (any(F_1[k,i,(fdim[i] + 1):dim(F_1)[3]] != 0)) {
+          stop("the first input matrix is not consistent to the possible feature vector")
+        }
+      }
+    }
+  }
+  
+  
+  F_1_mat <- matrix(0, K_1, M);
+  F_2_mat <- matrix(0, K_2, M);
+  
+  for (k in 1:K_1) {
+    inputF_1 <- F_1[k,,];
+    dim(inputF_1) <- c(length(fdim), max(fdim));
+    F_1_mat[k,] <- convertSignatureMatrixToVector(inputF_1, fdim);
+  }
+  for (k in 1:K_2) {
+    inputF_2 <- F_2[k,,];
+    dim(inputF_2) <- c(length(fdim), max(fdim));
+    F_2_mat[k,] <- convertSignatureMatrixToVector(inputF_2, fdim);
+  }
+  
+  F_1_mat_nor <- diag(sqrt(rowSums(F_1_mat^2))^(-1)) %*% F_1_mat;
+  F_2_mat_nor <- diag(sqrt(rowSums(F_2_mat^2))^(-1)) %*% F_2_mat;
+  
+  cos_F1_F2 <- F_1_mat_nor %*% t(F_2_mat_nor);
+  
+  tempSims <- rep(0, K_1);
+  tcos_F1_F2 <- cos_F1_F2;
+  for (k in 1:K_1) {
+    maxV <- max(tcos_F1_F2[k,]);
+    maxInd <- which(tcos_F1_F2[k,] == maxV);
+    tcos_F1_F2[,-maxInd];
+    tempSims[k] <- maxV;
+  }
+  
+  return(tempSims);
+  
+}
+
+
+G_sim <- makeSimData(type = "full", numBases = 5, trDir = FALSE, K = 5, sampleNum = 30, mutationNum = 400, isBG = TRUE);
+brprob <- readBGFile(G_sim[[1]]);
+Param_est <- getPMSignature(G_sim[[1]], K = 5, BG = brprob);
+
+getCosDistance(Param_est@signatureFeatureDistribution, G_sim[[2]], Param_est@possibleFeatures)

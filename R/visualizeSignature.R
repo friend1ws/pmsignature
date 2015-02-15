@@ -1,18 +1,18 @@
 #' @export
-setGeneric("visPMSignature", function(object, K = 1, baseCol) {
+setGeneric("visPMSignature", function(object, sinInd = 1, baseCol) {
   standardGeneric("visPMSignature")
 })
 
 #' @export
-setGeneric("visPMSignature", function(object, K = 1, ...) {
+setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
   standardGeneric("visPMSignature")
 })
 
 setMethod("visPMSignature", 
-          signature = c(object = "EstimatedParameters", K = "numeric"), 
-          function(object, K = 1, ...) {
+          signature = c(object = "EstimatedParameters", sinInd = "numeric"), 
+          function(object, sinInd = 1, ...) {
             
-            vF <- object@signatureFeatureDistribution[K,,];
+            vF <- object@signatureFeatureDistribution[sinInd,,];
             
             if (object@type == "independent") {
               visPMS_ind(vF, numBases = object@flankingBasesNum, trDir = object@transcriptionDirection, ...);
