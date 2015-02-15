@@ -68,8 +68,8 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
     }
   }
   
-  Q <- matrix(0, N, K); 
-  for (i in 1:N) {
+  Q <- matrix(0, sampleNum, K); 
+  for (i in 1:sampleNum) {
     Q[i,] <- rgamma(K, param_gamma);
     Q[i,] <- Q[i,] / sum(Q[i,]);
   }
