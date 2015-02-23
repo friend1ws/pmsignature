@@ -114,7 +114,7 @@ print(inputFile);
 
 * Mutation Feature Vector Format
 ```
-inputFile <- system.file("extdata/Hoang_MFVF.txt", package="pmsignature");
+inputFile <- system.file("extdata/Hoang_MFVF.ind.txt", package="pmsignature");
 print(inputFile);
 ```
 

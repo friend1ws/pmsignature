@@ -27,7 +27,15 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
   mutFile <- read.table(infile, sep="\t", header=FALSE);
   sampleName_str <- as.character(mutFile[,1]);
   mutFeatures <- mutFile[,2:ncol(mutFile), drop = FALSE];
-  fdim <- unname(apply(mutFeatures, 2, max));
+  if (type == "independent") {
+    fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)));
+  } else if (type == "full") {
+    fdim <- c(6 * 4^(numBases - 1) * 2^(as.integer(trDir)));
+  } else {
+    mutFeatures <- mutFile[,2:ncol(mutFile), drop = FALSE];
+    fdim <- unname(apply(mutFeatures, 2, max));
+  }
+
   
   if (type == "independent") {
 
