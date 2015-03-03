@@ -33,7 +33,7 @@ Currently, *pmsignature* can accept following two formats of tab-delimited text 
 
 ### Mutation Position Format
 
-|         |      |     |   |   |
+|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|
 |---------|------|-----|---|---|
 | sample1 | chr1 | 100 | A | C |
 | sample1 | chr1 | 200 | A | T |
@@ -50,7 +50,7 @@ Currently, *pmsignature* can accept following two formats of tab-delimited text 
 
 ### Mutation Feature Vector Format
 
-|    |   |   |   |   |   |   |
+|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|
 |----|---|---|---|---|---|---|
 |  1 | 4 | 4 | 4 | 3 | 3 | 2 |
 |  2 | 4 | 3 | 3 | 1 | 1 | 2 |
