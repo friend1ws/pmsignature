@@ -8,8 +8,8 @@ For extracting mutation signatures,
 principal component analysis or nonnegative matrix factorization have been popular.
 Compared to these existing approaches, the `pmsignature` has following advantages:
   
-  1. *pmsignature* can perform robust estimation of mutation signatures even taking account for many mutation features such as two bases 5' and 3' to the mutated sites.
-1. *pmsignature* provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
+1. *pmsignature* can perform robust estimation of mutation signatures even taking account for many mutation features such as two bases 5' and 3' to the mutated sites.
+2. *pmsignature* provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
 
 Currently, *pmsignature* can only accept tab delimited text files with specialized format. 
 We will improve the program so that it can accept VCF format files.
@@ -32,12 +32,13 @@ Currently, *pmsignature* can accept following two formats of tab-delimited text 
 
 ### Mutation Position Format
 
+|         |      |     |   |   |
 |---------|------|-----|---|---|
-  | sample1 | chr1 | 100 | A | C |
-  | sample1 | chr1 | 200 | A | T |
-  | sample1 | chr2 | 100 | G | T |
-  | sample2 | chr1 | 300 | T | C |
-  | sample3 | chr3 | 400 | T | C |
+| sample1 | chr1 | 100 | A | C |
+| sample1 | chr1 | 200 | A | T |
+| sample1 | chr2 | 100 | G | T |
+| sample2 | chr1 | 300 | T | C |
+| sample3 | chr3 | 400 | T | C |
   
   * The 1st column shows the name of samples 
 * The 2nd column shows the name of chromosome 
@@ -48,15 +49,16 @@ Currently, *pmsignature* can accept following two formats of tab-delimited text 
 
 ### Mutation Feature Vector Format
 
+|    |   |   |   |   |   |   |
 |----|---|---|---|---|---|---|
-  |  1 | 4 | 4 | 4 | 3 | 3 | 2 |
-  |  2 | 4 | 3 | 3 | 1 | 1 | 2 |
-  |  3 | 4 | 4 | 3 | 2 | 2 | 2 |
-  |  4 | 3 | 3 | 2 | 3 | 3 | 1 |
-  |  5 | 3 | 4 | 2 | 4 | 4 | 2 |
-  |  6 | 4 | 1 | 4 | 2 | 1 | 2 |
-  |  3 | 2 | 1 | 1 | 1 | 1 | 2 |
-  |  7 | 4 | 2 | 2 | 4 | 3 | 2 |
+|  1 | 4 | 4 | 4 | 3 | 3 | 2 |
+|  2 | 4 | 3 | 3 | 1 | 1 | 2 |
+|  3 | 4 | 4 | 3 | 2 | 2 | 2 |
+|  4 | 3 | 3 | 2 | 3 | 3 | 1 |
+|  5 | 3 | 4 | 2 | 4 | 4 | 2 |
+|  6 | 4 | 1 | 4 | 2 | 1 | 2 |
+|  3 | 2 | 1 | 1 | 1 | 1 | 2 |
+|  7 | 4 | 2 | 2 | 4 | 3 | 2 |
   
   * The 1st column shows the name of samples 
 * From the 2nd to the last column show the value of mutation features.

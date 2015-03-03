@@ -20,7 +20,7 @@ principal component analysis or nonnegative matrix factorization have been popul
 Compared to these existing approaches, the `pmsignature` has following advantages:
 
 1. *pmsignature* can perform robust estimation of mutation signatures even taking account for many mutation features such as two bases 5' and 3' to the mutated sites.
-1. *pmsignature* provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
+2. *pmsignature* provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
 
 Currently, *pmsignature* can only accept tab delimited text files with specialized format. 
 We will improve the program so that it can accept VCF format files.
@@ -43,6 +43,7 @@ Currently, *pmsignature* can accept following two formats of tab-delimited text 
 
 ### Mutation Position Format
 
+|         |      |     |   |   |
 |---------|------|-----|---|---|
 | sample1 | chr1 | 100 | A | C |
 | sample1 | chr1 | 200 | A | T |
@@ -59,6 +60,7 @@ Currently, *pmsignature* can accept following two formats of tab-delimited text 
   
 ### Mutation Feature Vector Format
 
+|    |   |   |   |   |   |   |
 |----|---|---|---|---|---|---|
 |  1 | 4 | 4 | 4 | 3 | 3 | 2 |
 |  2 | 4 | 3 | 3 | 1 | 1 | 2 |
