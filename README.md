@@ -8,6 +8,7 @@ For extracting mutation signatures,
 principal component analysis or nonnegative matrix factorization have been popular.
 Compared to these existing approaches, the `pmsignature` has following advantages:
   
+  
 1. *pmsignature* can perform robust estimation of mutation signatures even taking account for many mutation features such as two bases 5' and 3' to the mutated sites.
 2. *pmsignature* provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
 
