@@ -283,6 +283,8 @@ getMutationFeatureVector_DNP <- function(context, ref_base, alt_base, strandInfo
 
 visPMS_ind_DNP <- function(vF, numBases, baseCol = NA, trDir, charSize = 1.2) {
   
+  if (FALSE) {
+    
   if (is.na(baseCol)) {
     gg_color_hue6 <- hcl(h = seq(15, 375, length = 7), l=65, c=100)[1:6]
     baseCol <- c(gg_color_hue6[3], gg_color_hue6[5], gg_color_hue6[2], gg_color_hue6[1], gg_color_hue6[4], gg_color_hue6[6]);
@@ -302,9 +304,7 @@ visPMS_ind_DNP <- function(vF, numBases, baseCol = NA, trDir, charSize = 1.2) {
     A_center[lookup_ref[DNPTable[i,1]]] <- A_center[lookup_ref[DNPTable[i,1]]] + vF[1, i];
   }
   
-  B <- matrix(0, 10, 16) {
-    
-  }
+  B <- matrix(0, 10, 16) 
   
   if (trDir == TRUE) {
     v3 <- vF[(numBases + 1),1:2];
@@ -412,6 +412,8 @@ visPMS_ind_DNP <- function(vF, numBases, baseCol = NA, trDir, charSize = 1.2) {
     
   }
   ##########
+  
+}
   
 }
 
