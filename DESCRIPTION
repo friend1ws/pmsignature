@@ -25,6 +25,8 @@ Imports:
     XVector,
     Biostrings,
     BSgenome.Hsapiens.UCSC.hg19
+Suggets:
+    TxDb.Hsapiens.UCSC.hg19.knownGene
 LinkingTo: Rcpp
 Suggests:
     TxDb.Hsapiens.UCSC.hg19.knownGene,

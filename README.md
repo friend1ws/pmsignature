@@ -6,14 +6,12 @@ from the set of mutations collected typically from cancer genome sequencing data
 
 For extracting mutation signatures, 
 principal component analysis or nonnegative matrix factorization have been popular.
-Compared to these existing approaches, the `pmsignature` has following advantages:
+Compared to these existing approaches, the *pmsignature* has following advantages:
   
   
-1. *pmsignature* can perform robust estimation of mutation signatures even taking account for many mutation features such as two bases 5' and 3' to the mutated sites.
+1. *pmsignature* can perform robust estimation of mutation signatures in case of many mutation features are taken into account such as two bases 5' and 3' to the mutated sites.
 2. *pmsignature* provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
 
-Currently, *pmsignature* can only accept tab delimited text files with specialized format. 
-We will improve the program so that it can accept VCF format files.
 
 ## Paper
 
@@ -21,10 +19,9 @@ We will improve the program so that it can accept VCF format files.
 
 ## Input data
 
-For input data, we need mutation feature data for each sample and mutation.
-Here, **mutation features** are elements used for categorize the mutations such as: 
+Here, **mutation features** are elements used for categorizing mutations such as: 
   
-  * 6 substitutions (C>A, C>G, C>T, T>A, T>C and T>G)
+* 6 substitutions (C>A, C>G, C>T, T>A, T>C and T>G)
 * 5’ and 3’ flanking bases (A, C, G and T)
 * transcription direction.
 
@@ -39,7 +36,7 @@ sample1	chr2	100	G	T
 sample2	chr1	300	T	C	
 sample3	chr3	400	T	C	
   
-  * The 1st column shows the name of samples 
+* The 1st column shows the name of samples 
 * The 2nd column shows the name of chromosome 
 * The 3rd column shows the coordinate in the chromosome
 * The 4th column shows the reference base (A, C, G, or T).
@@ -57,17 +54,17 @@ sample3	chr3	400	T	C
 3	2	1	1	1	1	2	
 7	4	2	2	4	3	2	
   
-  * The 1st column shows the name of samples 
+* The 1st column shows the name of samples 
 * From the 2nd to the last column show the value of mutation features.
 * In this example, substitution patterns (1 to 6 values, C>A, C>G, C>T, T>A, T>C and T>G), two 5' and 3' flanking bases (1 to 4 values for each 4 site, A, C, G and T)
 and transcription direction (1 to 2 values, + and -) are considered.
-
+* However, you can put your favorite mutation features in this file format.
 
 ## Workflow
 
 ### Install the package
 
-First, the R packages *VariantAnnotation* and *BSgenome.Hsapiens.UCSC.hg19*,
+First, several R packages such as *ggplot2*, *Rcpp*, *GenomicRanges*, *BSgenome.Hsapiens.UCSC.hg19*,
 which *pmsignature* depends has to be installed.
 Also, *devtools* may be necessary for ease of installation.
 
@@ -77,7 +74,7 @@ biocLite(c("VariantAnnotation", "BSgenome.Hsapiens.UCSC.hg19"))
 install.packages("devtools")
 ```
 
-The easiest way for installing *pmsignature* is to use the package *devtools*:
+Currently, the easiest way for installing *pmsignature* is to use the package *devtools*:
   
   ```
 library(devtools)
@@ -115,12 +112,13 @@ Type the following commands:
 ```
 G <- readMPFile(inputFile, numBases = 5);
 ```
-Here, *inputFile* is the path for the input file. *numBases* is the number of flanking bases to consider including the central base (if you want to consider two 5' and 3' bases, then set 5).
-You can format the data as the full model by typing 
+Here, *inputFile* is the path for the input file.
+*numBases* is the number of flanking bases to consider including the central base (if you want to consider two 5' and 3' bases, then set 5).
+You can format the data as the full model by typing
 ```
 G <- readMPFile(inputFile, numBases = 5, type = "full");
 ```
-Also, you can add transcription direction information by typing 
+Also, you can add transcription direction information by typing (in that case, the package *TxDb.Hsapiens.UCSC.hg19.knownGene* is necessary)
 ```
 G <- readMPFile(inputFile, numBases = 5, trDir = TRUE);
 ```
@@ -135,7 +133,7 @@ G <- readMFVFile(inputFile, numBases = 5, type="independent", trDir=TRUE)
 
 When you want to set the number of mutation signature as 3, type the following command:
   
-  ```
+```
 Param <- getPMSignature(G, K = 3);
 ```
 
@@ -148,8 +146,8 @@ Param <- getPMSignature(G, K = 3, BG = BG_prob);
 ```
 
 In default, we repeat the estimation 10 times by changing the initial value,
-and select the parameter with maximum likelihood.
-If you want to changet the repeat number, then
+and select the parameter with the highest value of log-likelihood.
+If you want to changet the trial number, then
 
 ```
 Param <- getPMSignature(G, K = 3, numInit=20);
