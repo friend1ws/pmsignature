@@ -1,16 +1,16 @@
 # pmsignature
 
-The R package *pmsignature* is developed 
+The R package **pmsignature** is developed 
 for efficiently extracting characteristic mutation patterns (mutation signatures) 
 from the set of mutations collected typically from cancer genome sequencing data.
 
 For extracting mutation signatures, 
 principal component analysis or nonnegative matrix factorization have been popular.
-Compared to these existing approaches, the *pmsignature* has following advantages:
+Compared to these existing approaches, the **pmsignature** has following advantages:
   
   
-1. *pmsignature* can perform robust estimation of mutation signatures in case of many mutation features are taken into account such as two bases 5' and 3' to the mutated sites.
-2. *pmsignature* provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
+1. **pmsignature** can perform robust estimation of mutation signatures in case of many mutation features are taken into account such as two bases 5' and 3' to the mutated sites.
+2. **pmsignature** provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
 
 
 ## Paper
@@ -19,13 +19,13 @@ Compared to these existing approaches, the *pmsignature* has following advantage
 
 ## Input data
 
-Here, **mutation features** are elements used for categorizing mutations such as: 
+Here, *mutation features* are elements used for categorizing mutations such as: 
   
 * 6 substitutions (C>A, C>G, C>T, T>A, T>C and T>G)
 * 5’ and 3’ flanking bases (A, C, G and T)
 * transcription direction.
 
-Currently, *pmsignature* can accept following two formats of tab-delimited text file.
+Currently, **pmsignature** can accept following two formats of tab-delimited text file.
 
 
 ### Mutation Position Format
@@ -64,9 +64,9 @@ and transcription direction (1 to 2 values, + and -) are considered.
 
 ### Install the package
 
-First, several R packages such as *ggplot2*, *Rcpp*, *GenomicRanges*, *BSgenome.Hsapiens.UCSC.hg19*,
-which *pmsignature* depends has to be installed.
-Also, *devtools* may be necessary for ease of installation.
+First, several R packages such as **ggplot2**, **Rcpp**, **GenomicRanges**, **BSgenome.Hsapiens.UCSC.hg19**,
+which **pmsignature** depends has to be installed.
+Also, **devtools** may be necessary for ease of installation.
 
 ```
 source("http://bioconductor.org/biocLite.R")
@@ -74,7 +74,7 @@ biocLite(c("VariantAnnotation", "BSgenome.Hsapiens.UCSC.hg19"))
 install.packages("devtools")
 ```
 
-Currently, the easiest way for installing *pmsignature* is to use the package *devtools*:
+Currently, the easiest way for installing **pmsignature** is to use the package **devtools**:
   
   ```
 library(devtools)
@@ -88,7 +88,7 @@ library(pmsignature)
 
 First, create the input data from your mutation data.
 
-After installing *pmsignature*,
+After installing **pmsignature**,
 you can find the above example file at the directory where pmsignature is installed.
 
 * Mutation Position Format
@@ -118,7 +118,7 @@ You can format the data as the full model by typing
 ```
 G <- readMPFile(inputFile, numBases = 5, type = "full");
 ```
-Also, you can add transcription direction information by typing (in that case, the package *TxDb.Hsapiens.UCSC.hg19.knownGene* is necessary)
+Also, you can add transcription direction information by typing (in that case, the package **TxDb.Hsapiens.UCSC.hg19.knownGene** is necessary)
 ```
 G <- readMPFile(inputFile, numBases = 5, trDir = TRUE);
 ```
