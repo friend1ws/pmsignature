@@ -67,6 +67,9 @@ and transcription direction (1 to 2 values, + and -) are considered.
 First, several R packages such as **ggplot2**, **Rcpp**, **GenomicRanges**, **BSgenome.Hsapiens.UCSC.hg19**,
 which **pmsignature** depends has to be installed.
 Also, **devtools** may be necessary for ease of installation.
+Since the **pmsignature** utilizes C++ codes by way of **Rcpp**, you need to install C++ compiler
+(e.g., [Rtools](http://cran.r-project.org/bin/windows/Rtools/) for Windows, Xcode for Mac).
+See [Advanced R](http://adv-r.had.co.nz/Rcpp.html) by Dr. Hadley Wickham about the basic usage of **Rcpp**
 
 ```
 source("http://bioconductor.org/biocLite.R")
