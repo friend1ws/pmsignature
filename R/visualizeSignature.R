@@ -233,8 +233,9 @@ setMethod("visMembership",
           
             snum <- getMutNum(object1);
             if (ylog == TRUE) {
-              snum[,2] <- log(snum[,2]);
-            } 
+              snum[,2] <- log10(snum[,2]);
+            }  
+            
             sampleList <- object2@sampleList;
             signatureNum <- object2@signatureNum;
             Q <- as.data.frame(object2@sampleSignatureDistribution)
@@ -242,28 +243,37 @@ setMethod("visMembership",
             if (is.null(sampleNum)) {
               sampleNum <- length(sampleList);
             }
-            intensity <- c()
-            sample <- c()
-            signature <- c()
+            vMutationNum <- c()
+            vSample <- c()
+            vSignature <- c()
 
             mutNumOrder <- order(snum$mutationNum, decreasing = TRUE)[1:sampleNum];
 
             for (k in 1:signatureNum) {
-              sample <- c(sample, sampleList[mutNumOrder]);
-              signature <- c(signature ,rep(k, length(mutNumOrder)));
-              intensity <- c(intensity, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]); 
+              vSample <- c(vSample, sampleList[mutNumOrder]);
+              vSignature <- c(vSignature ,rep(k, length(mutNumOrder)));
+              vMutationNum <- c(vMutationNum, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]); 
             }
-
-            membership <- data.frame(sample = reorder(sample, - intensity), signature = as.factor(signature), intensty = intensity);
-
-            ggplot(membership, aes(x = sample, y = intensity, fill = signature)) +
+            vSample <- factor(vSample, levels = sampleList[mutNumOrder]);
+            
+            membership <- data.frame(sample = vSample, signature = as.factor(vSignature), mutationNum = vMutationNum);
+            # membership <- data.frame(sample = reorder(vSample, -vIntensity), signature = as.factor(vSignature), intensity = vIntensity);
+            
+            
+            gg <- ggplot(membership, aes(x = sample, y = mutationNum, fill = signature)) +
               geom_bar(width = 0.8, stat = "identity") +
               theme_bw() +
               theme(axis.text.x = element_blank(),
               axis.ticks.x = element_blank(),
               panel.grid.major.x = element_blank(),
               panel.grid.minor.x = element_blank());
+            if (ylog == TRUE) {
+              gg <- gg + ylab("log10(#mutation)");
+            } else {
+              gg <- gg + ylab("#mutation");
+            }
             
+            gg
           }
 
 )
