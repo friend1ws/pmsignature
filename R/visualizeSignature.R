@@ -8,6 +8,11 @@ setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
   standardGeneric("visPMSignature")
 })
 
+#' @export
+setGeneric("getMutNum", function(object) {
+  standardGeneric("getMutNum")
+})
+
 setMethod("visPMSignature", 
           signature = c(object = "EstimatedParameters", sinInd = "numeric"), 
           function(object, sinInd = 1, ...) {
@@ -205,5 +210,15 @@ visPMS_full <- function(Fvec, numBases, trDir) {
   gp
   
 }
+
+
+setMethod("getMutNum", 
+          signature = c(object = "MutationFeatureData"), 
+          function(object) {         
+            mutData <- data.frame(type = object@countData[1,], sampleName = object@sampleList[object@countData[2,]], count = object@countData[3,]);
+            sample2mutNum <- summarize(group_by(mutData, sampleName), mutationNum = sum(count))
+            return(as.data.frame(sample2mutNum))
+          }
+)
 
 
