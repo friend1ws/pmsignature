@@ -14,7 +14,7 @@ setGeneric("getMutNum", function(object) {
 })
 
 #' @export
-setGeneric("visMembership", function(object1, object2) {
+setGeneric("visMembership", function(object1, object2, ylog = FALSE, sampleNum = NULL) {
   standardGeneric("visMembership")
 })
 
@@ -229,27 +229,34 @@ setMethod("getMutNum",
 
 setMethod("visMembership",
           signature = c(object1 = "MutationFeatureData", object2 = "EstimatedParameters"),
-          function(object1, object2) {
+          function(object1, object2, ylog = FALSE, sampleNum = NULL) {
           
             snum <- getMutNum(object1);
+            if (ylog == TRUE) {
+              snum[,2] <- log(snum[,2]);
+            } 
+            sampleList <- object2@sampleList;
+            signatureNum <- object2@signatureNum;
             Q <- as.data.frame(object2@sampleSignatureDistribution)
 
+            if (is.null(sampleNum)) {
+              sampleNum <- length(sampleList);
+            }
             intensity <- c()
             sample <- c()
             signature <- c()
 
-            mutNumOrder <- order(snum$mutationNum, decreasing = TRUE);
-            sampleList <- object2@sampleList;
-            signatureNum <- object2@signatureNum;
+            mutNumOrder <- order(snum$mutationNum, decreasing = TRUE)[1:sampleNum];
+
             for (k in 1:signatureNum) {
               sample <- c(sample, sampleList[mutNumOrder]);
               signature <- c(signature ,rep(k, length(mutNumOrder)));
               intensity <- c(intensity, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]); 
             }
 
-            membership <- data.frame(sample = sample, signature = as.factor(signature), intensty = intensity);
+            membership <- data.frame(sample = reorder(sample, - intensity), signature = as.factor(signature), intensty = intensity);
 
-            ggplot(membership, aes(x = reorder(sample, -intensity), y = intensity, fill = signature)) +
+            ggplot(membership, aes(x = sample, y = intensity, fill = signature)) +
               geom_bar(width = 0.8, stat = "identity") +
               theme_bw() +
               theme(axis.text.x = element_blank(),
