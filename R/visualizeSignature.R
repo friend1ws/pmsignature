@@ -13,6 +13,11 @@ setGeneric("getMutNum", function(object) {
   standardGeneric("getMutNum")
 })
 
+#' @export
+setGeneric("visMembership", function(object1, object2) {
+  standardGeneric("visMembership")
+})
+
 setMethod("visPMSignature", 
           signature = c(object = "EstimatedParameters", sinInd = "numeric"), 
           function(object, sinInd = 1, ...) {
@@ -219,6 +224,41 @@ setMethod("getMutNum",
             sample2mutNum <- summarize(group_by(mutData, sampleName), mutationNum = sum(count))
             return(as.data.frame(sample2mutNum))
           }
+)
+
+
+setMethod("visMembership",
+          signature = c(object1 = "MutationFeatureData", object2 = "EstimatedParameters"),
+          function(object1, object2) {
+          
+            snum <- getMutNum(object1);
+            Q <- as.data.frame(object2@sampleSignatureDistribution)
+
+            intensity <- c()
+            sample <- c()
+            signature <- c()
+
+            mutNumOrder <- order(snum$mutationNum, decreasing = TRUE);
+            sampleList <- object2@sampleList;
+            signatureNum <- object2@signatureNum;
+            for (k in 1:signatureNum) {
+              sample <- c(sample, sampleList[mutNumOrder]);
+              signature <- c(signature ,rep(k, length(mutNumOrder)));
+              intensity <- c(intensity, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]); 
+            }
+
+            membership <- data.frame(sample = sample, signature = as.factor(signature), intensty = intensity);
+
+            ggplot(membership, aes(x = reorder(sample, -intensity), y = intensity, fill = signature)) +
+              geom_bar(width = 0.8, stat = "identity") +
+              theme_bw() +
+              theme(axis.text.x = element_blank(),
+              axis.ticks.x = element_blank(),
+              panel.grid.major.x = element_blank(),
+              panel.grid.minor.x = element_blank());
+            
+          }
+
 )
 
 
