@@ -53,23 +53,40 @@ alignmentSignature <- function(Params) {
 }
 
 
-getSignaturesForMultipleK <- function(inputFile, numBases, trDir) {
+getSignaturesForMultipleK <- function(inputFile, numBases = 5, trDir = TRUE, startK = NULL, endK = 6) {
  
   G <- readMPFile(inputFile, numBases = numBases, trDir = trDir);
 
-  BG_prob <- readBGFile(G);
-  Param2 <- getPMSignature(G, K = 2, BG = BG_prob);
-  Param3 <- getPMSignature(G, K = 3, BG = BG_prob);
-  Param4 <- getPMSignature(G, K = 4, BG = BG_prob);
-  Param5 <- getPMSignature(G, K = 5, BG = BG_prob);
-  Param6 <- getPMSignature(G, K = 6, BG = BG_prob);
-  Params <- c(Param2, Param3, Param4, Param5, Param6);
+  if (is.null(startK)) {
+    if (is.BackGround == TRUE) {
+      startK <- 2;
+    } else {
+      startK <- 1;
+    }
+  }
+  
+  Params <- c();
+  if (isBackGround = TRUE) {
+    BG_prob <- readBGFile(G);
+    Params <- c();
+    for (k in startK:endK) {
+      Params <- c(Params, getPMSignature(G, K = k, BG = BG_prob)); 
+    }
+  } else {
+    
+    Params <- c();
+    for (k in startK:endK) {
+      Params <- c(Params, getPMSignature(G, K = k)); 
+    }  
+    
+  }
+  
 
-
+  
   alignOrder <- alignmentSignature(Params);
-  layMat <- matrix(0, 5, 5);
+  layMat <- matrix(0, length(Params), length(Params));
   num <- 1;
-  for (l1 in 1:5) {
+  for (l1 in 1:length(Params)) {
     for (l2 in 1:l1) {
       layMat[l1, l2] <- num;
       num <- num + 1;
@@ -80,7 +97,7 @@ getSignaturesForMultipleK <- function(inputFile, numBases, trDir) {
   tempMar <- par("mar");
   par(mar = 0.4 * tempMar);
 
-  for (l1 in 1:5) {
+  for (l1 in 1:length(Params)) {
     for (l2 in 1:l1) {
       visPMSignature(Params[[l1]], which(alignOrder[[l1]] == l2));
       # visPMSignature(Params[[l1]], l2);
