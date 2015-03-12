@@ -14,7 +14,7 @@ setGeneric("getMutNum", function(object) {
 })
 
 #' @export
-setGeneric("visMembership", function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, colourBrewer = NULL) {
+setGeneric("visMembership", function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, reorderSig = NULL, colourBrewer = NULL) {
   standardGeneric("visMembership")
 })
 
@@ -229,7 +229,7 @@ setMethod("getMutNum",
 
 setMethod("visMembership",
           signature = c(object1 = "MutationFeatureData", object2 = "EstimatedParameters"),
-          function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, colourBrewer = NULL) {
+          function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, reorderSig = NULL, colourBrewer = NULL) {
           
             snum <- getMutNum(object1);
             if (ylog == TRUE) {
@@ -247,6 +247,11 @@ setMethod("visMembership",
               toSample <- length(sampleList);
             }
             
+            if (is.null(reorderSig)) {
+              reorderSig <- 1:length(signatureNum);
+            }
+            sigOrder <- reorderSig;
+            
             vMutationNum <- c()
             vSample <- c()
             vSignature <- c()
@@ -259,7 +264,7 @@ setMethod("visMembership",
 
             for (k in 1:signatureNum) {
               vSample <- c(vSample, sampleList[mutNumOrder]);
-              vSignature <- c(vSignature ,rep(k, length(mutNumOrder)));
+              vSignature <- c(vSignature ,rep(sigOrder[k], length(mutNumOrder)));
               if (multiplySampleNum == TRUE) {
                 vMutationNum <- c(vMutationNum, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]);
               } else {

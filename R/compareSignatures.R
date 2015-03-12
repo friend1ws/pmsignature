@@ -98,10 +98,15 @@ getSignaturesForMultipleK <- function(inputFile, numBases = 5, trDir = TRUE, sta
   par(mar = 0.4 * tempMar);
 
   for (l1 in 1:length(Params)) {
+    # aInds <- c()
     for (l2 in 1:l1) {
-      visPMSignature(Params[[l1]], which(alignOrder[[l1]] == l2));
+      aInd <- which(alignOrder[[l1]] == l2);
+      # aInds <- c(aInds, aInd);
+      visPMSignature(Params[[l1]], aInd);
       # visPMSignature(Params[[l1]], l2);
     }
+    # visMembership(G, Params[[l1]], toSample = 100, multiplySampleNum = FALSE, colourBrewer = "Set2", reorder = 1:6)
+    
   }
 
 }
