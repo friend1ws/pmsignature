@@ -53,6 +53,15 @@ alignmentSignature <- function(Params) {
 }
 
 
+#' Generate the figure of mutation signature for multiple K aligning the signatures.
+
+#' @param inputFile the path for the input file (MP format)
+#' @param numBases the number of flanking bases
+#' @param trDir the index for the usage of transcription strand bias
+#' @param startK the minimum number of signatures
+#' @param endK the maximum number of signatures
+
+#' @export
 getSignaturesForMultipleK <- function(inputFile, numBases = 5, trDir = TRUE, startK = NULL, endK = 6) {
  
   G <- readMPFile(inputFile, numBases = numBases, trDir = trDir);
@@ -66,7 +75,7 @@ getSignaturesForMultipleK <- function(inputFile, numBases = 5, trDir = TRUE, sta
   }
   
   Params <- c();
-  if (isBackGround = TRUE) {
+  if (isBackGround == TRUE) {
     BG_prob <- readBGFile(G);
     Params <- c();
     for (k in startK:endK) {
