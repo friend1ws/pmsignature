@@ -14,7 +14,7 @@ setGeneric("getMutNum", function(object) {
 })
 
 #' @export
-setGeneric("visMembership", function(object1, object2, ylog = FALSE, sampleNum = NULL) {
+setGeneric("visMembership", function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, colourBrewer = NULL) {
   standardGeneric("visMembership")
 })
 
@@ -229,7 +229,7 @@ setMethod("getMutNum",
 
 setMethod("visMembership",
           signature = c(object1 = "MutationFeatureData", object2 = "EstimatedParameters"),
-          function(object1, object2, ylog = FALSE, sampleNum = NULL) {
+          function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, colourBrewer = NULL) {
           
             snum <- getMutNum(object1);
             if (ylog == TRUE) {
@@ -240,19 +240,31 @@ setMethod("visMembership",
             signatureNum <- object2@signatureNum;
             Q <- as.data.frame(object2@sampleSignatureDistribution)
 
-            if (is.null(sampleNum)) {
-              sampleNum <- length(sampleList);
+            if (is.null(fromSample)) {
+              fromSample <- 1;
             }
+            if (is.null(toSample)) {
+              toSample <- length(sampleList);
+            }
+            
             vMutationNum <- c()
             vSample <- c()
             vSignature <- c()
 
-            mutNumOrder <- order(snum$mutationNum, decreasing = TRUE)[1:sampleNum];
+            if (sortSampleNum == TRUE) {
+              mutNumOrder <- order(snum$mutationNum, decreasing = TRUE)[fromSample:toSample];
+            } else {
+              mutNumOrder <- fromSample:toSample;
+            }
 
             for (k in 1:signatureNum) {
               vSample <- c(vSample, sampleList[mutNumOrder]);
               vSignature <- c(vSignature ,rep(k, length(mutNumOrder)));
-              vMutationNum <- c(vMutationNum, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]); 
+              if (multiplySampleNum == TRUE) {
+                vMutationNum <- c(vMutationNum, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]);
+              } else {
+                vMutationNum <- c(vMutationNum, Q[mutNumOrder,k]);                
+              }
             }
             vSample <- factor(vSample, levels = sampleList[mutNumOrder]);
             
@@ -267,10 +279,17 @@ setMethod("visMembership",
               axis.ticks.x = element_blank(),
               panel.grid.major.x = element_blank(),
               panel.grid.minor.x = element_blank());
-            if (ylog == TRUE) {
-              gg <- gg + ylab("log10(#mutation)");
+            if (multiplySampleNum == TRUE) {
+              if (ylog == TRUE) {
+                gg <- gg + ylab("log10(#mutation)");
+              } else {
+                gg <- gg + ylab("#mutation");
+              }
             } else {
-              gg <- gg + ylab("#mutation");
+                gg <- gg + ylab("#membershipRatio");             
+            }
+            if (!is.null(colourBrewer)) {
+              gg <- gg + scale_fill_brewer(palette = colourBrewer);
             }
             
             gg
