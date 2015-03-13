@@ -248,7 +248,7 @@ setMethod("visMembership",
             }
             
             if (is.null(reorderSig)) {
-              reorderSig <- 1:length(signatureNum);
+              reorderSig <- 1:signatureNum;
             }
             sigOrder <- reorderSig;
             
