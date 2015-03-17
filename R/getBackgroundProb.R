@@ -16,7 +16,7 @@ getBackgroudSignature <- function(type = "independent", numBases = 3, trDir = FA
   targetChr <- paste("chr", c(1:22, "X", "Y"), sep="");
   seqlen_chr <- GenomeInfoDb::seqlengths(genome)[targetChr];
   
-  prob_chr <- seqlen_chr / 100; # for avoiding flow..
+  prob_chr <- seqlen_chr / 100; # for avoiding over flow..
   prob_chr <- prob_chr / sum(prob_chr);
   
   
