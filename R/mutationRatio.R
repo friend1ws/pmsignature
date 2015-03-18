@@ -21,9 +21,9 @@ readMPFile_localMutRate <- function(infile) {
   sampleName_str <- as.character(mutFile[,1]);
   
   # check the 2nd column of the input feature vector (the name of chromosome)
-  removeInd <- !(chrInfo %in% targetChr);
+  removeInd <- which(!(chrInfo %in% targetChr));
   if (length(removeInd) > 0) {
-    warning(paste("The chromosome name is not any of chr1 ~ chr22, chrX, chrY for ", sum(removeInd), " records. We have removed them."));
+    warning(paste("The chromosome name is not any of chr1 ~ chr22, chrX, chrY for ", length(removeInd), " records. We have removed them."));
     sampleName_str <- sampleName_str[-removeInd];
     chrInfo <- chrInfo[-removeInd];
     posInfo <- posInfo[-removeInd];
