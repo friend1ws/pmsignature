@@ -42,8 +42,12 @@ setMethod("visPMSignature",
 #'   
 #' @param vF a matrix for mutation signature
 #' @param numBases the number of flanking bases 
-#' @param centerBases the number of flanking bases
-visPMS_ind <- function(vF, numBases, baseCol = NA, trDir, charSize = 1.2) {
+#' @param baseCol the colour of the bases (A, C, G, T, plus strand, minus strand)
+#' @param trDir the index whether the strand direction is plotted or not
+#' @param charSize the size of the character
+#' @param isScale the index whether the height of the flanking base is changed or not
+#' @param alpha the parameter for the Renyi entropy (applicable only if the isScale is TRUE)
+visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 1.2, isScale = TRUE, alpha = 2) {
   
   if (is.na(baseCol)) {
     gg_color_hue6 <- hcl(h = seq(15, 375, length = 7), l=65, c=100)[1:6]
@@ -79,14 +83,33 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir, charSize = 1.2) {
   frame();
   plot.window(xlim=c(-0.25, 1.25 * numBases + 0.25), ylim=c(-0.25, 3.25));
   
+  # function for calculating renyi entropy
+  renyi = function(p, tAlpha = alpha) {
+    if (tAlpha == 1) {
+      return(- sum(p * log2(p), na.rm = TRUE));
+    } else {
+      return( log(sum(p^tAlpha)) / (1 - tAlpha));
+    }
+  }
+  
+  if (scale == FALSE) {
+    sizes <- rep(1, numBases)
+  } else {
+    sizes <- 0.5 * (2 - apply(A, MARGIN = 1, FUN = renyi));
+  }
+  
   startx <- 0;
   for(l in 1:numBases) {
     
     for(w in 1:4) {
       endx <- startx + A[l,w]
-      polygon(c(startx, endx, endx, startx), c(0, 0, 1, 1), col = baseCol[w], border=F);
-      if (endx - startx > 1 / 4 & charSize > 0) {
-        text(0.5 * (endx + startx), 0.5, num2base[w], col="white", cex=charSize)
+      # polygon(c(startx, endx, endx, startx), c(0, 0, 1, 1), col = baseCol[w], border=F);
+      polygon(c(startx, endx, endx, startx), c(0, 0, sizes[l], sizes[l]), col = baseCol[w], border=F);
+      # if (endx - startx > 1 / 4 & charSize > 0) {
+      #   text(0.5 * (endx + startx), 0.5, num2base[w], col="white", cex=charSize)
+      # }
+      if (endx - startx > charLimit & sizes[l] > 0.5 & charSize > 0) {
+        text(0.5 * (endx + startx), 0.5 * sizes[l], num2base[w], col="white", cex=charSize)
       }
       startx <- endx;
     }
@@ -119,23 +142,7 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir, charSize = 1.2) {
 
   ##########
   if (trDir == TRUE) {
-  # draw direction bias
-  # startx <- (numBases - 1) * 1.25 + 0.5;
-  # endx <- (numBases - 1) * 1.25 + 0.75;
-  # starty <- 1.9;
-  # endy <- starty + v3[1];
-  # polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[5], border=F);
-  
-  # if (endy - starty > 1 / 8) {
-  #   text(0.5 * (startx + endx), 0.5 * (starty + endy), "+", col="white", cex=1.2)
-  # }
-  # starty <- endy;
-  # endy <- 2.9;
-  # polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[6], border=F);
-  # if (endy - starty > 1 / 8) {
-  #   text(0.5 * (startx + endx), 0.5 * (starty + endy), "-", col="white", cex=1.2)
-  # } 
-  
+ 
   # draw direction bias
   startx <- (numBases - 1) * 1.25 + 0.24;
   endx <- (numBases - 1) * 1.25 + 0.49;
