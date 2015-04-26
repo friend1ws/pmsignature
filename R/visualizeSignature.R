@@ -47,7 +47,7 @@ setMethod("visPMSignature",
 #' @param charSize the size of the character
 #' @param isScale the index whether the height of the flanking base is changed or not
 #' @param alpha the parameter for the Renyi entropy (applicable only if the isScale is TRUE)
-visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 1.2, isScale = TRUE, alpha = 2) {
+visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 1.2, isScale = FALSE, alpha = 2, charLimit = 0.25) {
   
   if (is.na(baseCol)) {
     gg_color_hue6 <- hcl(h = seq(15, 375, length = 7), l=65, c=100)[1:6]
@@ -92,7 +92,7 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 1.2
     }
   }
   
-  if (scale == FALSE) {
+  if (isScale == FALSE) {
     sizes <- rep(1, numBases)
   } else {
     sizes <- 0.5 * (2 - apply(A, MARGIN = 1, FUN = renyi));
@@ -123,7 +123,7 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 1.2
     for(ww in 1:4) {
       endy <- starty + B[w,ww];
       polygon(c(startx, endx, endx, startx), c(starty, starty, endy, endy), col=baseCol[ww], border=F);
-      if ((endy - starty > 1 / 4) & (endx - startx > 1 / 4) & charSize > 0) {
+      if ((endy - starty > charLimit) & (endx - startx > charLimit) & charSize > 0) {
         text(0.5 * (endx + startx), 0.5 * (endy + starty), num2base[ww], col="white", cex=charSize)
       }
       starty <- endy;
