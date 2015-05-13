@@ -1,0 +1,4 @@
+5/13, 2015
+
+1. Address the case where the input file includes the mutation with the same reference and alternative bases.
+2. Modify the Read.ME
