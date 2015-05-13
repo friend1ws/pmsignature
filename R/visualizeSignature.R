@@ -108,7 +108,7 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 1.2
       # if (endx - startx > 1 / 4 & charSize > 0) {
       #   text(0.5 * (endx + startx), 0.5, num2base[w], col="white", cex=charSize)
       # }
-      if (endx - startx > charLimit & sizes[l] > 0.5 & charSize > 0) {
+      if (endx - startx > charLimit & sizes[l] > charLimit & charSize > 0) {
         text(0.5 * (endx + startx), 0.5 * sizes[l], num2base[w], col="white", cex=charSize)
       }
       startx <- endx;

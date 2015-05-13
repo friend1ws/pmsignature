@@ -5,7 +5,7 @@
 \title{visualize probabisitic mutaiton signature for the independent model}
 \usage{
 visPMS_ind(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 1.2,
-  isScale = TRUE, alpha = 2)
+  isScale = FALSE, alpha = 2, charLimit = 0.25)
 }
 \arguments{
 \item{vF}{a matrix for mutation signature}
