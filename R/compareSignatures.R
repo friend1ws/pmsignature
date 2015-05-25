@@ -2,7 +2,6 @@
 #' return the order of signatures so that signatures from the several lists are well aligned.
 #' 
 #' @param Params the vector of the result of getPMSignature (EstimatedParameters class)
-
 #' @export
 alignmentSignature <- function(Params) {
   
@@ -60,7 +59,7 @@ alignmentSignature <- function(Params) {
 #' @param trDir the index for the usage of transcription strand bias
 #' @param startK the minimum number of signatures
 #' @param endK the maximum number of signatures
-
+#' 
 #' @export
 getSignaturesForMultipleK <- function(inputFile, numBases = 5, trDir = TRUE, startK = NULL, endK = 6) {
  

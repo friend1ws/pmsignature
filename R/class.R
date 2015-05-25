@@ -107,3 +107,20 @@ setClass(
 )
 
 
+
+#' @export
+setGeneric("getSignatureValue", function(object, sinInd = 1) {
+  standardGeneric("getSignatureValue")
+})
+
+#' Get the values of estimated signatures
+#' 
+#' @param object the EstimatedParameters class (the result of getPMSignature).
+#' @param sigInd the index of the estimated signatures
+setMethod("getSignatureValue", 
+          signature = c(object = "EstimatedParameters", sinInd = "numeric"), 
+          function(object, sinInd = 1) {
+            return(object@signatureFeatureDistribution[sinInd,,])
+          }
+)
+

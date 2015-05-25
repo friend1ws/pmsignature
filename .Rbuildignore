@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 .gitignore
 R/DNPAnalysis.R
+mutationRatio.R
+mutationPositionPlot.R

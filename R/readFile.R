@@ -6,7 +6,7 @@
 #' @param infile the path for the input file for the mutation data.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
-#' @param trDir the index representing whether transcription direction is considered or not
+#' @param trDir the index representing whether transcription direction is considered or not.
 #' @param type this argument can take either independent, full, or custom.
 #' @export
 readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
@@ -118,12 +118,14 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 }
 
 
-#' Read the raw mutation data of mutation position format.
+#' Read the raw mutation data of Mutation Posiiton Format. 
 #' 
-#' @param infile the path for the input file for the mutation data.
+#' @param infile the path for the input file for the mutation data of Mutation Position Format.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
-#' @param trDir the index representing whether transcription direction is considered or not
+#' @param trDir the index representing whether transcription direction is considered or not.
+#' The gene annotation information is ginven by UCSC knownGene (TxDb.Hsapiens.UCSC.hg19.knownGene object).
+#' When trDir is TRUE, the mutations located in intergenic region are excluded from the analysis.
 #' @param type this argument can take either independent, full, or custom.
 #' 
 #' @export
@@ -159,6 +161,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   context <- Biostrings::getSeq(BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, ranges);
 
 
+  # check the consistency between the input reference base and the obtained base using hg19 reference genome.
   removeInd <- which(XVector::subseq(context, start = centerInd, end = centerInd) != ref_base);
   if (length(removeInd) > 0) {
     warning(paste("The central bases are inconsistent in", length(removeInd), "mutations. We have removed them."));
@@ -170,6 +173,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     posInfo <- posInfo[-removeInd];
   }
 
+  # check the characters on alternative base
   alphabetFreq <- Biostrings::alphabetFrequency(alt_base);
   removeInd <- which(rowSums(alphabetFreq[,1:4]) != 1);
   if (length(removeInd) > 0) {
@@ -182,6 +186,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     posInfo <- posInfo[-removeInd];
   }
 
+  # check the characters on flanking bases
   alphabetFreq <- Biostrings::alphabetFrequency(context);
   removeInd <- which(alphabetFreq[,"A"] + alphabetFreq[,"C"] + alphabetFreq[,"G"] + alphabetFreq[,"T"] != numBases);
   if (length(removeInd) > 0) {
@@ -193,13 +198,27 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     posInfo <- posInfo[-removeInd];
     warning(paste("The characters other than (A, C, G, T) are included in flanking bases of", length(removeInd), "mutations. We have removed them."));
   }
+  
+  # check the characters on alternative base
+  alphabetFreq <- Biostrings::alphabetFrequency(alt_base);
+  removeInd <- which(ref_base == alt_base);
+  if (length(removeInd) > 0) {
+    warning(paste("The reference base and alternative bases are equal for", length(removeInd), "mutations. We have removed them."));
+    context <- context[-removeInd];
+    ref_base <- ref_base[-removeInd];
+    alt_base <- alt_base[-removeInd];
+    sampleName_str <- sampleName_str[-removeInd];
+    chrInfo <- chrInfo[-removeInd];
+    posInfo <- posInfo[-removeInd];
+  }
 
+  
   revCompInd <- which(as.character(XVector::subseq(context, start = centerInd, end = centerInd)) %in% c("A", "G"));
   context[revCompInd] <- Biostrings::reverseComplement(context[revCompInd]);
   ref_base[revCompInd] <- Biostrings::reverseComplement(ref_base[revCompInd]);
   alt_base[revCompInd] <- Biostrings::reverseComplement(alt_base[revCompInd]);
 
-  # Obtaining transcription strand information using VariantAnnotation packages
+  # Obtaining transcription strand information using GenomicRanges packages
   if (trDir == TRUE) {
     gr <- GenomicRanges::makeGRangesFromDataFrame(data.frame(chr = chrInfo, 
                                                              start = posInfo, 
