@@ -124,3 +124,19 @@ setMethod("getSignatureValue",
           }
 )
 
+
+#' @export
+setGeneric("getMembershipValue", function(object) {
+  standardGeneric("getMembershipValue")
+})
+
+#' Get the values of estimated membership parameters
+#' 
+#' @param object the EstimatedParameters class (the result of getPMSignature).
+setMethod("getMembershipValue", 
+          signature = c(object = "EstimatedParameters"), 
+          function(object) {
+            return(object@sampleSignatureDistribution)
+          }
+)
+
