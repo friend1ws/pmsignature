@@ -9,13 +9,13 @@ principal component analysis or nonnegative matrix factorization have been popul
 Compared to these existing approaches, the **pmsignature** has following advantages:
   
   
-1. **pmsignature** can perform robust estimation of mutation signatures in case of many mutation features are taken into account such as two bases 5' and 3' to the mutated sites.
-2. **pmsignature** provides intuitively interetable visualization of mutation signatures, which is reminicent of sequencing logos.
+1. **pmsignature** can perform robust estimation of mutation signatures in case of many contextual factors are taken into account such as two bases 5' and 3' to the mutated sites.
+2. **pmsignature** provides intuitively interetable visualization of mutation signatures, which is analogous to sequencing logos.
 
 
 ## Paper
 
-> Shiraishi et al. Extraction of Latent Probabilistic Mutational Signature in Cancer Genomes, submitted.
+> Shiraishi et al. A simple model-based approach to inferring and visualizing cancer mutation signatures, submitted.
 
 ## Input data
 
@@ -69,22 +69,30 @@ which **pmsignature** depends has to be installed.
 Also, **devtools** may be necessary for ease of installation.
 Since the **pmsignature** utilizes C++ codes by way of **Rcpp**, you need to install C++ compiler
 (e.g., [Rtools](http://cran.r-project.org/bin/windows/Rtools/) for Windows, Xcode for Mac).
-See [Advanced R](http://adv-r.had.co.nz/Rcpp.html) by Dr. Hadley Wickham about the basic usage of **Rcpp**
-
+See [Advanced R](http://adv-r.had.co.nz/Rcpp.html) by Dr. Hadley Wickham about the basic usage of **Rcpp**.
 ```
 source("http://bioconductor.org/biocLite.R")
-biocLite(c("VariantAnnotation", "BSgenome.Hsapiens.UCSC.hg19"))
+biocLite(c("GenomicRanges", "BSgenome.Hsapiens.UCSC.hg19"))
 install.packages("devtools")
+install.packages("ggplot2")
+install.packages("Rcpp")
 ```
 
 Currently, the easiest way for installing **pmsignature** is to use the package **devtools**:
   
-  ```
+```
 library(devtools)
 devtools::install_github("friend1ws/pmsignature")
 library(pmsignature)
 ```
 
+For those who failed to installing, we recommend to use the newest R version.
+Also, you may be required to upgrade the bioconductor:
+
+```
+source("http://bioconductor.org/biocLite.R")
+biocLite("BiocUpgrade")
+```
 
 
 ### Prepare input data
@@ -92,18 +100,18 @@ library(pmsignature)
 First, create the input data from your mutation data.
 
 After installing **pmsignature**,
-you can find the above example file at the directory where pmsignature is installed.
+you can find example files at the directory where pmsignature is installed:
 
 * Mutation Position Format
 ```
-inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature");
-print(inputFile);
+inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature")
+print(inputFile)
 ```
 
 * Mutation Feature Vector Format
 ```
-inputFile <- system.file("extdata/Hoang_MFVF.ind.txt", package="pmsignature");
-print(inputFile);
+inputFile <- system.file("extdata/Hoang_MFVF.ind.txt", package="pmsignature")
+print(inputFile)
 ```
 
 
@@ -111,19 +119,19 @@ print(inputFile);
 
 Type the following commands:
   
-  * Mutation Position Format
+* Mutation Position Format
 ```
-G <- readMPFile(inputFile, numBases = 5);
+G <- readMPFile(inputFile, numBases = 5)
 ```
 Here, *inputFile* is the path for the input file.
 *numBases* is the number of flanking bases to consider including the central base (if you want to consider two 5' and 3' bases, then set 5).
 You can format the data as the full model by typing
 ```
-G <- readMPFile(inputFile, numBases = 5, type = "full");
+G <- readMPFile(inputFile, numBases = 5, type = "full")
 ```
 Also, you can add transcription direction information by typing (in that case, the package **TxDb.Hsapiens.UCSC.hg19.knownGene** is necessary)
 ```
-G <- readMPFile(inputFile, numBases = 5, trDir = TRUE);
+G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
 ```
 
 * Mutation Feature Vector Format
@@ -137,15 +145,15 @@ G <- readMFVFile(inputFile, numBases = 5, type="independent", trDir=TRUE)
 When you want to set the number of mutation signature as 3, type the following command:
   
 ```
-Param <- getPMSignature(G, K = 3);
+Param <- getPMSignature(G, K = 3)
 ```
 
 If you want to add the background signature, then after obtaining the background probability, perform the estimation.
 Currently, we only provide the background data for the "independent" and "full" model with 3 and 5 flanking bases.
 
 ```
-BG_prob <- readBGFile(G);
-Param <- getPMSignature(G, K = 3, BG = BG_prob);
+BG_prob <- readBGFile(G)
+Param <- getPMSignature(G, K = 3, BG = BG_prob)
 ```
 
 In default, we repeat the estimation 10 times by changing the initial value,
@@ -153,16 +161,37 @@ and select the parameter with the highest value of log-likelihood.
 If you want to changet the trial number, then
 
 ```
-Param <- getPMSignature(G, K = 3, numInit=20);
+Param <- getPMSignature(G, K = 3, numInit=20)
 ```
 
 
 ### Visualing the mutation signatures and memberships
 
-You can check the mutation signature by typing
-
+To visualize the mutation signatures by typing:
 ```
 visPMSignature(Param, 1)
 visPMSignature(Param, 2)
 visPMSignature(Param, 3)
+```
+
+To obtain the value of estimated mutation signatures:
+```
+getSignatureValue(Param, 1)
+getSignatureValue(Param, 2)
+getSignatureValue(Param, 3)
+```
+
+
+To see the overview of the estimated membership parameter:
+```
+visMembership(G, Param)
+```
+Here, samples are sorted according to the number of mutations.
+To unsort the sample, set sortSampleNum = FALSE.
+Also, not to multiply the number of mutations to the barplot,
+set multiplySampleNum = FALSE. 
+
+To obtain the value of estimated membership parameters:
+```
+getMembershipValue(Param)
 ```
