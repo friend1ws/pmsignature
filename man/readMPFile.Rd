@@ -2,21 +2,23 @@
 % Please edit documentation in R/readFile.R
 \name{readMPFile}
 \alias{readMPFile}
-\title{Read the raw mutation data of mutation position format.}
+\title{Read the raw mutation data of Mutation Posiiton Format.}
 \usage{
 readMPFile(infile, numBases = 3, trDir = FALSE, type = "independent")
 }
 \arguments{
-\item{infile}{the path for the input file for the mutation data.}
+\item{infile}{the path for the input file for the mutation data of Mutation Position Format.}
 
 \item{numBases}{the number of upstream and downstream flanking bases
 (including the mutated base) to take into account.}
 
-\item{trDir}{the index representing whether transcription direction is considered or not}
+\item{trDir}{the index representing whether transcription direction is considered or not.
+The gene annotation information is ginven by UCSC knownGene (TxDb.Hsapiens.UCSC.hg19.knownGene object).
+When trDir is TRUE, the mutations located in intergenic region are excluded from the analysis.}
 
 \item{type}{this argument can take either independent, full, or custom.}
 }
 \description{
-Read the raw mutation data of mutation position format.
+Read the raw mutation data of Mutation Posiiton Format.
 }
 

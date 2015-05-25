@@ -12,7 +12,7 @@ readMFVFile(infile, numBases = 3, trDir = FALSE, type = "custom")
 \item{numBases}{the number of upstream and downstream flanking bases
 (including the mutated base) to take into account.}
 
-\item{trDir}{the index representing whether transcription direction is considered or not}
+\item{trDir}{the index representing whether transcription direction is considered or not.}
 
 \item{type}{this argument can take either independent, full, or custom.}
 
