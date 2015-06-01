@@ -27,7 +27,7 @@ Imports:
     Biostrings,
     BSgenome.Hsapiens.UCSC.hg19
 LinkingTo: Rcpp
-Suggests:
-    TxDb.Hsapiens.UCSC.hg19.knownGene,
-    knitr
 VignetteBuilder: knitr
+Suggests:
+    TxDb.Hsapiens.UCSC.hg19.knownGene, knitr, rmarkdown, BiocStyle
+
