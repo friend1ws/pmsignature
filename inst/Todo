@@ -1,4 +1,7 @@
-5/13, 2015
+6/4. 2015
 
-1. Address the case where the input file includes the mutation with the same reference and alternative bases.
-2. Modify the Read.ME
+1. introduce testthat package for automatic testing
+2. visualization for custom type
+3. prepare background data for the data with more than 5 flanking bases
+4. Add example for all the document
+5. documentation for S4 generics
