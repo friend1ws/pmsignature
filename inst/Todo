@@ -5,3 +5,10 @@
 3. prepare background data for the data with more than 5 flanking bases
 4. Add example for all the document
 5. documentation for S4 generics
+6. add sample name for getMembershipParam function
+
+
+5/13, 2015
+
+1. Address the case where the input file includes the mutation with the same reference and alternative bases.
+2. Modify the Read.ME
