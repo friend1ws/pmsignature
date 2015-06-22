@@ -35,6 +35,11 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
     mutFeatures <- mutFile[,2:ncol(mutFile), drop = FALSE];
     fdim <- unname(apply(mutFeatures, 2, max));
   }
+  
+  # check the consistency of the dimension of mutation features
+  if (length(fdim) != ncol(mutFile) - 1) {
+    stop(paste("The dimension of mutation features should be", length(fdim), "for numBases:", numBases, ",trDir:", trDir, ",type:", type))
+  }
 
   
   if (type == "independent") {
