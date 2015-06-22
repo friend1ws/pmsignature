@@ -15,10 +15,10 @@ License: GPL-3
 URL: https://github.com/friend1ws/pmsignature
 BugReports: https://github.com/friend1ws/pmsignature/issues
 LazyData: true
-Depends:
+Depends: 
   ggplot2,
   dplyr
-Imports:
+Imports: 
     Rcpp,
     GenomicRanges,
     S4Vectors,
@@ -28,6 +28,6 @@ Imports:
     BSgenome.Hsapiens.UCSC.hg19
 LinkingTo: Rcpp
 VignetteBuilder: knitr
-Suggests:
-    TxDb.Hsapiens.UCSC.hg19.knownGene, knitr, rmarkdown, BiocStyle
-
+Suggests: 
+    TxDb.Hsapiens.UCSC.hg19.knownGene, knitr, rmarkdown, BiocStyle,
+    testthat
