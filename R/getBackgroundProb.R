@@ -6,6 +6,10 @@
 #' @param trial the number of randome site generations
 #' @export
 getBackgroudSignature <- function(type = "independent", numBases = 3, trDir = FALSE, trial = 1000000) {
+
+  if (!(type %in% c("independent", "full"))) {
+    stop('the parameter type should be "independent" or "full"')
+  }
   
   if (numBases %% 2 != 1) {
     stop("numBases should be odd numbers")
