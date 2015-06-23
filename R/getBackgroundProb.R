@@ -131,3 +131,39 @@ getBackgroudSignature <- function(type = "independent", numBases = 3, trDir = FA
   
   
 }
+
+
+#' update the background signature file in the package system.file.
+#'
+#' @param type the type of mutation feature vecotr (should be "independent" or "full").
+#' @param numBases the number of flanking bases around the mutated position.
+#' @param trDir the index representing whether transcription direction is considered or not
+#' @param trial the number of randome site generations
+updateBackgroudSignatureFile <- function(type = "independent", numBases = 3, trDir = FALSE, trial = 1000000) {
+  
+  if (type == "independent") {
+    tempType <- "ind"
+  } else if (type == "full") {
+    tempType <- "full"
+  } else {
+    stop('the parameter type should be "independent" or "full"')
+  }
+  
+  if (!(numBases %in% c(3, 5, 7, 9))) {
+    stop('Background data whose number of flanking bases is other than 3, 5, 7 or 9 is not available')
+  }
+  
+  if (trDir == TRUE) {
+    bgfile <- paste("inst/bgdata/bg.", tempType, numBases, "_dir.txt", sep="")
+  } else {
+    bgfile <- paste("inst/bgdata/bg.", tempType, numBases, ".txt", sep="")
+  }
+  
+  bgProb <- getBackgroudSignature(type = type, numBases = numBases, trDir = trDir, trial = trial)
+  
+  
+  write.table(bgProb, file = bgfile, quote = FALSE, sep = "\t", row.names = TRUE)
+  
+}
+  
+  
