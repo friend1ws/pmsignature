@@ -22,12 +22,12 @@ setMethod("visPMSignature",
           signature = c(object = "EstimatedParameters", sinInd = "numeric"), 
           function(object, sinInd = 1, ...) {
             
-            vF <- object@signatureFeatureDistribution[sinInd,,];
+            vF <- object@signatureFeatureDistribution[sinInd,,]
             
             if (object@type == "independent") {
-              visPMS_ind(vF, numBases = object@flankingBasesNum, trDir = object@transcriptionDirection, ...);
+              visPMS_ind(vF, numBases = object@flankingBasesNum, trDir = object@transcriptionDirection, ...)
             } else if (object@type == "full") {
-              visPMS_full(vF, numBases = object@flankingBasesNum, object@transcriptionDirection);
+              visPMS_full(vF, numBases = object@flankingBasesNum, object@transcriptionDirection)
             }
             
           }
@@ -51,45 +51,45 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 5, 
   
   if (is.na(baseCol)) {
     gg_color_hue6 <- hcl(h = seq(15, 375, length = 7), l=65, c=100)[1:6]
-    baseCol <- c(gg_color_hue6[3], gg_color_hue6[5], gg_color_hue6[2], gg_color_hue6[1], gg_color_hue6[4], gg_color_hue6[6]);
+    baseCol <- c(gg_color_hue6[3], gg_color_hue6[5], gg_color_hue6[2], gg_color_hue6[1], gg_color_hue6[4], gg_color_hue6[6])
   }
   
-  centerBase <- (1 + numBases) / 2;
+  centerBase <- (1 + numBases) / 2
   
-  v1 <- vF[1,1:6];
-  V2 <- vF[2:(numBases),1:4];
-  A <- matrix(0, numBases, 4);
-  B <- matrix(0, 4, 4);
+  v1 <- vF[1,1:6]
+  V2 <- vF[2:(numBases),1:4]
+  A <- matrix(0, numBases, 4)
+  B <- matrix(0, 4, 4)
   
   if (trDir == TRUE) {
-    v3 <- vF[(numBases + 1),1:2];
+    v3 <- vF[(numBases + 1),1:2]
   }
   
   for (l in 1:numBases) {
     if (l < centerBase) {
-      A[l, ] <- V2[l, ];
+      A[l, ] <- V2[l, ]
     } else if (l > centerBase) {
-      A[l, ] <- V2[l - 1, ];
+      A[l, ] <- V2[l - 1, ]
     }
   }
-  A[centerBase,2] <- sum(v1[1:3]);
-  A[centerBase,4] <- sum(v1[4:6]);
+  A[centerBase,2] <- sum(v1[1:3])
+  A[centerBase,4] <- sum(v1[4:6])
   
-  B[2, c(1, 3, 4)] <- v1[1:3] / sum(v1[1:3]);
-  B[4, c(1, 2, 3)] <- v1[4:6] / sum(v1[4:6]);
+  B[2, c(1, 3, 4)] <- v1[1:3] / sum(v1[1:3])
+  B[4, c(1, 2, 3)] <- v1[4:6] / sum(v1[4:6])
  
   renyi <- function(p, tAlpha = alpha) {
     if (tAlpha == 1) {
-      return(- sum(p * log2(p), na.rm = TRUE));
+      return(- sum(p * log2(p), na.rm = TRUE))
     } else {
-      return( log(sum(p^tAlpha)) / (1 - tAlpha));
+      return( log(sum(p^tAlpha)) / (1 - tAlpha))
     }
   }
   
   if (isScale == FALSE) {
     fheight <- rep(1, numBases)
   } else {
-    fheight <- 0.5 * (2 - apply(A, MARGIN = 1, FUN = renyi));
+    fheight <- 0.5 * (2 - apply(A, MARGIN = 1, FUN = renyi))
   }
 
   ##########
@@ -103,13 +103,13 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 5, 
   text_lab <- c()
   text_col <- c()
   rectType <- c()
-  num2base <- c("A", "C", "G", "T");
+  num2base <- c("A", "C", "G", "T")
   
   # flanking bases
-  tempStartX <- 0;
+  tempStartX <- 0
   for (i in 1:numBases) {
     x_start <- c(x_start, tempStartX + c(0, cumsum(A[i,1:3])))
-    x_end <- c(x_end, tempStartX + cumsum(A[i,1:4]));
+    x_end <- c(x_end, tempStartX + cumsum(A[i,1:4]))
     y_start <- c(y_start, rep(0, 4))
     y_end <- c(y_end, rep(fheight[i], 4))
     rectType <- c(rectType, c("A", "C", "G", "T")) 
@@ -126,7 +126,7 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 5, 
   }  
   
   # alternative bases from C
-  tempStartX <- (centerBase - 1) * 1.25;
+  tempStartX <- (centerBase - 1) * 1.25
   x_start <- c(x_start, rep(tempStartX, 4))
   x_end <- c(x_end, rep(tempStartX + A[centerBase, 2], 4))
   y_start <- c(y_start, 2 + c(0, cumsum(B[2,1:3])))
@@ -234,24 +234,24 @@ visPMS_ind <- function(vF, numBases, baseCol = NA, trDir = FALSE, charSize = 5, 
 #' @param trDir the index showing whether the transcription direction is used or not
 visPMS_full <- function(Fvec, numBases, trDir) {
   
-  flankingPatternNum <- 4^(numBases - 1);
+  flankingPatternNum <- 4^(numBases - 1)
   subPattern <- c(rep("C>A", flankingPatternNum), 
                   rep("C>G", flankingPatternNum), 
                   rep("C>T", flankingPatternNum), 
                   rep("T>A", flankingPatternNum), 
                   rep("T>C", flankingPatternNum), 
                   rep("T>G", flankingPatternNum)
-                  );
+                  )
   
-  X <- data.frame(probability = Fvec);
-  # X$strand <- factor(rep(c("plus", "minus"), 1536), levels=c("plus", "minus"));
+  X <- data.frame(probability = Fvec)
+  # X$strand <- factor(rep(c("plus", "minus"), 1536), levels=c("plus", "minus"))
   
   if (trDir == TRUE) {
-    X$strand <- factor(c(rep("plus", flankingPatternNum * 6), rep("minus", flankingPatternNum * 6)), levels=c("plus", "minus"));
-    X$subtype <- factor(rep(subPattern, 2), levels=c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G"));
-    X$flank <- rep(1:flankingPatternNum, 2);
+    X$strand <- factor(c(rep("plus", flankingPatternNum * 6), rep("minus", flankingPatternNum * 6)), levels=c("plus", "minus"))
+    X$subtype <- factor(rep(subPattern, 2), levels=c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G"))
+    X$flank <- rep(1:flankingPatternNum, 2)
   } else {
-    X$subtype <- factor(subPattern, levels=c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G"));
+    X$subtype <- factor(subPattern, levels=c("C>A", "C>G", "C>T", "T>A", "T>C", "T>G"))
     X$flank <- 1:flankingPatternNum
   }
   
@@ -267,12 +267,12 @@ visPMS_full <- function(Fvec, numBases, trDir) {
           panel.grid.major.x = element_blank(),
           panel.grid.minor.x = element_blank(),
           strip.text= element_text(face="bold", size=rel(1.2))) +
-    guides(fill=FALSE);
+    guides(fill=FALSE)
   
   if (trDir == TRUE) {
-    gp <- gp + facet_grid(strand ~ subtype);
+    gp <- gp + facet_grid(strand ~ subtype)
   } else {
-    gp <- gp + facet_grid(. ~ subtype);
+    gp <- gp + facet_grid(. ~ subtype)
   }
   
   gp
@@ -283,7 +283,7 @@ visPMS_full <- function(Fvec, numBases, trDir) {
 setMethod("getMutNum", 
           signature = c(object = "MutationFeatureData"), 
           function(object) {         
-            mutData <- data.frame(type = object@countData[1,], sampleName = object@sampleList[object@countData[2,]], count = object@countData[3,]);
+            mutData <- data.frame(type = object@countData[1,], sampleName = object@sampleList[object@countData[2,]], count = object@countData[3,])
             sample2mutNum <- summarize(group_by(mutData, sampleName), mutationNum = sum(count))
             return(as.data.frame(sample2mutNum))
           }
@@ -294,50 +294,50 @@ setMethod("visMembership",
           signature = c(object1 = "MutationFeatureData", object2 = "EstimatedParameters"),
           function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, reorderSig = NULL, colourBrewer = NULL) {
           
-            snum <- getMutNum(object1);
+            snum <- getMutNum(object1)
             if (ylog == TRUE) {
-              snum[,2] <- log10(snum[,2]);
+              snum[,2] <- log10(snum[,2])
             }  
             
-            sampleList <- object2@sampleList;
-            signatureNum <- object2@signatureNum;
+            sampleList <- object2@sampleList
+            signatureNum <- object2@signatureNum
             Q <- as.data.frame(object2@sampleSignatureDistribution)
 
             if (is.null(fromSample)) {
-              fromSample <- 1;
+              fromSample <- 1
             }
             if (is.null(toSample)) {
-              toSample <- length(sampleList);
+              toSample <- length(sampleList)
             }
             
             if (is.null(reorderSig)) {
-              reorderSig <- 1:signatureNum;
+              reorderSig <- 1:signatureNum
             }
-            sigOrder <- reorderSig;
+            sigOrder <- reorderSig
             
             vMutationNum <- c()
             vSample <- c()
             vSignature <- c()
 
             if (sortSampleNum == TRUE) {
-              mutNumOrder <- order(snum$mutationNum, decreasing = TRUE)[fromSample:toSample];
+              mutNumOrder <- order(snum$mutationNum, decreasing = TRUE)[fromSample:toSample]
             } else {
-              mutNumOrder <- fromSample:toSample;
+              mutNumOrder <- fromSample:toSample
             }
 
             for (k in 1:signatureNum) {
-              vSample <- c(vSample, sampleList[mutNumOrder]);
-              vSignature <- c(vSignature ,rep(sigOrder[k], length(mutNumOrder)));
+              vSample <- c(vSample, sampleList[mutNumOrder])
+              vSignature <- c(vSignature ,rep(sigOrder[k], length(mutNumOrder)))
               if (multiplySampleNum == TRUE) {
-                vMutationNum <- c(vMutationNum, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k]);
+                vMutationNum <- c(vMutationNum, snum$mutationNum[mutNumOrder] * Q[mutNumOrder,k])
               } else {
                 vMutationNum <- c(vMutationNum, Q[mutNumOrder,k]);                
               }
             }
-            vSample <- factor(vSample, levels = sampleList[mutNumOrder]);
+            vSample <- factor(vSample, levels = sampleList[mutNumOrder])
             
-            membership <- data.frame(sample = vSample, signature = as.factor(vSignature), mutationNum = vMutationNum);
-            # membership <- data.frame(sample = reorder(vSample, -vIntensity), signature = as.factor(vSignature), intensity = vIntensity);
+            membership <- data.frame(sample = vSample, signature = as.factor(vSignature), mutationNum = vMutationNum)
+            # membership <- data.frame(sample = reorder(vSample, -vIntensity), signature = as.factor(vSignature), intensity = vIntensity)
             
             
             gg <- ggplot(membership, aes(x = sample, y = mutationNum, fill = signature)) +
@@ -346,18 +346,18 @@ setMethod("visMembership",
               theme(axis.text.x = element_blank(),
               axis.ticks.x = element_blank(),
               panel.grid.major.x = element_blank(),
-              panel.grid.minor.x = element_blank());
+              panel.grid.minor.x = element_blank())
             if (multiplySampleNum == TRUE) {
               if (ylog == TRUE) {
-                gg <- gg + ylab("log10(#mutation)");
+                gg <- gg + ylab("log10(#mutation)")
               } else {
-                gg <- gg + ylab("#mutation");
+                gg <- gg + ylab("#mutation")
               }
             } else {
                 gg <- gg + ylab("#membershipRatio");             
             }
             if (!is.null(colourBrewer)) {
-              gg <- gg + scale_fill_brewer(palette = colourBrewer);
+              gg <- gg + scale_fill_brewer(palette = colourBrewer)
             }
             
             gg
