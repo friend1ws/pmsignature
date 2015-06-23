@@ -166,7 +166,7 @@ updateBackgroudSignatureFile <- function(type = "independent", numBases = 3, trD
   bgProb <- getBackgroudSignature(type = type, numBases = numBases, trDir = trDir, trial = trial)
   
   
-  write.table(bgProb, file = bgfile, quote = FALSE, sep = "\t", row.names = TRUE)
+  write.table(bgProb, file = bgfile, quote = FALSE, sep = "\t", row.names = TRUE, col.names = FALSE)
   
 }
   
