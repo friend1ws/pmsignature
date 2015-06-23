@@ -14,58 +14,58 @@
 getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol = 1e-4, maxIter = 10000) {
   
   if (!is.null(BG)) {
-    isBG <- TRUE;
-    varK <- K - 1;
+    isBG <- TRUE
+    varK <- K - 1
   } else {
-    isBG <- FALSE;
-    varK <- K;
-    BG <- 0;
+    isBG <- FALSE
+    varK <- K
+    BG <- 0
   }
 
-  sampleNum <- length(slot(mutationFeatureData, "sampleList"));
-  fdim <- slot(mutationFeatureData, "possibleFeatures");
+  sampleNum <- length(slot(mutationFeatureData, "sampleList"))
+  fdim <- slot(mutationFeatureData, "possibleFeatures")
   
-  tempL <- -Inf;
-  tempPar <- c();
+  tempL <- -Inf
+  tempPar <- c()
   for (kkk in 1:numInit) {
     
-    F <- array(0, c(varK, length(fdim), max(fdim)));
+    F <- array(0, c(varK, length(fdim), max(fdim)))
     
     for (k in 1:varK) {
       for (kk in 1:length(fdim)) {
-        F[k,kk,1:fdim[kk]] <- rgamma(fdim[kk], rep(1, fdim[kk]));
-        F[k,kk,1:fdim[kk]] <- F[k,kk,1:fdim[kk]] / sum(F[k,kk,1:fdim[kk]]);
+        F[k,kk,1:fdim[kk]] <- rgamma(fdim[kk], rep(1, fdim[kk]))
+        F[k,kk,1:fdim[kk]] <- F[k,kk,1:fdim[kk]] / sum(F[k,kk,1:fdim[kk]])
       }
     }
     
 
-    Q <- matrix(rgamma(sampleNum * K, 1, 1), K, sampleNum);
+    Q <- matrix(rgamma(sampleNum * K, 1, 1), K, sampleNum)
     Q <- sweep(Q, 2, apply(Q, 2, sum), `/`)
     
-    p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, sampleNum));
-    Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), slot(mutationFeatureData, "countData")), K, isBG, BG);  
+    p0 <- c(convertToTurbo_F(as.vector(F), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q)), K, sampleNum))
+    Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), slot(mutationFeatureData, "countData")), K, isBG, BG)
     
-    res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter);
+    res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter)
     cat(paste("#trial: ", sprintf("%2d", kkk), 
               "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
               "; time(s): ", sprintf("%4.2f", res1$elapsed.time), 
               "; convergence: ", res1$convergence,
               "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
-    ));
+    ))
     
     if (res1$value.objfn > tempL) {
-      tempL <- res1$value.objfn;
-      tempPar <- res1$par;
+      tempL <- res1$value.objfn
+      tempPar <- res1$par
     }
     
   }
   
-  lenF <- varK * (sum(fdim) - length(fdim));
-  lenQ <- sampleNum * (K - 1);
-  F <- convertFromTurbo_F(tempPar[1:lenF], fdim, K, isBG);
-  Q <- convertFromTurbo_Q(tempPar[(lenF + 1):(lenF + lenQ)], K, sampleNum);
-  dim(F) <- c(varK, length(fdim), max(fdim));
-  dim(Q) <- c(sampleNum, K);
+  lenF <- varK * (sum(fdim) - length(fdim))
+  lenQ <- sampleNum * (K - 1)
+  F <- convertFromTurbo_F(tempPar[1:lenF], fdim, K, isBG)
+  Q <- convertFromTurbo_Q(tempPar[(lenF + 1):(lenF + lenQ)], K, sampleNum)
+  dim(F) <- c(varK, length(fdim), max(fdim))
+  dim(Q) <- c(sampleNum, K)
   
   # return(list(F, Q, tempL))
   return(new(Class = "EstimatedParameters", 
@@ -96,74 +96,74 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
 bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL, tol = 1e-2, maxIter = 10000) {
   
   
-  K <- slot(Param0, "signatureNum");
-  isBG <- slot(Param0, "isBackGround");
+  K <- slot(Param0, "signatureNum")
+  isBG <- slot(Param0, "isBackGround")
  
   if (isBG == TRUE) {
     if (!is.null(BG)) {
-      varK <- K - 1;
+      varK <- K - 1
     } else {
       stop(paste("The input parameter is estimated using a background signature.\n",
-                 "Please specify the same background signature."));
+                 "Please specify the same background signature."))
     }
   } else {
     if (!is.null(BG)) {      
       warning(paste("The input parameter is estimated without using a background signature.\n",
-                    "Specified background signature is ignored."));
+                    "Specified background signature is ignored."))
     }
-    varK <- K;
-    BG <- 0;
+    varK <- K
+    BG <- 0
   }
   
-  sampleNum <- length(slot(mutationFeatureData, "sampleList"));
-  fdim <- slot(mutationFeatureData, "possibleFeatures");
-  countData_org <- slot(mutationFeatureData, "countData");
-  bootData <- countData_org;
+  sampleNum <- length(slot(mutationFeatureData, "sampleList"))
+  fdim <- slot(mutationFeatureData, "possibleFeatures")
+  countData_org <- slot(mutationFeatureData, "countData")
+  bootData <- countData_org
   
-  F0 <- slot(Param0, "signatureFeatureDistribution");
-  Q0 <- slot(Param0, "sampleSignatureDistribution");
+  F0 <- slot(Param0, "signatureFeatureDistribution")
+  Q0 <- slot(Param0, "sampleSignatureDistribution")
   
-  tempL <- -Inf;
-  tempPar <- c();
+  tempL <- -Inf
+  tempPar <- c()
 
-  sqF <- array(0, c(bootNum, varK, length(fdim), max(fdim)));
-  sqQ <- array(0, c(bootNum, nrow(Q0), ncol(Q0)));
+  sqF <- array(0, c(bootNum, varK, length(fdim), max(fdim)))
+  sqQ <- array(0, c(bootNum, nrow(Q0), ncol(Q0)))
   
   for (bbb in 1:bootNum) {
     
     ##########
     # This part is under construction!!!!
     # bootData violates the validity rules of the mutation feature class... I don't like this..
-    tempG <- table(sample(1:length(countData_org[3,]), sum(countData_org[3,]), replace=TRUE, prob= countData_org[3,] / sum(countData_org[3,]) ));
-    bootData[3, ] <- 0;
-    bootData[3, as.integer(names(tempG))] <- tempG;
+    tempG <- table(sample(1:length(countData_org[3,]), sum(countData_org[3,]), replace=TRUE, prob= countData_org[3,] / sum(countData_org[3,]) ))
+    bootData[3, ] <- 0
+    bootData[3, as.integer(names(tempG))] <- tempG
     ##########
     
-    p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q0)), K, sampleNum));
-    Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), bootData), K, isBG, BG); 
+    p0 <- c(convertToTurbo_F(as.vector(F0), fdim, K, isBG), convertToTurbo_Q(as.vector(t(Q0)), K, sampleNum))
+    Y <- list(list(sampleNum, fdim, slot(mutationFeatureData, "featureVectorList"), bootData), K, isBG, BG)
     
-    res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter);
+    res1 <- mySquareEM(p0, Y, tol = tol, maxIter = maxIter)
     cat(paste("#trial: ", sprintf("%2d", bbb), 
               "; #iteration: ", sprintf("%4d", as.integer(res1$itr)), 
               "; time(s): ", sprintf("%4.2f", res1$elapsed.time), 
               "; convergence: ", res1$convergence,
               "; loglikelihood: ", sprintf("%.4f", res1$value.objfn), "\n", sep=""
-    ));
+    ))
     
-    tempPar <- res1$par;
-    lenF <- varK * (sum(fdim) - length(fdim));
-    lenQ <- sampleNum * (K - 1);
-    F <- convertFromTurbo_F(res1$par[1:lenF], fdim, K, isBG);
-    Q <- convertFromTurbo_Q(res1$par[(lenF + 1):(lenF + lenQ)], K, sampleNum);
-    dim(F) <- c(varK, length(fdim), max(fdim));
-    dim(Q) <- c(sampleNum, K);
+    tempPar <- res1$par
+    lenF <- varK * (sum(fdim) - length(fdim))
+    lenQ <- sampleNum * (K - 1)
+    F <- convertFromTurbo_F(res1$par[1:lenF], fdim, K, isBG)
+    Q <- convertFromTurbo_Q(res1$par[(lenF + 1):(lenF + lenQ)], K, sampleNum)
+    dim(F) <- c(varK, length(fdim), max(fdim))
+    dim(Q) <- c(sampleNum, K)
     
     for (k in 1:varK) {
-      sqF[bbb,k,,] <- (F[k,,] - F0[k,,])^2;
+      sqF[bbb,k,,] <- (F[k,,] - F0[k,,])^2
     }
     
     for (n in 1:sampleNum) {
-      sqQ[bbb,,] <- (Q[n,] - Q0[n,])^2;
+      sqQ[bbb,,] <- (Q[n,] - Q0[n,])^2
     }
     
 
@@ -184,37 +184,37 @@ bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL
 #' @param maxIter the maximum number of iteration of estimation
 mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
   
-  prevL <- -Inf;
-  step.min <- 1;
-  step.max <- 1;
-  step.max0 <- 1;
-  mstep <- 4;
-  objfn.inc <- 1;
-  updEvalNum <- 0;
-  LEvalNum <- 0;
-  useSquareEM <- 0;
-  iterNum <- 0;
-  convFlag <- FALSE;
-  startTime <- proc.time();
+  prevL <- -Inf
+  step.min <- 1
+  step.max <- 1
+  step.max0 <- 1
+  mstep <- 4
+  objfn.inc <- 1
+  updEvalNum <- 0
+  LEvalNum <- 0
+  useSquareEM <- 0
+  iterNum <- 0
+  convFlag <- FALSE
+  startTime <- proc.time()
   
-  newL <- calcPMSLikelihood(p, y);
-  LEvalNum <- LEvalNum + 1;
+  newL <- calcPMSLikelihood(p, y)
+  LEvalNum <- LEvalNum + 1
   
   for (iterNum in 1:maxIter) {
     
-    p1 <- updatePMSParam(p, y);
-    updEvalNum <- updEvalNum + 1;
+    p1 <- updatePMSParam(p, y)
+    updEvalNum <- updEvalNum + 1
     if ( any(is.nan(unlist(p1))) ) {
-      stop("Error in function evaluation");
+      stop("Error in function evaluation")
     }
     
-    q1 <- p1 - p;
-    sr2 <- crossprod(q1);
+    q1 <- p1 - p
+    sr2 <- crossprod(q1)
     
-    p2 <- updatePMSParam(p1, y);
-    updEvalNum <- updEvalNum + 1;
+    p2 <- updatePMSParam(p1, y)
+    updEvalNum <- updEvalNum + 1
     if ( any(is.nan(unlist(p2))) ) {
-      stop("Error in function evaluation");
+      stop("Error in function evaluation")
     }
     
     q2 <- p2 - p1
@@ -223,88 +223,88 @@ mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
     srv <- crossprod(q1, q2 - q1)
     
     # alpha <- switch(ctrl$version, -srv/sv2, -sr2/srv, sqrt(sr2/sv2))
-    alpha <- -srv/sv2;
-    alpha <- max(step.min, min(step.max, alpha));
-    p.new <- p + 2 * alpha * q1 + alpha^2 * (q2 - q1);
+    alpha <- -srv/sv2
+    alpha <- max(step.min, min(step.max, alpha))
+    p.new <- p + 2 * alpha * q1 + alpha^2 * (q2 - q1)
     
     # This step is done in the original turboEM code...
     # but I cannot understand why this step is necessary....
     if (isTRUE(abs(alpha - 1) > 0.01) ) {
-      p.new <- updatePMSParam(p.new, y);
-      updEvalNum <- updEvalNum + 1;
+      p.new <- updatePMSParam(p.new, y)
+      updEvalNum <- updEvalNum + 1
     }
     
     # when p.new has some problems...
     if (any(is.nan(p.new)) | !PMSboundary(y)(p.new) ) {
       
-      p.new <- p2;
-      newL <- calcPMSLikelihood(p2, y);
-      LEvalNum  <- LEvalNum + 1;
+      p.new <- p2
+      newL <- calcPMSLikelihood(p2, y)
+      LEvalNum  <- LEvalNum + 1
       
       # since there was a problem, consider to reduce the amount of step max
       if (isTRUE(all.equal(alpha, step.max))) {
-        step.max <- max(step.max0, step.max / mstep);
+        step.max <- max(step.max0, step.max / mstep)
       }
       alpha <- 1
       
       # when p.new is O.K....
     } else {
       
-      newL <- calcPMSLikelihood(p.new, y);
-      LEvalNum  <- LEvalNum + 1;
+      newL <- calcPMSLikelihood(p.new, y)
+      LEvalNum  <- LEvalNum + 1
       
       # when the calculated log-likelihood has some problems
       # or the difference betwen the calculated log-likelihood is large...
       if (is.nan(newL) | (newL > prevL + objfn.inc)) {
         
         p.new <- p2
-        lnew <- calcPMSLikelihood(p2, y);
-        LEvalNum  <- LEvalNum + 1;
+        lnew <- calcPMSLikelihood(p2, y)
+        LEvalNum  <- LEvalNum + 1
         
         # since there was a problem, consider to reduce the amount of step max
         if (alpha == step.max) {
-          step.max <- max(step.max0, step.max / mstep);
+          step.max <- max(step.max0, step.max / mstep)
         }
         alpha <- 1
         
       } else {
-        useSquareEM <- useSquareEM + 1;
+        useSquareEM <- useSquareEM + 1
       }
       
     }
     
     if (isTRUE(all.equal(alpha, step.max))) {
-      step.max <- mstep * step.max;
+      step.max <- mstep * step.max
     }
     
     if (step.min < 0 & isTRUE(all.equal(alpha, step.min))) {
-      step.min <- mstep * step.min;
+      step.min <- mstep * step.min
     }
     
-    p <- p.new;
+    p <- p.new
     
     # for debugging
-    # print(c(updEvalNum, LEvalNum, useSquareEM, step.min, step.max, newL));
+    # print(c(updEvalNum, LEvalNum, useSquareEM, step.min, step.max, newL))
     
     if (abs(prevL - newL) < tol) {
-      convFlag <- TRUE;
-      break;
+      convFlag <- TRUE
+      break
     }
     
     if (!is.nan(newL)) {
-      prevL <- newL;
+      prevL <- newL
     }
     
   }
   
-  calcTime <- proc.time() - startTime;
+  calcTime <- proc.time() - startTime
   
   return(list(par = p,
               value.objfn = newL,
               itr = iterNum,
               fpeval = updEvalNum,
               convergence = convFlag,
-              elapsed.time = calcTime[3]));
+              elapsed.time = calcTime[3]))
   
 }
 
@@ -317,48 +317,48 @@ mySquareEM <- function(p, y, tol = 1e-4, maxIter = 10000) {
 #' the number of mutation signatures specified and so on
 updatePMSParam <- function(p, y) {
   
-  sampleNum <- y[[1]][[1]];
-  fdim <- y[[1]][[2]];
-  patternList <- y[[1]][[3]];
-  sparseCount <- y[[1]][[4]];
-  K <- y[[2]];
-  isBG <- y[[3]];
-  BG0 <- y[[4]];  
+  sampleNum <- y[[1]][[1]]
+  fdim <- y[[1]][[2]]
+  patternList <- y[[1]][[3]]
+  sparseCount <- y[[1]][[4]]
+  K <- y[[2]]
+  isBG <- y[[3]]
+  BG0 <- y[[4]]
   
-  patternNum <- ncol(patternList);
-  samplePatternNum <- ncol(sparseCount);
+  patternNum <- ncol(patternList)
+  samplePatternNum <- ncol(sparseCount)
 
   
   if (isBG) {
-    varK <- K - 1;
+    varK <- K - 1
   } else {
-    varK <- K;
+    varK <- K
   }
   
-  lenF <- varK * (sum(fdim) - length(fdim));
-  lenQ <- (K - 1) * sampleNum;
-  F <- convertFromTurbo_F(p[1:lenF], fdim, K, isBG);
-  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum);
+  lenF <- varK * (sum(fdim) - length(fdim))
+  lenQ <- (K - 1) * sampleNum
+  F <- convertFromTurbo_F(p[1:lenF], fdim, K, isBG)
+  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum)
   
-  dim(Q) <- c(sampleNum, K);
-  Q <- t(Q);
+  dim(Q) <- c(sampleNum, K)
+  Q <- t(Q)
   ####################
   # E-step
-  Theta <- updateTheta_NormalizedC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0);
+  Theta <- updateTheta_NormalizedC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0)
 
-  dim(Theta) <- c(K, samplePatternNum);
+  dim(Theta) <- c(K, samplePatternNum)
   
   ####################
   # M-step 
-  F_Q <- updateMstepFQC(as.vector(patternList), as.vector(sparseCount), as.vector(Theta), fdim, K, sampleNum, patternNum, samplePatternNum, isBG);
+  F_Q <- updateMstepFQC(as.vector(patternList), as.vector(sparseCount), as.vector(Theta), fdim, K, sampleNum, patternNum, samplePatternNum, isBG)
   #########################################
-  F <- F_Q[1:(varK * length(fdim) * max(fdim))];
-  Q <- F_Q[(varK * length(fdim) * max(fdim) + 1):(varK * length(fdim) * max(fdim) + K * sampleNum)];
-  dim(F) <- c(varK, length(fdim), max(fdim));
-  dim(Q) <- c(K, sampleNum);
-  Q <- t(Q);
+  F <- F_Q[1:(varK * length(fdim) * max(fdim))]
+  Q <- F_Q[(varK * length(fdim) * max(fdim) + 1):(varK * length(fdim) * max(fdim) + K * sampleNum)]
+  dim(F) <- c(varK, length(fdim), max(fdim))
+  dim(Q) <- c(K, sampleNum)
+  Q <- t(Q)
   
-  return(c(convertToTurbo_F(as.vector(F), fdim, K, isBG),  convertToTurbo_Q(as.vector(Q), K, sampleNum)));
+  return(c(convertToTurbo_F(as.vector(F), fdim, K, isBG),  convertToTurbo_Q(as.vector(Q), K, sampleNum)))
   
 }
 
@@ -370,34 +370,34 @@ updatePMSParam <- function(p, y) {
 #' the number of mutation signatures specified and so on
 calcPMSLikelihood <- function(p, y) {
   
-  sampleNum <- y[[1]][[1]];
-  fdim <- y[[1]][[2]];
-  patternList <- y[[1]][[3]];
-  sparseCount <- y[[1]][[4]];
-  K <- y[[2]];
-  isBG <- y[[3]];
-  BG0 <- y[[4]];  
+  sampleNum <- y[[1]][[1]]
+  fdim <- y[[1]][[2]]
+  patternList <- y[[1]][[3]]
+  sparseCount <- y[[1]][[4]]
+  K <- y[[2]]
+  isBG <- y[[3]]
+  BG0 <- y[[4]]
   
-  patternNum <- ncol(patternList);
-  samplePatternNum <- ncol(sparseCount);
+  patternNum <- ncol(patternList)
+  samplePatternNum <- ncol(sparseCount)
   
   
   if (isBG) {
-    varK <- K - 1;
+    varK <- K - 1
   } else {
-    varK <- K;
+    varK <- K
   }
   
-  lenF <- varK * (sum(fdim) - length(fdim));
-  lenQ <- (K - 1) * sampleNum;
-  F <- convertFromTurbo_F(p[1:lenF], fdim, K, isBG);
-  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum);
+  lenF <- varK * (sum(fdim) - length(fdim))
+  lenQ <- (K - 1) * sampleNum
+  F <- convertFromTurbo_F(p[1:lenF], fdim, K, isBG)
+  Q <- convertFromTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum)
   
-  dim(Q) <- c(sampleNum, K);
-  Q <- t(Q);
+  dim(Q) <- c(sampleNum, K)
+  Q <- t(Q)
   ####################
   
-  return(getLogLikelihoodC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0));
+  return(getLogLikelihoodC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0))
 
 }
 
@@ -408,30 +408,30 @@ calcPMSLikelihood <- function(p, y) {
 #' the number of mutation signatures specified and so on
 PMSboundary <- function(y) {
   
-  sampleNum <- y[[1]][[1]];
-  fdim <- y[[1]][[2]];
-  patternList <- y[[1]][[3]];
-  sparseCount <- y[[1]][[4]];
-  K <- y[[2]];
-  isBG <- y[[3]];
-  F0 <- y[[4]];  
+  sampleNum <- y[[1]][[1]]
+  fdim <- y[[1]][[2]]
+  patternList <- y[[1]][[3]]
+  sparseCount <- y[[1]][[4]]
+  K <- y[[2]]
+  isBG <- y[[3]]
+  F0 <- y[[4]]
   
-  patternNum <- ncol(patternList);
-  samplePatternNum <- ncol(sparseCount);
+  patternNum <- ncol(patternList)
+  samplePatternNum <- ncol(sparseCount)
   
   
   if (isBG) {
-    varK <- K - 1;
+    varK <- K - 1
   } else {
-    varK <- K;
+    varK <- K
   }
   
-  lenF <- varK * (sum(fdim) - length(fdim));
-  lenQ <- (K - 1) * sampleNum;
+  lenF <- varK * (sum(fdim) - length(fdim))
+  lenQ <- (K - 1) * sampleNum
 
   
   function(p) {
-    return(all(boundaryTurbo_F(p[1:lenF], fdim, varK), boundaryTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum)));
+    return(all(boundaryTurbo_F(p[1:lenF], fdim, varK), boundaryTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum)))
   }
   
 }

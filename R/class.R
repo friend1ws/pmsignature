@@ -30,20 +30,20 @@ setClass(
     mutationPosition = "data.frame"
     ),
   validity = function(object) {
-    errors <- character();
+    errors <- character()
     # check for the consistency about the possible feature vector.
     for (i in 1:length(object@possibleFeatures)) {
       if (any(!(object@featureVectorList[i] %in% seq_len(object@possibleFeatures[i])))) {
-        errors <- c(errors, paste("Inconsistency in the ", i, "-th feature", sep = ""));
+        errors <- c(errors, paste("Inconsistency in the ", i, "-th feature", sep = ""))
       }
     }
     # check for the number of mutation patterns
     if (any(!sort(unique(object@countData[1,])) %in% seq_len(ncol(object@featureVectorList)))) {
-      errors <- c(errors, "Inconsistency about the number of mutation patterns");
+      errors <- c(errors, "Inconsistency about the number of mutation patterns")
     } 
     # check for the number of samples
     if (any(!sort(unique(object@countData[2,])) %in% seq_len(length(object@sampleList)))) {
-      errors <- c(errors, "Inconsistency about the sample indice");
+      errors <- c(errors, "Inconsistency about the sample indice")
     }
     # check for the zero count
     if (any(!object@countData[3,] != 0)) {
@@ -73,32 +73,32 @@ setClass(
     loglikelihood = "numeric"
   ),
   validity = function(object) {
-    errors <- character();
-    variantSignatureNum = object@signatureNum - as.integer(object@isBackGround);
+    errors <- character()
+    variantSignatureNum = object@signatureNum - as.integer(object@isBackGround)
     # check for the estimated signature feature distribution
     if (any(object@signatureFeatureDistribution < 0) || any(object@signatureFeatureDistribution > 1)) {
-      errors <- c(errors, "The estimated signature feature distribution value should be between 0 to 1");    
+      errors <- c(errors, "The estimated signature feature distribution value should be between 0 to 1")
     }
     for (k in 1:variantSignatureNum) {
       for (l in 1:length(object@possibleFeatures)) {
         if (abs(sum(object@signatureFeatureDistribution[k, l, 1:object@possibleFeatures[l]]) - 1) > 1e-10) {
-          errors <- c(errors, paste("The estimated values should sum to 1 at the ", k, "-th signature and the ", l, "-th feature", sep=""));
+          errors <- c(errors, paste("The estimated values should sum to 1 at the ", k, "-th signature and the ", l, "-th feature", sep=""))
         }
       }
     }
     # check for estimated sample signature distribution
     if (any(object@sampleSignatureDistribution < 0) || any(object@sampleSignatureDistribution > 1)) {
-      errors <- c(errors, "The estimated signature feature distribution value should be between 0 to 1");    
+      errors <- c(errors, "The estimated signature feature distribution value should be between 0 to 1")
     }    
     if (nrow(object@sampleSignatureDistribution) != length(object@sampleList)) {
-      errors <- c(errors, "Inconsistency in the number of samples and the estimated sample signature distibution");
+      errors <- c(errors, "Inconsistency in the number of samples and the estimated sample signature distibution")
     }
     if (ncol(object@sampleSignatureDistribution) != object@signatureNum) {
-      errors <- c(errors, "Inconsistency in the number of signatures and the estimated sample signature distibution");
+      errors <- c(errors, "Inconsistency in the number of signatures and the estimated sample signature distibution")
     }
     for (n in 1:nrow(object@sampleSignatureDistribution)) {
       if (abs(sum(object@sampleSignatureDistribution[n, ]) - 1) > 1e-10) {
-        errors <- c(errors, paste("The estimated values should sum to 1 at the ", n, "-th sample", sep=""));
+        errors <- c(errors, paste("The estimated values should sum to 1 at the ", n, "-th sample", sep=""))
       }
     }      
         
