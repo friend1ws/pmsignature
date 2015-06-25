@@ -1,13 +1,24 @@
-
-
 #' Read the raw mutation data with the mutation feature vector format.
+#' 
+#' @description
+#' The mutation position format is tab-delimited text file, 
+#' where the 1st column shows the name of samples, and the 2nd-last colums show the value of mutation features.
+#' 
+#' Also, this function usually can accept compressed files (e.g., by gzip, bzip2 and so on) when using recent version of R.
 #' 
 #' @param infile the path for the input file for the mutation feature data.
 #' @param infile the path for the input file for the mutation data.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
 #' @param trDir the index representing whether transcription direction is considered or not.
-#' @param type this argument can take either independent, full, or custom.
+#' @param type this argument can take either "independent", "full", or "custom".
+#' The values "independent" or "full" can be set only when the input file has decent format.
+#' 
+#' @examples 
+#' We have example data in the pmsignature package;
+#' inputFile <- system.file("extdata/Hoang_MFVF.ind.txt", package="pmsignature")
+#' G <- readMFVFile(inputFile, numBases = 5, type="independent", trDir=TRUE)
+#' 
 #' @export
 readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
   

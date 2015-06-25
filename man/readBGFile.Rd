@@ -23,7 +23,7 @@ Therefore, when you are using whole genome sequencing data, the results of this 
 }
 \examples{
 inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
-G <- readMPFile(inputFile, numBases = 5)
+G <- readMPFile(inputFile, numBases = 7)
 BG_prob <- readBGFile(G)
 }
 
