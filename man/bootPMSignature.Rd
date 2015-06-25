@@ -8,17 +8,18 @@ bootPMSignature(mutationFeatureData, Param0, bootNum = 10, BG = NULL,
   tol = 0.01, maxIter = 10000)
 }
 \arguments{
+\item{mutationFeatureData}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}
+
 \item{Param0}{the initial value for the parameter of memberships used for bootstraped parameter estimations}
 
 \item{bootNum}{the number of performing bootstrap calculations}
 
 \item{BG}{the background signature used for estimating Param0}
 
-\item{tol}{tolerance for the estimation}
+\item{tol}{tolerance for the estimation
+(when the difference of log-likelihoods become below this value, stop the estimation)}
 
-\item{G}{the matrix of mutation feature data}
-
-\item{numInit}{the number of performing calculations with different initial values}
+\item{maxIter}{the maximum number of iteration of estimation}
 }
 \description{
 Obtain the standard error estimates for parameters for mutation signatures and memberships

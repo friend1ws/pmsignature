@@ -2,8 +2,7 @@
 #' 
 #' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
 #' @param K the number of mutation signatures
-#' @param isBG the logical value showing whether a background mutaiton features is included or not
-#' @param BG0 a background mutaiton features
+#' @param BG a background mutaiton features (default: NULL)
 #' @param numInit the number of performing calculations with different initial values
 #' @param tol tolerance for the estimation
 #' (when the difference of log-likelihoods become below this value, stop the estimation)
@@ -86,12 +85,15 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
 
 #' Obtain the standard error estimates for parameters for mutation signatures and memberships
 #' 
-#' @param G the matrix of mutation feature data
+#' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
 #' @param Param0 the initial value for the parameter of memberships used for bootstraped parameter estimations
 #' @param bootNum the number of performing bootstrap calculations
 #' @param BG the background signature used for estimating Param0
-#' @param numInit the number of performing calculations with different initial values
 #' @param tol tolerance for the estimation
+#' (when the difference of log-likelihoods become below this value, stop the estimation)
+#' @param maxIter the maximum number of iteration of estimation
+#' @useDynLib pmsignature
+#' @importFrom Rcpp sourceCpp
 #' @export
 bootPMSignature <- function(mutationFeatureData, Param0, bootNum = 10, BG = NULL, tol = 1e-2, maxIter = 10000) {
   
