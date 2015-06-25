@@ -4,6 +4,8 @@
 #'  @slot flankingBasesNum the number of flanking bases to consider (only apprecable for independent and full types)
 #'  @slot transcriptionDirection the flag representing whether transcription direction is considered or not
 #'  @slot possibleFeatures a vector representing the numbers of possible values for each mutation feature
+#'  
+#'  @exportClass 
 setClass("MetaInformation",
          representation = representation(
            "VIRTUAL",
@@ -20,6 +22,8 @@ setClass("MetaInformation",
 #' @slot sampleList a list of sample names observed in the input mutation data
 #' @slot countData a matrix representing the number of mutations and samples.
 #'  The (first, second, third) colums are for (mutation pattern indice, sample indice, frequencies).
+#'  
+#' @exportClass 
 setClass(
   Class = "MutationFeatureData",
   contains = "MetaInformation",
@@ -61,6 +65,8 @@ setClass(
 #' @slot signatureFeatureDistribution estimated parameters for mutation signatures
 #' @slot sampleSignatureDistribution estimated parameters for memberships of mutation signatures for each sample
 #' @slot loglikelihood the loglikelihood about the estimated parameters
+
+#' @exportClass 
 setClass(
   Class = "EstimatedParameters",
   contains = "MetaInformation",
