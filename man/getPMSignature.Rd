@@ -8,7 +8,7 @@ getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10,
   tol = 1e-04, maxIter = 10000)
 }
 \arguments{
-\item{mutationFeatureData}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}
+\item{mutationFeatureData}{the mutation data (MutationFeatureData class (S4 class)) by the functions (readMutFile or readRawMutfeatFile).}
 
 \item{K}{the number of mutation signatures}
 
@@ -21,7 +21,19 @@ getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10,
 
 \item{maxIter}{the maximum number of iteration of estimation}
 }
+\value{
+The output is an instance of EstimatedParameters S4 class, which stores estimated parameters and other meta-information,
+and will be used for obtaining parameter values and visualizing the mutation signatures and memberships
+}
 \description{
 Obtain the parameters for mutation signatures and memberships
+}
+\examples{
+After obtaining mutationFeatureData (see e.g., readMPFile function) as G,
+Param <- getPMSignature(G, K = 3)
+
+When using background signature
+BG_prob <- readBGFile(G)
+Param <- getPMSignature(G, K = 3, BG = BG_prob)
 }
 

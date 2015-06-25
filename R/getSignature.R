@@ -1,12 +1,24 @@
 #' Obtain the parameters for mutation signatures and memberships
 #' 
-#' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
+#' @param mutationFeatureData the mutation data (MutationFeatureData class (S4 class)) by the functions (readMutFile or readRawMutfeatFile). 
 #' @param K the number of mutation signatures
 #' @param BG a background mutaiton features (default: NULL)
 #' @param numInit the number of performing calculations with different initial values
 #' @param tol tolerance for the estimation
 #' (when the difference of log-likelihoods become below this value, stop the estimation)
 #' @param maxIter the maximum number of iteration of estimation
+#' 
+#' @return The output is an instance of EstimatedParameters S4 class, which stores estimated parameters and other meta-information,
+#' and will be used for obtaining parameter values and visualizing the mutation signatures and memberships
+#' 
+#' @examples 
+#' After obtaining mutationFeatureData (see e.g., readMPFile function) as G,
+#' Param <- getPMSignature(G, K = 3)
+#' 
+#' When using background signature
+#' BG_prob <- readBGFile(G)
+#' Param <- getPMSignature(G, K = 3, BG = BG_prob)
+#'
 #' @useDynLib pmsignature
 #' @importFrom Rcpp sourceCpp
 #' @export
