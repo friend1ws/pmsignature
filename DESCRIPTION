@@ -25,7 +25,8 @@ Imports:
     IRanges,
     XVector,
     Biostrings,
-    BSgenome.Hsapiens.UCSC.hg19
+    BSgenome.Hsapiens.UCSC.hg19,
+    reshape2
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests: 
