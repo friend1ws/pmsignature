@@ -493,7 +493,7 @@ readBGFile <- function(mutationFeatureData) {
   bdata <- read.table(system.file(bgfile, package = "pmsignature"), header = FALSE, sep="\t")
   
   tempFeatureVectorList <- apply(slot(mutationFeatureData, "featureVectorList"), 2, paste0, collapse=",")
-  bprob <- bdata[,2]
+  bprob <- bdata[,2] / sum(bdata[,2]) # normalize sum to one
   names(bprob) <- bdata[,1]
   
   if (!all(tempFeatureVectorList %in% names(bprob))) {
