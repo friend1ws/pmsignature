@@ -7,9 +7,23 @@
 readBGFile(mutationFeatureData)
 }
 \arguments{
-\item{mutationFeatureData}{the mutation data processed in the function (readMutFile or readRawMutfeatFile)}
+\item{mutationFeatureData}{the mutation data processed in the function (readMPFile or readMFVFile)}
+}
+\value{
+The output is background probability values for each mutation feature vector.
 }
 \description{
-Read and format the background vector data
+This function provide background probabilities for each mutation feature,
+that is available for the model type is "independent" or "full",
+and the numBases is either of 3, 5, 7 or 9.
+
+The background probability vecotrs are calculated by the function \code{getBackgroudSignature},
+checking the frequencies of consecutive nucleotides on \strong{exonic regions}.
+Therefore, when you are using whole genome sequencing data, the results of this function may not be appropriate.
+}
+\examples{
+inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
+G <- readMPFile(inputFile, numBases = 5)
+BG_prob <- readBGFile(G)
 }
 

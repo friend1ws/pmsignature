@@ -125,6 +125,28 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 
 #' Read the raw mutation data of Mutation Posiiton Format. 
 #' 
+#' @description
+#' The mutation position format is tab-delimited text file, where 
+#' the 1st-5th columns shows the name of samples, the name of chromosome, 
+#' the coordinate in the chromosome, the reference base (A, C, G, or T) and
+#' the alternate base (A, C, G, or T), respectively. An example is like;
+#' 
+#' ---
+#' 
+#' sample1 chr1 100 A C
+#' 
+#' sample1 chr1 200 A T
+#' 
+#' sample1 chr2 100 G T
+#' 
+#' sample2 chr1 300 T C
+#' 
+#' sample3 chr3 400 T C
+#' 
+#' ---
+#' 
+#' Also, this function usually can accept compressed files (e.g., by gzip, bzip2 and so on) when using recent version of R.
+#' 
 #' @param infile the path for the input file for the mutation data of Mutation Position Format.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
@@ -132,6 +154,20 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 #' The gene annotation information is ginven by UCSC knownGene (TxDb.Hsapiens.UCSC.hg19.knownGene object).
 #' When trDir is TRUE, the mutations located in intergenic region are excluded from the analysis.
 #' @param type this argument can take either independent, full, or custom.
+#' 
+#' @return The output is an instance of MutationFeatureData S4 class (which stores processed summary of mutation data and meta-information).
+#' This will be typically the input of getPMSignature function for estimating the parameter of mutation signatures and memberships.
+#' 
+#' @examples 
+#' We have example data in the pmsignature package;
+#' inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
+#' G <- readMPFile(inputFile, numBases = 5)
+#' 
+#' When assuming non-independent model;
+#' G <- readMPFile(inputFile, numBases = 5, type = "full")
+#' 
+#' For adding transcription direction information;
+#' G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
 #' 
 #' @export
 readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
@@ -412,7 +448,25 @@ getMutationFeatureVector <- function(context, ref_base, alt_base, strandInfo = N
 
 #' Read and format the background vector data
 #' 
-#' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
+#' @description
+#' This function provide background probabilities for each mutation feature,
+#' that is available for the model type is "independent" or "full",
+#' and the numBases is either of 3, 5, 7 or 9.
+#'
+#' The background probability vecotrs are calculated by the function \code{getBackgroudSignature},
+#' checking the frequencies of consecutive nucleotides on \strong{exonic regions}. 
+#' Therefore, when you are using whole genome sequencing data, the results of this function may not be appropriate.
+#' 
+#' @param mutationFeatureData the mutation data processed in the function (readMPFile or readMFVFile)
+#' 
+#' @return
+#' The output is background probability values for each mutation feature vector.
+#' 
+#' @examples 
+#' inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
+#' G <- readMPFile(inputFile, numBases = 7)
+#' BG_prob <- readBGFile(G)
+#' 
 #' @export
 readBGFile <- function(mutationFeatureData) {
   
@@ -424,7 +478,7 @@ readBGFile <- function(mutationFeatureData) {
     stop('Background data for types other than "independent" or "full" is not available')
   }
   
-  if (slot(mutationFeatureData, "flankingBasesNum") %in% c(3, 5)) {
+  if (slot(mutationFeatureData, "flankingBasesNum") %in% c(3, 5, 7, 9)) {
     tempNumBase <- slot(mutationFeatureData, "flankingBasesNum")
   } else {
     stop('Background data whose number of flanking bases is other than 3 or 5 is not available')

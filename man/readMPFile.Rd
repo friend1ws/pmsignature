@@ -18,7 +18,41 @@ When trDir is TRUE, the mutations located in intergenic region are excluded from
 
 \item{type}{this argument can take either independent, full, or custom.}
 }
+\value{
+The output is an instance of MutationFeatureData S4 class (which stores processed summary of mutation data and meta-information).
+This will be typically the input of getPMSignature function for estimating the parameter of mutation signatures and memberships.
+}
 \description{
-Read the raw mutation data of Mutation Posiiton Format.
+The mutation position format is tab-delimited text file, where
+the 1st-5th columns shows the name of samples, the name of chromosome,
+the coordinate in the chromosome, the reference base (A, C, G, or T) and
+the alternate base (A, C, G, or T), respectively. An example is like;
+
+---
+
+sample1 chr1 100 A C
+
+sample1 chr1 200 A T
+
+sample1 chr2 100 G T
+
+sample2 chr1 300 T C
+
+sample3 chr3 400 T C
+
+---
+
+Also, this function usually can accept compressed files (e.g., by gzip, bzip2 and so on) when using recent version of R.
+}
+\examples{
+We have example data in the pmsignature package;
+inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
+G <- readMPFile(inputFile, numBases = 5)
+
+When assuming non-independent model;
+G <- readMPFile(inputFile, numBases = 5, type = "full")
+
+For adding transcription direction information;
+G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
 }
 
