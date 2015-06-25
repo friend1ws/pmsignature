@@ -20,6 +20,6 @@ An S4 class representing the estimated parameters
 
 \item{\code{sampleSignatureDistribution}}{estimated parameters for memberships of mutation signatures for each sample}
 
-\item{\code{loglikelihood}}{the loglikelihood about the estimated parameters}
+\item{\code{loglikelihood}}{the loglikelihood value for the estimated parameters}
 }}
 

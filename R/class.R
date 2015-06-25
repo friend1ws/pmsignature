@@ -62,7 +62,7 @@ setClass(
 #' @slot isBackGround the flag showing whether the background signature data is used or not.
 #' @slot signatureFeatureDistribution estimated parameters for mutation signatures
 #' @slot sampleSignatureDistribution estimated parameters for memberships of mutation signatures for each sample
-#' @slot loglikelihood the loglikelihood about the estimated parameters
+#' @slot loglikelihood the loglikelihood value for the estimated parameters
 #' @export
 setClass(
   Class = "EstimatedParameters",
