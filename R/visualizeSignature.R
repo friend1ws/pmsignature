@@ -1,6 +1,6 @@
-#' visualize probabisitic mutaiton signature
+#' Visualize probabisitic mutaiton signature
 #' 
-#' @description test
+#' @description This generic
 #' 
 #' @param object 
 #' @param sigInd the index of the mutation signature plotted
@@ -10,7 +10,7 @@
 #' @param alpha the parameter for the Renyi entropy (applicable only if the isScale is TRUE)
 #' 
 #' @return a figure of estimaged probabilistic mutation signature via ggplot2 is generated
-#' (therefore, can be saved using \code{ggsave} function.
+#' (therefore, can be saved using \code{ggsave} function).
 #' @examples test
 #' 
 #' @export
@@ -18,6 +18,18 @@ setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
   standardGeneric("visPMSignature")
 })
 
+
+#' Obtain somatic mutation count for each sample
+#' 
+#' @param object MutationFeatureData
+#' 
+#' @return the number of somatic mutation stored into the instance of mutationFeatureData class. 
+#' 
+#' @examples 
+#' After obtaining mutationFeatureData (see e.g., readMPFile function) as G,
+#' mutNum <- getMutNum(G)
+#' print(mutNum)
+#' 
 #' @export
 setGeneric("getMutNum", function(object) {
   standardGeneric("getMutNum")
