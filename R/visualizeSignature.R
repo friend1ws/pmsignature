@@ -1,8 +1,18 @@
-#' @export
-setGeneric("visPMSignature", function(object, sinInd = 1, baseCol) {
-  standardGeneric("visPMSignature")
-})
-
+#' visualize probabisitic mutaiton signature
+#' 
+#' @description test
+#' 
+#' @param object 
+#' @param sigInd the index of the mutation signature plotted
+#' @param baseCol the colour of the bases (A, C, G, T, plus strand, minus strand) (active only if type = "independent")
+#' @param charSize the size of the character (active only if type = "independent")
+#' @param isScale the index whether the height of the flanking base is changed or not (active only if type = "independent")
+#' @param alpha the parameter for the Renyi entropy (applicable only if the isScale is TRUE)
+#' 
+#' @return a figure of estimaged probabilistic mutation signature via ggplot2 is generated
+#' (therefore, can be saved using \code{ggsave} function.
+#' @examples test
+#' 
 #' @export
 setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
   standardGeneric("visPMSignature")

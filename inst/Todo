@@ -1,3 +1,9 @@
+6/26, 2015
+
+1. implement visualization via ggvis package
+2. allowing or missing values
+3. implement beta-divergence optimization
+
 6/4. 2015
 
 1. introduce testthat package for automatic testing
