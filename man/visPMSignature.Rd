@@ -7,26 +7,30 @@
 visPMSignature(object, sinInd = 1, ...)
 }
 \arguments{
-\item{object}{}
+\item{object}{EstimatedParameters class}
 
 \item{sigInd}{the index of the mutation signature plotted}
 
-\item{baseCol}{the colour of the bases (A, C, G, T, plus strand, minus strand) (active only if type = "independent")}
+\item{baseCol}{the colour of the bases (A, C, G, T, plus strand, minus strand), (default: ggplot default colors, active only if type = "independent")}
 
-\item{charSize}{the size of the character (active only if type = "independent")}
+\item{charSize}{the size of the character passed to geom_text function (defalt: 5 (active only if type = "independent")}
 
-\item{isScale}{the index whether the height of the flanking base is changed or not (active only if type = "independent")}
+\item{isScale}{the index whether the height of the flanking base is changed or not (default: FALSE, active only if type = "independent")}
 
-\item{alpha}{the parameter for the Renyi entropy (applicable only if the isScale is TRUE)}
+\item{alpha}{the parameter for the Renyi entropy (default: 2, applicable only if the isScale is TRUE)}
 }
 \value{
 a figure of estimaged probabilistic mutation signature via ggplot2 is generated
 (therefore, can be saved using \code{ggsave} function).
 }
 \description{
-This generic
+By checking the meta-information on the mutation signature
+(model type, #flanking-bases, transcription strand usages),
+appropriate visualization will be automatically produced
+(but currently, we are supporting just for "independent" and "full" type models).
 }
 \examples{
-test
+After obtaining EstimatedParameters (typically by \\code{getPMSignature}) as Param,
+visPMSignature(Param, 1)
 }
 

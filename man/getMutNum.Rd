@@ -10,7 +10,8 @@ getMutNum(object)
 \item{object}{MutationFeatureData}
 }
 \value{
-the number of somatic mutation stored into the instance of mutationFeatureData class.
+the number of somatic mutations for each cancer sample
+stored into the instance of mutationFeatureData class.
 }
 \description{
 Obtain somatic mutation count for each sample

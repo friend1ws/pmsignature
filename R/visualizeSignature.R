@@ -1,17 +1,22 @@
 #' Visualize probabisitic mutaiton signature
 #' 
-#' @description This generic
+#' @description By checking the meta-information on the mutation signature 
+#' (model type, #flanking-bases, transcription strand usages), 
+#' appropriate visualization will be automatically produced
+#' (but currently, we are supporting just for "independent" and "full" type models).
 #' 
-#' @param object 
+#' @param object EstimatedParameters class
 #' @param sigInd the index of the mutation signature plotted
-#' @param baseCol the colour of the bases (A, C, G, T, plus strand, minus strand) (active only if type = "independent")
-#' @param charSize the size of the character (active only if type = "independent")
-#' @param isScale the index whether the height of the flanking base is changed or not (active only if type = "independent")
-#' @param alpha the parameter for the Renyi entropy (applicable only if the isScale is TRUE)
+#' @param baseCol the colour of the bases (A, C, G, T, plus strand, minus strand), (default: ggplot default colors, active only if type = "independent")
+#' @param charSize the size of the character passed to geom_text function (defalt: 5 (active only if type = "independent")
+#' @param isScale the index whether the height of the flanking base is changed or not (default: FALSE, active only if type = "independent")
+#' @param alpha the parameter for the Renyi entropy (default: 2, applicable only if the isScale is TRUE)
 #' 
 #' @return a figure of estimaged probabilistic mutation signature via ggplot2 is generated
 #' (therefore, can be saved using \code{ggsave} function).
-#' @examples test
+#' @examples 
+#' After obtaining EstimatedParameters (typically by \code{getPMSignature}) as Param,
+#' visPMSignature(Param, 1)
 #' 
 #' @export
 setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
@@ -23,7 +28,8 @@ setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
 #' 
 #' @param object MutationFeatureData
 #' 
-#' @return the number of somatic mutation stored into the instance of mutationFeatureData class. 
+#' @return the number of somatic mutations for each cancer sample 
+#' stored into the instance of mutationFeatureData class. 
 #' 
 #' @examples 
 #' After obtaining mutationFeatureData (see e.g., readMPFile function) as G,
