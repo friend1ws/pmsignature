@@ -7,7 +7,7 @@
 getMutNum(object)
 }
 \arguments{
-\item{object}{MutationFeatureData}
+\item{object}{MutationFeatureData class}
 }
 \value{
 the number of somatic mutations for each cancer sample

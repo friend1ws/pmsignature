@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualizeSignature.R
 \name{visPMSignature}
 \alias{visPMSignature}
-\title{Visualize probabisitic mutaiton signature}
+\title{Visualize estimated probabisitic mutaiton signatures}
 \usage{
 visPMSignature(object, sinInd = 1, ...)
 }
@@ -32,5 +32,8 @@ appropriate visualization will be automatically produced
 \examples{
 After obtaining EstimatedParameters (typically by \\code{getPMSignature}) as Param,
 visPMSignature(Param, 1)
+
+You can change the heights of flanking bases according to information contents,
+visPMSignature(Param, 1, isScale = TRUE)
 }
 

@@ -1,4 +1,4 @@
-#' Visualize probabisitic mutaiton signature
+#' Visualize estimated probabisitic mutaiton signatures
 #' 
 #' @description By checking the meta-information on the mutation signature 
 #' (model type, #flanking-bases, transcription strand usages), 
@@ -18,6 +18,9 @@
 #' After obtaining EstimatedParameters (typically by \code{getPMSignature}) as Param,
 #' visPMSignature(Param, 1)
 #' 
+#' You can change the heights of flanking bases according to information contents,
+#' visPMSignature(Param, 1, isScale = TRUE)
+#' 
 #' @export
 setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
   standardGeneric("visPMSignature")
@@ -26,7 +29,7 @@ setGeneric("visPMSignature", function(object, sinInd = 1, ...) {
 
 #' Obtain somatic mutation count for each sample
 #' 
-#' @param object MutationFeatureData
+#' @param object MutationFeatureData class 
 #' 
 #' @return the number of somatic mutations for each cancer sample 
 #' stored into the instance of mutationFeatureData class. 
@@ -41,6 +44,35 @@ setGeneric("getMutNum", function(object) {
   standardGeneric("getMutNum")
 })
 
+
+
+#' Visualize estimated membership parameters
+#' 
+#' @param object1 MutationFeatureData class 
+#' @param object2 EstimatedParameters class
+#' @param multiplySampleNum barplot height for each sample is multiplied by #mutations (default: TRUE).
+#' @param ylog barplot height is an logarithms of #mutaitons or not 
+#' (defalt: FALSE, active only if multiplySampleNum = TRUE).
+#' @param sortSampleNum samples are sorted according to #mutations (default: TRUE).
+#' @param fromSample only samples from the specified index will be plotted (default: NULL).
+#' @param fromSample only samples until the specified index will be plotted (default: NULL).
+#' @param reorderSig the order of signatures are reordered according to the specified order (default: NULL).
+#' @param colourBrewer colourBrewer pallete set passed to scale_fill_brewer function.
+#' See, e.g., \url{http://docs.ggplot2.org/current/scale_brewer.html} for detail.
+#' 
+#' @return a figure of estimaged membership parameter via ggplot2 is generated
+#' (therefore, can be saved using \code{ggsave} function).
+#' 
+#' @examples 
+#' After obtaining EstimatedParameters (typically by \code{getPMSignature}) as Param,
+#' visPMSignature(G, Param)
+#' 
+#' You can equate the heights of barplot
+#' visPMSignature(G,Param, multiplySampleNum = TRUE)
+#' 
+#' Use colourBrewer pallete,
+#' visPMSignature(G,Param, colourBrewer = "Set2")
+#' 
 #' @export
 setGeneric("visMembership", function(object1, object2, ylog = FALSE, sortSampleNum = TRUE, multiplySampleNum = TRUE, fromSample = NULL, toSample = NULL, reorderSig = NULL, colourBrewer = NULL) {
   standardGeneric("visMembership")
