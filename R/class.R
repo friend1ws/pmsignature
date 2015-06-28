@@ -139,9 +139,9 @@ setGeneric("getMembershipValue", function(object) {
 setMethod("getMembershipValue", 
           signature = c(object = "EstimatedParameters"), 
           function(object) {
-            membership.df <- object@sampleSignatureDistribution
+            membership.df <- as.data.frame(object@sampleSignatureDistribution)
             rownames(membership.df) <- object@sampleList
-            colnames(membership.df) <- paste("signature", 1:ncol(membership.df))          
+            colnames(membership.df) <- paste("signature", 1:ncol(membership.df), sep="_")          
             return(membership.df)
           }
 )
