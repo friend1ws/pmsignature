@@ -17,7 +17,8 @@ BugReports: https://github.com/friend1ws/pmsignature/issues
 LazyData: true
 Depends: 
   ggplot2,
-  dplyr
+  dplyr,
+  tidyr
 Imports: 
     Rcpp,
     GenomicRanges,
@@ -30,4 +31,6 @@ LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests: 
     TxDb.Hsapiens.UCSC.hg19.knownGene, knitr, rmarkdown, BiocStyle,
-    testthat
+    testthat,
+    ggvis
+    
