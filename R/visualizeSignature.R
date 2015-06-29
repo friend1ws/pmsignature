@@ -78,6 +78,19 @@ setGeneric("visMembership", function(object1, object2, ylog = FALSE, sortSampleN
   standardGeneric("visMembership")
 })
 
+#' Visualize Correlation
+#'
+#' Visualize pairwise signature correlations using a heatmap.
+#'
+#' @param object EstimatedParameters object.
+#' @return ggplot object.
+#'
+#' @export
+#' @docType methods
+setGeneric("visCorrelation", function(object) {
+    standardGeneric("visCorrelation")
+})
+
 setMethod("visPMSignature", 
           signature = c(object = "EstimatedParameters", sinInd = "numeric"), 
           function(object, sinInd = 1, ...) {
@@ -425,4 +438,28 @@ setMethod("visMembership",
 
 )
 
+#' @aliases visCorrelation,EstimatedParameters-method
+setMethod("visCorrelation", signature("EstimatedParameters"),
+          function(object) {
+    sig <- apply(object@signatureFeatureDistribution, 1, function(x) x[x > 0])
+    sigCor <- reshape2::melt(cor(sig), value.name="correlation")
+    sigCor$param <- "signature"
 
+    memb <- Param@sampleSignatureDistribution
+    membCor <- reshape2::melt(cor(memb), value.name="correlation")
+    membCor$param <- "membership"
+
+    paramCor <- rbind(sigCor, membCor)
+    paramCor$param <- factor(paramCor$param, levels=c("signature", "membership"))
+
+    ggplot(paramCor, aes(Var1, Var2, fill=correlation)) +
+        geom_tile() +
+        facet_wrap(~param) +
+        scale_fill_gradient2(limits=c(-1, 1)) +
+        scale_y_reverse() +
+        theme(panel.background=element_blank(),
+              panel.grid.major=element_blank(),
+              panel.grid.minor=element_blank(),
+              axis.title=element_blank(),
+              axis.ticks=element_blank())
+})
