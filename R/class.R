@@ -110,16 +110,24 @@ setClass(
 )
 
 
-
+#' Get the values of estimated signatures
+#' 
+#' @param object the EstimatedParameters class (the result of getPMSignature)
+#' @param sigInd the index of the estimated signatures
+#' 
+#' @return mutation signature parameter values estimated by \code{getPMSignature}
+#' 
+#' @examples 
+#' After obtaining EstimatedParameters (typically by \code{getPMSignature}) as Param,
+#' print(getSignatureValue(Param, 1))
+#' 
 #' @export
 setGeneric("getSignatureValue", function(object, sinInd = 1) {
   standardGeneric("getSignatureValue")
 })
 
-#' Get the values of estimated signatures
-#' 
-#' @param object the EstimatedParameters class (the result of getPMSignature).
-#' @param sigInd the index of the estimated signatures
+
+
 setMethod("getSignatureValue", 
           signature = c(object = "EstimatedParameters", sinInd = "numeric"), 
           function(object, sinInd = 1) {
@@ -128,14 +136,23 @@ setMethod("getSignatureValue",
 )
 
 
+
+#' Get the values of estimated membership parameters
+#' 
+#' @param object the EstimatedParameters class (the result of getPMSignature).
+#' 
+#' @return membership parameter values estimated by \code{getPMSignature}
+#' 
+#' @examples 
+#' After obtaining EstimatedParameters (typically by \code{getPMSignature}) as Param,
+#' print(getMembershipValue(Param))
+#' 
 #' @export
 setGeneric("getMembershipValue", function(object) {
   standardGeneric("getMembershipValue")
 })
 
-#' Get the values of estimated membership parameters
-#' 
-#' @param object the EstimatedParameters class (the result of getPMSignature).
+
 setMethod("getMembershipValue", 
           signature = c(object = "EstimatedParameters"), 
           function(object) {

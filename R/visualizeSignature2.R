@@ -5,12 +5,11 @@
 #' 
 #' @return a figure of estimaged membership parameter via ggvis is generated
 #' 
-#' @import ggvis
 #' @examples 
 #' After obtaining EstimatedParameters (typically by \code{getPMSignature}) as Param,
 #' visPMSignature2(Param)
 #' 
-#' 
+#' @import ggvis
 #' @export
 setGeneric("visMembership2", function(object) {
   standardGeneric("visMembership2")
