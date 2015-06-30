@@ -1,4 +1,4 @@
-#' Visualize estimated probabisitic mutaiton signatures
+#' Visualize estimated probabilistic mutation signatures
 #' 
 #' @description By checking the meta-information on the mutation signature 
 #' (model type, #flanking-bases, transcription strand usages), 
@@ -7,12 +7,12 @@
 #' 
 #' @param object EstimatedParameters class
 #' @param sigInd the index of the mutation signature plotted
-#' @param baseCol the colour of the bases (A, C, G, T, plus strand, minus strand), (default: ggplot default colors, active only if type = "independent")
-#' @param charSize the size of the character passed to geom_text function (defalt: 5 (active only if type = "independent")
+#' @param baseCol the colors of the bases (A, C, G, T, plus strand, minus strand), (default: ggplot2 default colors, active only if type = "independent")
+#' @param charSize the size of the character passed to geom_text function (default: 5 (active only if type = "independent")
 #' @param isScale the index whether the height of the flanking base is changed or not (default: FALSE, active only if type = "independent")
-#' @param alpha the parameter for the Renyi entropy (default: 2, applicable only if the isScale is TRUE)
+#' @param alpha the parameter for the Renyi entropy (default: 2, applicable only if the isScale == TRUE)
 #' 
-#' @return a figure of estimaged probabilistic mutation signature via ggplot2 is generated
+#' @return a figure of estimated probabilistic mutation signature via ggplot2 is generated
 #' (therefore, can be saved using \code{ggsave} function).
 #' @examples 
 #' After obtaining EstimatedParameters (typically by \code{getPMSignature}) as Param,
@@ -51,16 +51,16 @@ setGeneric("getMutNum", function(object) {
 #' @param object1 MutationFeatureData class 
 #' @param object2 EstimatedParameters class
 #' @param multiplySampleNum barplot height for each sample is multiplied by #mutations (default: TRUE).
-#' @param ylog barplot height is an logarithms of #mutaitons or not 
-#' (defalt: FALSE, active only if multiplySampleNum = TRUE).
+#' @param ylog barplot height is an logarithms of #mutations or not 
+#' (default: FALSE, active only if multiplySampleNum = TRUE).
 #' @param sortSampleNum samples are sorted according to #mutations (default: TRUE).
 #' @param fromSample only samples from the specified index will be plotted (default: NULL).
 #' @param fromSample only samples until the specified index will be plotted (default: NULL).
 #' @param reorderSig the order of signatures are reordered according to the specified order (default: NULL).
-#' @param colourBrewer colourBrewer pallete set passed to scale_fill_brewer function.
+#' @param colourBrewer colourBrewer palette set passed to scale_fill_brewer function.
 #' See, e.g., \url{http://docs.ggplot2.org/current/scale_brewer.html} for detail.
 #' 
-#' @return a figure of estimaged membership parameter via ggplot2 is generated
+#' @return a figure of estimated membership parameter via ggplot2 is generated
 #' (therefore, can be saved using \code{ggsave} function).
 #' 
 #' @examples 
@@ -70,7 +70,7 @@ setGeneric("getMutNum", function(object) {
 #' You can equate the heights of barplot
 #' visPMSignature(G,Param, multiplySampleNum = TRUE)
 #' 
-#' Use colourBrewer pallete,
+#' Use colourBrewer palette,
 #' visPMSignature(G,Param, colourBrewer = "Set2")
 #' 
 #' @export

@@ -13,8 +13,8 @@ visMembership(object1, object2, ylog = FALSE, sortSampleNum = TRUE,
 
 \item{object2}{EstimatedParameters class}
 
-\item{ylog}{barplot height is an logarithms of #mutaitons or not
-(defalt: FALSE, active only if multiplySampleNum = TRUE).}
+\item{ylog}{barplot height is an logarithms of #mutations or not
+(default: FALSE, active only if multiplySampleNum = TRUE).}
 
 \item{sortSampleNum}{samples are sorted according to #mutations (default: TRUE).}
 
@@ -24,13 +24,13 @@ visMembership(object1, object2, ylog = FALSE, sortSampleNum = TRUE,
 
 \item{reorderSig}{the order of signatures are reordered according to the specified order (default: NULL).}
 
-\item{colourBrewer}{colourBrewer pallete set passed to scale_fill_brewer function.
+\item{colourBrewer}{colourBrewer palette set passed to scale_fill_brewer function.
 See, e.g., \url{http://docs.ggplot2.org/current/scale_brewer.html} for detail.}
 
 \item{fromSample}{only samples until the specified index will be plotted (default: NULL).}
 }
 \value{
-a figure of estimaged membership parameter via ggplot2 is generated
+a figure of estimated membership parameter via ggplot2 is generated
 (therefore, can be saved using \code{ggsave} function).
 }
 \description{
@@ -43,7 +43,7 @@ visPMSignature(G, Param)
 You can equate the heights of barplot
 visPMSignature(G,Param, multiplySampleNum = TRUE)
 
-Use colourBrewer pallete,
+Use colourBrewer palette,
 visPMSignature(G,Param, colourBrewer = "Set2")
 }
 
