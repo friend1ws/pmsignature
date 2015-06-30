@@ -8,11 +8,11 @@ getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10,
   tol = 1e-04, maxIter = 10000)
 }
 \arguments{
-\item{mutationFeatureData}{the mutation data (MutationFeatureData class (S4 class)) by the functions (readMutFile or readRawMutfeatFile).}
+\item{mutationFeatureData}{the mutation data (MutationFeatureData class (S4 class)) by the \code{readMPFile} or \code{readMFVFile} functions.}
 
 \item{K}{the number of mutation signatures}
 
-\item{BG}{a background mutaiton features (default: NULL)}
+\item{BG}{a background mutation features typically provided by \code{readBGFile} function (default: NULL)}
 
 \item{numInit}{the number of performing calculations with different initial values}
 
@@ -23,7 +23,7 @@ getPMSignature(mutationFeatureData, K, BG = NULL, numInit = 10,
 }
 \value{
 The output is an instance of EstimatedParameters S4 class, which stores estimated parameters and other meta-information,
-and will be used for obtaining parameter values and visualizing the mutation signatures and memberships
+and will be used for saving parameter values and visualizing the mutation signatures and memberships
 }
 \description{
 Obtain the parameters for mutation signatures and memberships

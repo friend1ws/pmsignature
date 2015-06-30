@@ -1,15 +1,15 @@
 #' Obtain the parameters for mutation signatures and memberships
 #' 
-#' @param mutationFeatureData the mutation data (MutationFeatureData class (S4 class)) by the functions (readMutFile or readRawMutfeatFile). 
+#' @param mutationFeatureData the mutation data (MutationFeatureData class (S4 class)) by the \code{readMPFile} or \code{readMFVFile} functions. 
 #' @param K the number of mutation signatures
-#' @param BG a background mutaiton features (default: NULL)
+#' @param BG a background mutation features typically provided by \code{readBGFile} function (default: NULL)
 #' @param numInit the number of performing calculations with different initial values
 #' @param tol tolerance for the estimation
 #' (when the difference of log-likelihoods become below this value, stop the estimation)
 #' @param maxIter the maximum number of iteration of estimation
 #' 
 #' @return The output is an instance of EstimatedParameters S4 class, which stores estimated parameters and other meta-information,
-#' and will be used for obtaining parameter values and visualizing the mutation signatures and memberships
+#' and will be used for saving parameter values and visualizing the mutation signatures and memberships
 #' 
 #' @examples 
 #' After obtaining mutationFeatureData (see e.g., readMPFile function) as G,
@@ -97,13 +97,21 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
 
 #' Obtain the standard error estimates for parameters for mutation signatures and memberships
 #' 
-#' @param mutationFeatureData the mutation data processed in the function (readMutFile or readRawMutfeatFile)
-#' @param Param0 the initial value for the parameter of memberships used for bootstraped parameter estimations
-#' @param bootNum the number of performing bootstrap calculations
+#' @param mutationFeatureData the mutation data (MutationFeatureData class (S4 class)) by the \code{readMPFile} or \code{readMFVFile} functions.
+#' @param Param0 the initial value for the parameter of memberships used for bootstrapped parameter estimations
+#' @param bootNum the number of bootstrapping
 #' @param BG the background signature used for estimating Param0
 #' @param tol tolerance for the estimation
 #' (when the difference of log-likelihoods become below this value, stop the estimation)
 #' @param maxIter the maximum number of iteration of estimation
+#' 
+#' @return a list of standard error matrices (mutation signatures, membership parameters)
+#' 
+#' @examples 
+#' After obtaining mutationFeatureData (see e.g., by \code{readMPFile} function) as G, 
+#' and EstimatedParameters (e.g., by \code{getPMSignature} function) as Param,
+#' bootParam <- bootPMSignature(G, Param, bootNum = 100)
+#' 
 #' @useDynLib pmsignature
 #' @importFrom Rcpp sourceCpp
 #' @export
