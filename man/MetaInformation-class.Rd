@@ -12,7 +12,7 @@ An S4 class to represent a mutation meta information common to many data types
 \describe{
 \item{\code{type}}{type of data format (independent, full, custom)}
 
-\item{\code{flankingBasesNum}}{the number of flanking bases to consider (only apprecable for independent and full types)}
+\item{\code{flankingBasesNum}}{the number of flanking bases to consider (only applicable for independent and full types)}
 
 \item{\code{transcriptionDirection}}{the flag representing whether transcription direction is considered or not}
 

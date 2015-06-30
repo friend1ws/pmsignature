@@ -1,7 +1,7 @@
 #' An S4 class to represent a mutation meta information common to many data types
 #'
 #'  @slot type type of data format (independent, full, custom)
-#'  @slot flankingBasesNum the number of flanking bases to consider (only apprecable for independent and full types)
+#'  @slot flankingBasesNum the number of flanking bases to consider (only applicable for independent and full types)
 #'  @slot transcriptionDirection the flag representing whether transcription direction is considered or not
 #'  @slot possibleFeatures a vector representing the numbers of possible values for each mutation feature
 setClass("MetaInformation",
@@ -19,7 +19,7 @@ setClass("MetaInformation",
 #' @slot featureVectorList a list of feature vectors actually observed in the input mutation data
 #' @slot sampleList a list of sample names observed in the input mutation data
 #' @slot countData a matrix representing the number of mutations and samples.
-#'  The (first, second, third) colums are for (mutation pattern indice, sample indice, frequencies).
+#'  The (1st, 2nd, 3rd) columns are for (mutation pattern index, sample index, frequencies).
 #'  
 #' @export
 setClass(
@@ -62,7 +62,7 @@ setClass(
 #' @slot isBackGround the flag showing whether the background signature data is used or not.
 #' @slot signatureFeatureDistribution estimated parameters for mutation signatures
 #' @slot sampleSignatureDistribution estimated parameters for memberships of mutation signatures for each sample
-#' @slot loglikelihood the loglikelihood value for the estimated parameters
+#' @slot loglikelihood the log-likelihood  value for the estimated parameters
 #' @export
 setClass(
   Class = "EstimatedParameters",
