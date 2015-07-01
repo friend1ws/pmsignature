@@ -1,18 +1,28 @@
 #' Read the raw mutation data with the mutation feature vector format.
 #' 
 #' @description
-#' The mutation position format is tab-delimited text file, 
-#' where the 1st column shows the name of samples, and the 2nd-last colums show the value of mutation features.
+#' The mutation feature vector format is tab-delimited format, 
+#' where the 1st column shows the name of samples, and the 2nd-last columns show the values of mutation features.
+#' 
+#' When type = "independent", the mutation feature should be equal to \code{(numBases + as.integer(trDir))}-dimensional vector,
+#' representing substitution patterns (1 to 6, C>A, C>G, C>T, T>A, T>C and T>G), 
+#' 5' and 3' flanking bases (1 to 4, A, C, G and T),
+#' and transcription direction (1 to 2, + and -), in this order.
+#' 
+#' When type = "full", the mutation feature should be equal to \code{1}-dimensional vector,
+#' taking the value of 1 to \code{6 * 4^{(numBases - 1)} * 2^{as.integer(trDir)}}.
+#' For the coding of the number to the actual mutation pattern (substitution patterns, flanking bases, transcription direction),
+#' seeing the source code of \code{getMutationFeatureVector} may be helpful.
 #' 
 #' Also, this function usually can accept compressed files (e.g., by gzip, bzip2 and so on) when using recent version of R.
 #' 
 #' @param infile the path for the input file for the mutation feature data.
-#' @param infile the path for the input file for the mutation data.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
 #' @param trDir the index representing whether transcription direction is considered or not.
 #' @param type this argument can take either "independent", "full", or "custom".
-#' The values "independent" or "full" can be set only when the input file has decent format.
+#' The values "independent" or "full" can be set only when the input file is decently formatted.
+#' 
 #' 
 #' @examples 
 #' We have example data in the pmsignature package;
@@ -134,13 +144,13 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 }
 
 
-#' Read the raw mutation data of Mutation Posiiton Format. 
+#' Read the raw mutation data of Mutation Position Format. 
 #' 
 #' @description
 #' The mutation position format is tab-delimited text file, where 
-#' the 1st-5th columns shows the name of samples, the name of chromosome, 
-#' the coordinate in the chromosome, the reference base (A, C, G, or T) and
-#' the alternate base (A, C, G, or T), respectively. An example is like;
+#' the 1st-5th columns shows sample names, chromosome names, 
+#' coordinates, reference bases (A, C, G, or T) and
+#' the alternate bases (A, C, G, or T), respectively. An example is as follows;
 #' 
 #' ---
 #' 
@@ -157,17 +167,18 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 #' ---
 #' 
 #' Also, this function usually can accept compressed files (e.g., by gzip, bzip2 and so on) when using recent version of R.
+#' Currently, only UCSC hg19 (BSgenome.Hsapiens.UCSC.hg19) is supported. 
 #' 
 #' @param infile the path for the input file for the mutation data of Mutation Position Format.
 #' @param numBases the number of upstream and downstream flanking bases
 #' (including the mutated base) to take into account.
 #' @param trDir the index representing whether transcription direction is considered or not.
-#' The gene annotation information is ginven by UCSC knownGene (TxDb.Hsapiens.UCSC.hg19.knownGene object).
+#' The gene annotation information is given by UCSC knownGene (TxDb.Hsapiens.UCSC.hg19.knownGene object).
 #' When trDir is TRUE, the mutations located in intergenic region are excluded from the analysis.
-#' @param type this argument can take either independent, full, or custom.
+#' @param type this argument can take either "independent", "full", or "custom".
 #' 
-#' @return The output is an instance of MutationFeatureData S4 class (which stores processed summary of mutation data and meta-information).
-#' This will be typically the input of getPMSignature function for estimating the parameter of mutation signatures and memberships.
+#' @return The output is an instance of MutationFeatureData S4 class (which stores summarized information on mutation data).
+#' This will be typically the input of \code{getPMSignature} function for estimating the parameters of mutation signatures and memberships.
 #' 
 #' @examples 
 #' We have example data in the pmsignature package;
@@ -177,7 +188,7 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 #' When assuming non-independent model;
 #' G <- readMPFile(inputFile, numBases = 5, type = "full")
 #' 
-#' For adding transcription direction information;
+#' When adding transcription direction information;
 #' G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
 #' 
 #' @export
@@ -362,7 +373,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 
 
 
-#' get mutation feature vector from context sequence data and reference and alternate allele information
+#' Get mutation feature vector from context sequence data and reference and alternate allele information
 #'
 #' @param context the context sequence data around the mutated position. This shoud be Biostrings::DNAStringSet class
 #' @param ref_base the reference bases at the mutated position.
@@ -370,6 +381,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
 #' @param strandInfo transcribed strand information at the mutated position. (this is optional)
 #' @param numBases the number of flanking bases around the mutated position.
 #' @param type the type of mutation feature vecotr (should be "independent" or "full").
+#' 
+#' @export
 getMutationFeatureVector <- function(context, ref_base, alt_base, strandInfo = NULL, numBases, type) {
   
   trDir <- !is.null(strandInfo)
@@ -460,18 +473,19 @@ getMutationFeatureVector <- function(context, ref_base, alt_base, strandInfo = N
 #' Read and format the background vector data
 #' 
 #' @description
-#' This function provide background probabilities for each mutation feature,
-#' that is available for the model type is "independent" or "full",
+#' This function provides a background probability for each mutation feature,
+#' that is available only when the model type is "independent" or "full",
 #' and the numBases is either of 3, 5, 7 or 9.
 #'
-#' The background probability vecotrs are calculated by the function \code{getBackgroudSignature},
+#' The background probability vectors are calculated by the function \code{getBackgroudSignature},
 #' checking the frequencies of consecutive nucleotides on \strong{exonic regions}. 
-#' Therefore, when you are using whole genome sequencing data, the results of this function may not be appropriate.
+#' Therefore, when you are using whole genome sequencing data, 
+#' using the background signatures provided by this function may not be appropriate.
 #' 
-#' @param mutationFeatureData the mutation data processed in the function (readMPFile or readMFVFile)
+#' @param mutationFeatureData the mutation data processed in the function (\code{readMPFile} or \code{readMFVFile})
 #' 
 #' @return
-#' The output is background probability values for each mutation feature vector.
+#' The output is a background probability vector corresponding to the input mutation data.
 #' 
 #' @examples 
 #' inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
