@@ -15,7 +15,7 @@ Compared to these existing approaches, the **pmsignature** has following advanta
 
 ## Paper
 
-> Shiraishi et al. A simple model-based approach to inferring and visualizing cancer mutation signatures, submitted.
+> Shiraishi et al. A simple model-based approach to inferring and visualizing cancer mutation signatures, bioRxiv, doi: [http://dx.doi.org/10.1101/019901](http://dx.doi.org/10.1101/019901).
 
 ## Input data
 
@@ -142,14 +142,14 @@ G <- readMFVFile(inputFile, numBases = 5, type="independent", trDir=TRUE)
 ### Estimate the parameters
 
 
-When you want to set the number of mutation signature as 3, type the following command:
+When you want to set the number of mutation signature as 3, type the following command (see also ?getPMSignature):
   
 ```
 Param <- getPMSignature(G, K = 3)
 ```
 
 If you want to add the background signature, then after obtaining the background probability, perform the estimation.
-Currently, we only provide the background data for the "independent" and "full" model with 3 and 5 flanking bases.
+Currently, we only provide the background data for the "independent" and "full" model with 3, 5, 7 and 9 flanking bases (see also ?readBGFile).
 
 ```
 BG_prob <- readBGFile(G)
@@ -167,14 +167,14 @@ Param <- getPMSignature(G, K = 3, numInit=20)
 
 ### Visualing the mutation signatures and memberships
 
-To visualize the mutation signatures by typing:
+To visualize the mutation signatures by typing (see also ?visPMSignature):
 ```
 visPMSignature(Param, 1)
 visPMSignature(Param, 2)
 visPMSignature(Param, 3)
 ```
 
-To obtain the value of estimated mutation signatures:
+To obtain the value of estimated mutation signatures (see also ?getSignatureValue):
 ```
 getSignatureValue(Param, 1)
 getSignatureValue(Param, 2)
@@ -182,7 +182,7 @@ getSignatureValue(Param, 3)
 ```
 
 
-To see the overview of the estimated membership parameter:
+To see the overview of the estimated membership parameter (see also ?visMembership):
 ```
 visMembership(G, Param)
 ```
@@ -191,7 +191,7 @@ To unsort the sample, set sortSampleNum = FALSE.
 Also, not to multiply the number of mutations to the barplot,
 set multiplySampleNum = FALSE. 
 
-To obtain the value of estimated membership parameters:
+To obtain the value of estimated membership parameters (see also ?getMembershipValue):
 ```
 getMembershipValue(Param)
 ```
