@@ -2,14 +2,14 @@ Package: pmsignature
 Title: Extracting characteristic mutation signatures from a set of mutation
     data.
 Description: This package is an R implementation of PMSignature (Shiraishi et
-    al. 2015+), which identifies characteristic mutation patterns concealed in
+    al. 2014+), which identifies characteristic mutation patterns concealed in
     large amounts of somatic mutation data. In this method, the generative
     process of each mutaiton follows a mixed membership model, where each
     cancer genome has multiple source of mutations (mutation signatures), and
     each mutation is associated to one of the mutation signatures. By EM
     algorithm, we jointly estimate the mutation signatures and the membership
     parameters.
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: "Yuichi Shiraishi <friend1ws@gmail.com> [cre]"
 License: GPL-3
 URL: https://github.com/friend1ws/pmsignature
@@ -20,13 +20,13 @@ Depends:
   dplyr,
   tidyr
 Imports: 
-  Rcpp,
-  GenomicRanges,
-  S4Vectors,
-  IRanges,
-  XVector,
-  Biostrings,
-  BSgenome.Hsapiens.UCSC.hg19
+    Rcpp,
+    GenomicRanges,
+    S4Vectors,
+    IRanges,
+    XVector,
+    Biostrings,
+    BSgenome.Hsapiens.UCSC.hg19
 LinkingTo: Rcpp
 VignetteBuilder: knitr
 Suggests: 
