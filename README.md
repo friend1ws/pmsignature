@@ -104,13 +104,13 @@ you can find example files at the directory where pmsignature is installed:
 
 * Mutation Position Format
 ```
-inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature")
+inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
 print(inputFile)
 ```
 
 * Mutation Feature Vector Format
 ```
-inputFile <- system.file("extdata/Hoang_MFVF.ind.txt", package="pmsignature")
+inputFile <- system.file("extdata/Hoang_MFVF.ind.txt.gz", package="pmsignature")
 print(inputFile)
 ```
 
