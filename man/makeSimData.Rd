@@ -4,9 +4,9 @@
 \alias{makeSimData}
 \title{Generate simulation data}
 \usage{
-makeSimData(type = "independent", numBases = 3, trDir = FALSE, K = 3,
-  sampleNum = 10, mutationNum = 100, param_alpha = 1, param_gamma = 1,
-  isBG = FALSE)
+makeSimData(type = "independent", numBases = 3, trDir = FALSE,
+  fdim = NULL, K = 3, sampleNum = 10, mutationNum = 100,
+  param_alpha = 1, param_gamma = 1, isBG = FALSE)
 }
 \arguments{
 \item{type}{this argument can take either independent, full}
