@@ -291,9 +291,12 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
     # exons_txdb <- GenomicFeatures::exons(txdb)
     # gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE)
     # gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(exons_txdb[gr_txdb@subjectHits]))))
-    txdb_bed <- GenomicFeatures::asBED(txdb)
+    
+    # txdb_bed <- GenomicFeatures::asBED(txdb)
+    txdb_bed <- GenomicFeatures::transcripts(txdb)
     gr_txdb <- GenomicRanges::findOverlaps(gr, txdb_bed, ignore.strand = FALSE)
-    gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(txdb_bed[gr_txdb@subjectHits]))))
+    # gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(txdb_bed[gr_txdb@subjectHits]))))
+    gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(txdb_bed[S4Vectors::subjectHits(gr_txdb)]))))
     ugr_strand <- unique(gr_strand[gr_strand[, 2] != "*" ,], MARGIN=1)
     
     rmdup_ugr_strand <- ugr_strand[!duplicated(ugr_strand[, 1]), ]

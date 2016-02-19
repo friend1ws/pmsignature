@@ -15,7 +15,7 @@ Compared to these existing approaches, the **pmsignature** has following advanta
 
 ## Paper
 
-> [Shiraishi et al. A simple model-based approach to inferring and visualizing cancer mutation signatures, PLoS Genetics, 2015,
+> Shiraishi et al. A simple model-based approach to inferring and visualizing cancer mutation signatures, PLoS Genetics, 2015,
 [http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1005657](http://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1005657).
 
 ## Input data
