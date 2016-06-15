@@ -2,7 +2,7 @@ context("mutation position format reading and estimation")
 
 test_that("read mutation position format data and estimation (type: indepenent, numBases: 3, trDir: FALSE)", {
   
-  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature")
+  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
   G <- readMPFile(inputFile, numBases = 3, trDir = FALSE)
   BG_prob <- readBGFile(G)
   
@@ -20,7 +20,7 @@ test_that("read mutation position format data and estimation (type: indepenent, 
 
 test_that("read mutation position format data and estimation (type: indepenent, numBases: 3, trDir: TRUE)", {
   
-  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature")
+  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
   G <- readMPFile(inputFile, numBases = 3, trDir = TRUE)
   BG_prob <- readBGFile(G)
   
@@ -38,7 +38,7 @@ test_that("read mutation position format data and estimation (type: indepenent, 
 
 test_that("read mutation position format data and estimation (type: indepenent, numBases: 5, trDir: FALSE)", {
   
-  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature")
+  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
   G <- readMPFile(inputFile, numBases = 5, trDir = FALSE)
   BG_prob <- readBGFile(G)
   
@@ -56,7 +56,7 @@ test_that("read mutation position format data and estimation (type: indepenent, 
 
 test_that("read mutation position format data and estimation (type: indepenent, numBases: 5, trDir: TRUE)", {
   
-  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt", package="pmsignature")
+  inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.txt.gz", package="pmsignature")
   G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
   BG_prob <- readBGFile(G)
   
