@@ -176,7 +176,10 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 #' The gene annotation information is given by UCSC knownGene (TxDb.Hsapiens.UCSC.hg19.knownGene object).
 #' When trDir is TRUE, the mutations located in intergenic region are excluded from the analysis.
 #' @param type this argument can take either "independent", "full", or "custom".
-#' 
+#' @param bs_genome this argument specifies the reference genome (e.g., BSgenome.Mmusculus.UCSC.mm10 can be used for the mouse genome).
+#' See https://bioconductor.org/packages/release/bioc/html/BSgenome.html for the available genome list
+#' @param txdb_transcript this argument specified the transcript database (e.g., TxDb.Mmusculus.UCSC.mm10.knownGene can be used for the mouse genome).
+#' See https://bioconductor.org/packages/release/bioc/html/AnnotationDbi.html for details.
 #' @return The output is an instance of MutationFeatureData S4 class (which stores summarized information on mutation data).
 #' This will be typically the input of \code{getPMSignature} function for estimating the parameters of mutation signatures and memberships.
 #' 
