@@ -192,7 +192,9 @@ readMFVFile <- function(infile, numBases = 3, trDir = FALSE, type = "custom") {
 #' G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
 #' 
 #' @export
-readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
+readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent", 
+                       bs_genome = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+                       txdb_transcript = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene) {
 
   
   if (type == "independent") {
@@ -221,7 +223,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
                                             end = posInfo), ignore.strand = TRUE)
 
   ranges <- GenomicRanges::resize(gr, numBases, fix = "center")
-  context <- Biostrings::getSeq(BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19, ranges)
+  context <- Biostrings::getSeq(bs_genome, ranges)
 
 
   # check the consistency between the input reference base and the obtained base using hg19 reference genome.
@@ -287,7 +289,8 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
                                                              start = posInfo, 
                                                              end = posInfo), ignore.strand = TRUE)
     
-    txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    # txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
+    txdb <- txdb_transcript
     # exons_txdb <- GenomicFeatures::exons(txdb)
     # gr_txdb <- GenomicRanges::findOverlaps(gr, exons_txdb, ignore.strand = FALSE)
     # gr_strand <- cbind(S4Vectors::queryHits(gr_txdb), as.character(S4Vectors::as.factor(BiocGenerics::strand(exons_txdb[gr_txdb@subjectHits]))))
