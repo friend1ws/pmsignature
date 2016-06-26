@@ -371,9 +371,13 @@ setMethod("visMembership",
             }
             
             if (is.null(reorderSig)) {
-              reorderSig <- 1:signatureNum
+              reorderSig <- as.character(1:signatureNum)
+              if (object2@isBackGround) {
+                reorderSig[signatureNum] <- "BG"
+              }
             }
             sigOrder <- reorderSig
+            
             
             vMutationNum <- c()
             vSample <- c()

@@ -2,7 +2,7 @@ context("mutation feature vector format reading and estimation")
 
 
 test_that("read mutation feature vector format data and estimation (type: indepenent, numBases: 5, trDir: TRUE)", {
-  inputFile <- system.file("extdata/Hoang_MFVF.ind.txt", package="pmsignature")
+  inputFile <- system.file("extdata/Hoang_MFVF.ind.txt.gz", package="pmsignature")
   G <- readMFVFile(inputFile, numBases = 5, trDir = TRUE, type = "independent")
   BG_prob <- readBGFile(G)
   
@@ -21,7 +21,7 @@ test_that("read mutation feature vector format data and estimation (type: indepe
 
 
 test_that("read mutation feature vector format data and estimation (type: full, numBases: 5, trDir: TRUE)", {
-  inputFile <- system.file("extdata/Hoang_MFVF.full.txt", package="pmsignature")
+  inputFile <- system.file("extdata/Hoang_MFVF.full.txt.gz", package="pmsignature")
   G <- readMFVFile(inputFile, numBases = 5, trDir = TRUE, type = "full")
   BG_prob <- readBGFile(G)
   

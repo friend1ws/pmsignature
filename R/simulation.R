@@ -11,23 +11,25 @@
 #' @param isBG the logical value showing whether the background signature is used or not
 #'
 #' @export
-makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3, sampleNum = 10, mutationNum = 100, param_alpha = 1, param_gamma = 1, isBG = FALSE) {
+makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, fdim = NULL, K = 3, sampleNum = 10, mutationNum = 100, param_alpha = 1, param_gamma = 1, isBG = FALSE) {
 
   if (type == "independent") {
     fdim <- c(6, rep(4, numBases - 1), rep(2, as.integer(trDir)))
   } else if (type == "full") {
     fdim <- c(6 * 4^(numBases - 1) * 2^(as.integer(trDir)))
+  } else if (type == "custom") {
+    if (is.null(fdim)) stop('for type "custom"", argument fdim should be specified')
   } else {
-    stop('for reading mutation position format, the type argument has to be "independent" or "full"')
+    stop('the type argument has to be "independent", "full" or "custom"')
   }
   
-  if (numBases %% 2 != 1) {
+  if (type != "custom" & numBases %% 2 != 1) {
     stop("numBases should be odd numbers")
   }
   
   ##########
   # obtaining background signature
-  if (isBG == TRUE) {
+  if (type != "custom" & isBG == TRUE) {
     if (numBases > 5 | numBases < 3) {
       stop('Background data whose number of flanking bases is other than 3 or 5 is not available')
     }
@@ -126,11 +128,11 @@ makeSimData <- function(type = "independent", numBases = 3, trDir = FALSE, K = 3
   procCount <- cbind(w[,2], w[,1], tableCount[w])
   
   
-  if (length(fdim) == 1) {
+  if (type == "full") {
     # mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(1)))
     mutFeatList <- matrix(as.integer(suFeatStr), length(suFeatStr), 1)
   } else {
-    mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(numBases + as.integer(trDir))))
+    mutFeatList <- t(vapply(suFeatStr, function(x) as.numeric(unlist(strsplit(x, ","))), numeric(length(fdim))))
   } 
   
   rownames(mutFeatList) <- NULL

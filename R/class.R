@@ -158,7 +158,10 @@ setMethod("getMembershipValue",
           function(object) {
             membership.df <- as.data.frame(object@sampleSignatureDistribution)
             rownames(membership.df) <- object@sampleList
-            colnames(membership.df) <- paste("signature", 1:ncol(membership.df), sep="_")          
+            colnames(membership.df) <- paste("signature", 1:ncol(membership.df), sep="_")  
+            if (object@isBackGround) {
+              colnames(membership.df)[ncol(membership.df)] <- "background"
+            }
             return(membership.df)
           }
 )
