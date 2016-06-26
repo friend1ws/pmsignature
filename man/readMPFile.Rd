@@ -4,7 +4,9 @@
 \alias{readMPFile}
 \title{Read the raw mutation data of Mutation Position Format.}
 \usage{
-readMPFile(infile, numBases = 3, trDir = FALSE, type = "independent")
+readMPFile(infile, numBases = 3, trDir = FALSE, type = "independent",
+  bs_genome = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19,
+  txdb_transcript = TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene)
 }
 \arguments{
 \item{infile}{the path for the input file for the mutation data of Mutation Position Format.}
@@ -17,6 +19,12 @@ The gene annotation information is given by UCSC knownGene (TxDb.Hsapiens.UCSC.h
 When trDir is TRUE, the mutations located in intergenic region are excluded from the analysis.}
 
 \item{type}{this argument can take either "independent", "full", or "custom".}
+
+\item{bs_genome}{this argument specifies the reference genome (e.g., BSgenome.Mmusculus.UCSC.mm10 can be used for the mouse genome).
+See https://bioconductor.org/packages/release/bioc/html/BSgenome.html for the available genome list}
+
+\item{txdb_transcript}{this argument specified the transcript database (e.g., TxDb.Mmusculus.UCSC.mm10.knownGene can be used for the mouse genome).
+See https://bioconductor.org/packages/release/bioc/html/AnnotationDbi.html for details.}
 }
 \value{
 The output is an instance of MutationFeatureData S4 class (which stores summarized information on mutation data).
