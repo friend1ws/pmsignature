@@ -135,6 +135,16 @@ Also, you can add transcription direction information by typing (in that case, t
 G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
 ```
 
+Now, you can use genomes and transcripts other than the hg19 human reference genome.
+```
+inputFile <- system.file("extdata/Nik_Zainal_2012.mutationPositionFormat.hg18.txt.gz", package="pmsignature")
+G <- readMPFile(inputFile, numBases = 5, trDir = TRUE, 
+                bs_genome = BSgenome.Hsapiens.UCSC.hg18::BSgenome.Hsapiens.UCSC.hg18,
+                txdb_transcript = TxDb.Hsapiens.UCSC.hg18.knownGene::TxDb.Hsapiens.UCSC.hg18.knownGene)
+```
+See `BSgenome::available.genomes()` for available reference genome list.
+
+
 * Mutation Feature Vector Format
 ```
 G <- readMFVFile(inputFile, numBases = 5, type="independent", trDir=TRUE)
@@ -164,6 +174,7 @@ If you want to changet the trial number, then
 ```
 Param <- getPMSignature(G, K = 3, numInit=20)
 ```
+
 
 
 ### Visualing the mutation signatures and memberships
