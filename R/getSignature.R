@@ -460,6 +460,21 @@ PMSboundary <- function(y) {
 }
 
 
+#' Obtain the standard error estimates for parameters for mutation signatures and memberships
+#' 
+#' @param mutationFeatureData the mutation data (MutationFeatureData class (S4 class)) by the \code{readMPFile} or \code{readMFVFile} functions.
+#' @param EstimatedParameters the estimated parameters (EstimatedParameter class (S4 class)) by the \code{getPMSignature} function.
+#' 
+#' @return a data frame of mutation wise membership.
+#' 
+#' @examples 
+#' After obtaining mutationFeatureData (see e.g., by \code{readMPFile} function) as G, 
+#' and EstimatedParameters (e.g., by \code{getPMSignature} function) as Param,
+#' mutMembership <- getMutMembership(G, Param)
+#' 
+#' @useDynLib pmsignature
+#' @importFrom Rcpp sourceCpp
+#' @export
 getMutMembership <- function(MutationFeatureData, EstimatedParameters) {
   
 
