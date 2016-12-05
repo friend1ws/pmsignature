@@ -460,7 +460,7 @@ PMSboundary <- function(y) {
 }
 
 
-getMembershipForEachMutation <- function(MutationFeatureData, EstimatedParameters) {
+getMutMembership <- function(MutationFeatureData, EstimatedParameters) {
   
 
   sampleNum <- length(slot(mutationFeatureData, "sampleList"))
