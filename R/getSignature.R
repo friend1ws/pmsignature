@@ -87,6 +87,7 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
              sampleList = slot(mutationFeatureData, "sampleList"),
              signatureNum = as.integer(K),
              isBackGround = isBG,
+             backGroundProb = BG,
              signatureFeatureDistribution = F,
              sampleSignatureDistribution = Q,
              loglikelihood = tempL)
@@ -455,6 +456,48 @@ PMSboundary <- function(y) {
   function(p) {
     return(all(boundaryTurbo_F(p[1:lenF], fdim, varK), boundaryTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum)))
   }
+  
+}
+
+
+getMembershipForEachMutation <- function(MutationFeatureData, EstimatedParameters) {
+  
+
+  sampleNum <- length(slot(mutationFeatureData, "sampleList"))
+  fdim <- slot(mutationFeatureData, "possibleFeatures")
+  patternList <- slot(mutationFeatureData, "featureVectorList")
+  sparseCount <- slot(mutationFeatureData, "countData")
+
+  K <- slot(EstimatedParameters, "signatureNum")
+  isBG <- slot(EstimatedParameters, "isBackGround")
+  BG0 <- slot(EstimatedParameters, "backGroundProb")
+  
+  patternNum <- ncol(patternList)
+  samplePatternNum <- ncol(sparseCount)
+  
+ 
+  F <- slot(EstimatedParameters, "signatureFeatureDistribution")
+  Q <- slot(EstimatedParameters, "sampleSignatureDistribution")
+  
+  ####################
+  # E-step
+  Theta <- updateTheta_NormalizedC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0)
+  
+  dim(Theta) <- c(K, samplePatternNum)
+  
+  colnames(Theta) <- paste(sparseCount[2,], sparseCount[1,], sep = ",")
+  
+  mut_list <- slot(mutationFeatureData, "mutationPosition")
+  mut_membership <- t(Theta[,paste(mut_list[,"sampleID"], mut_list[,"mutID"], sep = ",")])
+  rownames(mut_membership) <- NULL
+  colnames(mut_membership) <- paste("signature", 1:K, sep = "_")
+  
+  samplelist <- slot(EstimatedParameters, "sampleList")
+  samplename <- samplelist[mut_list[,"sampleID"]]
+  
+  return(cbind(samplename, 
+               mut_list[,c("chr", "pos", "ref", "alt", "strand", "context")],
+               mut_membership))
   
 }
 

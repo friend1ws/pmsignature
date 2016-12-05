@@ -366,6 +366,12 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
   rownames(mutFeatList) <- NULL
   rownames(procCount) <- NULL
 
+  if (trDir == FALSE) {
+    strandInfo_for_class <- rep(NA, length(chrInfo))
+  } else {
+    strandInfo_for_class <- strandInfo
+  }
+  
   return(new(Class = "MutationFeatureData", 
              type = type,
              flankingBasesNum = as.integer(numBases),
@@ -374,7 +380,7 @@ readMPFile <- function(infile, numBases = 3, trDir = FALSE, type = "independent"
              featureVectorList = t(mutFeatList),
              sampleList = suSampleStr,
              countData = t(procCount),
-             mutationPosition = data.frame(chr = chrInfo, pos = posInfo, sampleID = unname(sampleIDs), mutID = unname(lookupFeatInd[featStr]), stringsAsFactors = FALSE)
+             mutationPosition = data.frame(chr = chrInfo, pos = posInfo, ref = ref_base, alt = alt_base, strand = strandInfo_for_class, context = context, sampleID = unname(sampleIDs), mutID = unname(lookupFeatInd[featStr]), stringsAsFactors = FALSE)
              )
   )
 
