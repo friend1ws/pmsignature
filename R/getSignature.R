@@ -478,10 +478,10 @@ PMSboundary <- function(y) {
 getMutMembership <- function(MutationFeatureData, EstimatedParameters) {
   
 
-  sampleNum <- length(slot(mutationFeatureData, "sampleList"))
-  fdim <- slot(mutationFeatureData, "possibleFeatures")
-  patternList <- slot(mutationFeatureData, "featureVectorList")
-  sparseCount <- slot(mutationFeatureData, "countData")
+  sampleNum <- length(slot(MutationFeatureData, "sampleList"))
+  fdim <- slot(MutationFeatureData, "possibleFeatures")
+  patternList <- slot(MutationFeatureData, "featureVectorList")
+  sparseCount <- slot(MutationFeatureData, "countData")
 
   K <- slot(EstimatedParameters, "signatureNum")
   isBG <- slot(EstimatedParameters, "isBackGround")
@@ -502,7 +502,7 @@ getMutMembership <- function(MutationFeatureData, EstimatedParameters) {
   
   colnames(Theta) <- paste(sparseCount[2,], sparseCount[1,], sep = ",")
   
-  mut_list <- slot(mutationFeatureData, "mutationPosition")
+  mut_list <- slot(MutationFeatureData, "mutationPosition")
   mut_membership <- t(Theta[,paste(mut_list[,"sampleID"], mut_list[,"mutID"], sep = ",")])
   rownames(mut_membership) <- NULL
   colnames(mut_membership) <- paste("signature", 1:K, sep = "_")
