@@ -74,12 +74,21 @@ NumericVector convertFromTurbo_Q(NumericVector turboQ, int signatureNum, int sam
 
     tempSum = 0;
     for (int k = 1; k < signatureNum; k++) {
-      rQ[n + k * sampleNum] = turboQ[n + (k - 1) * sampleNum];
+      if (turboQ[n + (k - 1) * sampleNum] >= 0) {
+        rQ[n + k * sampleNum] = turboQ[n + (k - 1) * sampleNum];
+      } else {
+        rQ[n + k * sampleNum] = 0;
+      }
       tempSum = tempSum + rQ[n + k * sampleNum];
     }
     
     if (1 - tempSum < 0) {
+      
       rQ[n] = 0;
+      for (int k = 1; k < signatureNum; k++) {
+        rQ[n + k * sampleNum] = rQ[n + k * sampleNum] / tempSum;
+      }
+      
     } else {
       rQ[n] = 1 - tempSum;
     }
@@ -118,12 +127,21 @@ NumericVector convertFromTurbo_F(NumericVector turboF, NumericVector fdim, int s
       
       tempSum = 0;
       for (int ll = 1; ll < fdim[l]; ll++) {
-        rF[k + l * variableSigNum + ll * variableSigNum * fdim.size()] = turboF[k + (cumFdim + ll - 1) * variableSigNum];
+        if (turboF[k + (cumFdim + ll - 1) * variableSigNum] >= 0) {
+          rF[k + l * variableSigNum + ll * variableSigNum * fdim.size()] = turboF[k + (cumFdim + ll - 1) * variableSigNum];
+        } else {
+          rF[k + l * variableSigNum + ll * variableSigNum * fdim.size()] = 0;
+        }
         tempSum = tempSum + rF[k + l * variableSigNum + ll * variableSigNum * fdim.size()];
       }
       
       if (1 - tempSum < 0) {
+        
         rF[k + l * variableSigNum + 0 * variableSigNum * fdim.size()] = 0;
+        for (int ll = 1; ll < fdim[l]; ll++) {
+          rF[k + l * variableSigNum + ll * variableSigNum * fdim.size()] = rF[k + l * variableSigNum + ll * variableSigNum * fdim.size()] / tempSum;
+        }
+        
       } else {
         rF[k + l * variableSigNum + 0 * variableSigNum * fdim.size()] = 1 - tempSum;
       }

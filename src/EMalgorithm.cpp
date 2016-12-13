@@ -48,6 +48,11 @@ NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector 
       featureInd = vPatternList[l + m * fdim.size()] - 1;
       for (int k = 0; k < variableSigNum; k++) {
         vF_full[k + m * signatureNum] = vF_full[k + m * signatureNum] * vF[k + l * variableSigNum + featureInd * variableSigNum * fdim.size()];
+        /*
+        if (vF[k + l * variableSigNum + featureInd * variableSigNum * fdim.size()] < 0) {
+          std::cout << l << "\t" << k << "\t" << featureInd << "\t" << vF[k + l * variableSigNum + featureInd * variableSigNum * fdim.size()] << "\n";
+        }
+        */
       }
     }
     
@@ -58,7 +63,7 @@ NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector 
   double invTempSum = 0;
   int sampleInd;
   int patternInd;
-  
+  // double tempQsum = 0;
 
   NumericVector nTheta(signatureNum * samplePatternNum);
   for (int nm = 0; nm < samplePatternNum; nm++) {
@@ -67,19 +72,31 @@ NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector 
     sampleInd = vSparseCount[1 + nm * 3] - 1;
       
     tempSum = 0;
+    // tempQsum = 0;
     for(int k = 0; k < signatureNum; k++) {
       vTheta[k + nm * signatureNum] = vQ[k + sampleInd * signatureNum] * vF_full[k + patternInd * signatureNum];
       tempSum = tempSum + vTheta[k + nm * signatureNum];
+      // tempQsum = tempQsum + vQ[k + sampleInd * signatureNum];
+      
     }
+
+    /*
+    if (tempQsum < 0.99 or tempQsum > 1.01) {
+      std::cout << nm << "\t" << tempQsum << "\t" << "\n";
+    }
+    */
     
-    if (tempSum > 1e-10) {
+    
+    
+    if (tempSum > 1e-8) {
       invTempSum = 1 / tempSum;
       for(int k = 0; k < signatureNum; k++) {
         nTheta[k + nm * signatureNum] = vTheta[k + nm * signatureNum] * invTempSum;
       }
     } else {
       for(int k = 0; k < signatureNum; k++) {
-        nTheta[k + nm * signatureNum] = 1 / signatureNum;
+        nTheta[k + nm * signatureNum] = 1.0 / signatureNum;
+        // std::cout << nm << "\t" << k << "\t" << signatureNum << "\t" << nTheta[k + nm * signatureNum] << "\t" << tempSum << "\t" << "\n";
       }
     }
        
