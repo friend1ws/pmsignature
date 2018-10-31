@@ -1,5 +1,7 @@
 # pmsignature
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 The R package **pmsignature** is developed 
 for efficiently extracting characteristic mutation patterns (mutation signatures) 
 from the set of mutations collected typically from cancer genome sequencing data.
