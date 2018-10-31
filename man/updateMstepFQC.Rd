@@ -33,4 +33,3 @@ updateMstepFQC(vPatternList, vSparseCount, nTheta, fdim, signatureNum,
 \description{
 Update the parameter F and Q (M-step in the EM-algorithm)
 }
-

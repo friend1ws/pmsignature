@@ -20,4 +20,3 @@ the number of mutation signatures specified and so on}
 \description{
 A function for estimating parameters using Squared EM algorithm
 }
-

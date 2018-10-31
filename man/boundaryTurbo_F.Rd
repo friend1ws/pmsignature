@@ -16,4 +16,3 @@ boundaryTurbo_F(turboF, fdim, signatureNum)
 \description{
 Check whether the parameter F is within the appropriate range
 }
-

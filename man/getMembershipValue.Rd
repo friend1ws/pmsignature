@@ -20,4 +20,3 @@ After obtaining EstimatedParameters (typically by \\code{getPMSignature}) as Par
 print(getMembershipValue(Param))
 
 }
-

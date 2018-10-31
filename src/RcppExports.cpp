@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 // boundaryTurbo_F
 bool boundaryTurbo_F(NumericVector turboF, NumericVector fdim, int signatureNum);
-RcppExport SEXP pmsignature_boundaryTurbo_F(SEXP turboFSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP) {
+RcppExport SEXP _pmsignature_boundaryTurbo_F(SEXP turboFSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -20,7 +20,7 @@ END_RCPP
 }
 // boundaryTurbo_Q
 bool boundaryTurbo_Q(NumericVector turboQ, int signatureNum, int sampleNum);
-RcppExport SEXP pmsignature_boundaryTurbo_Q(SEXP turboQSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP) {
+RcppExport SEXP _pmsignature_boundaryTurbo_Q(SEXP turboQSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -33,7 +33,7 @@ END_RCPP
 }
 // convertToTurbo_Q
 NumericVector convertToTurbo_Q(NumericVector vQ, int signatureNum, int sampleNum);
-RcppExport SEXP pmsignature_convertToTurbo_Q(SEXP vQSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP) {
+RcppExport SEXP _pmsignature_convertToTurbo_Q(SEXP vQSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -46,7 +46,7 @@ END_RCPP
 }
 // convertToTurbo_F
 NumericVector convertToTurbo_F(NumericVector vF, NumericVector fdim, int signatureNum, bool isBackground);
-RcppExport SEXP pmsignature_convertToTurbo_F(SEXP vFSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP isBackgroundSEXP) {
+RcppExport SEXP _pmsignature_convertToTurbo_F(SEXP vFSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP isBackgroundSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -60,7 +60,7 @@ END_RCPP
 }
 // convertFromTurbo_Q
 NumericVector convertFromTurbo_Q(NumericVector turboQ, int signatureNum, int sampleNum);
-RcppExport SEXP pmsignature_convertFromTurbo_Q(SEXP turboQSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP) {
+RcppExport SEXP _pmsignature_convertFromTurbo_Q(SEXP turboQSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -73,7 +73,7 @@ END_RCPP
 }
 // convertFromTurbo_F
 NumericVector convertFromTurbo_F(NumericVector turboF, NumericVector fdim, int signatureNum, bool isBackground);
-RcppExport SEXP pmsignature_convertFromTurbo_F(SEXP turboFSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP isBackgroundSEXP) {
+RcppExport SEXP _pmsignature_convertFromTurbo_F(SEXP turboFSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP isBackgroundSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -87,7 +87,7 @@ END_RCPP
 }
 // updateTheta_NormalizedC
 NumericVector updateTheta_NormalizedC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground, NumericVector vF0);
-RcppExport SEXP pmsignature_updateTheta_NormalizedC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
+RcppExport SEXP _pmsignature_updateTheta_NormalizedC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -108,7 +108,7 @@ END_RCPP
 }
 // getLogLikelihoodC
 double getLogLikelihoodC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector vF, NumericVector vQ, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground, NumericVector vF0);
-RcppExport SEXP pmsignature_getLogLikelihoodC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
+RcppExport SEXP _pmsignature_getLogLikelihoodC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP vFSEXP, SEXP vQSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP, SEXP vF0SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -129,7 +129,7 @@ END_RCPP
 }
 // updateMstepFQC
 NumericVector updateMstepFQC(NumericVector vPatternList, NumericVector vSparseCount, NumericVector nTheta, NumericVector fdim, int signatureNum, int sampleNum, int patternNum, int samplePatternNum, bool isBackground);
-RcppExport SEXP pmsignature_updateMstepFQC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP nThetaSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP) {
+RcppExport SEXP _pmsignature_updateMstepFQC(SEXP vPatternListSEXP, SEXP vSparseCountSEXP, SEXP nThetaSEXP, SEXP fdimSEXP, SEXP signatureNumSEXP, SEXP sampleNumSEXP, SEXP patternNumSEXP, SEXP samplePatternNumSEXP, SEXP isBackgroundSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -145,4 +145,22 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(updateMstepFQC(vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground));
     return rcpp_result_gen;
 END_RCPP
+}
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_pmsignature_boundaryTurbo_F", (DL_FUNC) &_pmsignature_boundaryTurbo_F, 3},
+    {"_pmsignature_boundaryTurbo_Q", (DL_FUNC) &_pmsignature_boundaryTurbo_Q, 3},
+    {"_pmsignature_convertToTurbo_Q", (DL_FUNC) &_pmsignature_convertToTurbo_Q, 3},
+    {"_pmsignature_convertToTurbo_F", (DL_FUNC) &_pmsignature_convertToTurbo_F, 4},
+    {"_pmsignature_convertFromTurbo_Q", (DL_FUNC) &_pmsignature_convertFromTurbo_Q, 3},
+    {"_pmsignature_convertFromTurbo_F", (DL_FUNC) &_pmsignature_convertFromTurbo_F, 4},
+    {"_pmsignature_updateTheta_NormalizedC", (DL_FUNC) &_pmsignature_updateTheta_NormalizedC, 11},
+    {"_pmsignature_getLogLikelihoodC", (DL_FUNC) &_pmsignature_getLogLikelihoodC, 11},
+    {"_pmsignature_updateMstepFQC", (DL_FUNC) &_pmsignature_updateMstepFQC, 9},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_pmsignature(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
 }

@@ -33,4 +33,3 @@ getLogLikelihoodC(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum,
 \description{
 Calculate the value of the log-likelihood for given parameters
 }
-

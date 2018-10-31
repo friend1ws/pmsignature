@@ -27,4 +27,3 @@ Generate visualization of mutation signatures for the model with
   substitution patterns and flanking bases represented by the indepenent
   representation.
 }
-

@@ -30,4 +30,3 @@ makeSimData(type = "independent", numBases = 3, trDir = FALSE,
 \description{
 Generate simulation data
 }
-

@@ -7,7 +7,7 @@
 #' @param fdim a vector specifying the number of possible values for each mutation signature
 #' @param signatureNum the number of mutation signatures
 boundaryTurbo_F <- function(turboF, fdim, signatureNum) {
-    .Call('pmsignature_boundaryTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum)
+    .Call('_pmsignature_boundaryTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum)
 }
 
 #' Check whether the parameter Q is within the appropriate range
@@ -16,7 +16,7 @@ boundaryTurbo_F <- function(turboF, fdim, signatureNum) {
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
 boundaryTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
-    .Call('pmsignature_boundaryTurbo_Q', PACKAGE = 'pmsignature', turboQ, signatureNum, sampleNum)
+    .Call('_pmsignature_boundaryTurbo_Q', PACKAGE = 'pmsignature', turboQ, signatureNum, sampleNum)
 }
 
 #' Convert the parameter Q so that turboEM can treat
@@ -25,7 +25,7 @@ boundaryTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
 convertToTurbo_Q <- function(vQ, signatureNum, sampleNum) {
-    .Call('pmsignature_convertToTurbo_Q', PACKAGE = 'pmsignature', vQ, signatureNum, sampleNum)
+    .Call('_pmsignature_convertToTurbo_Q', PACKAGE = 'pmsignature', vQ, signatureNum, sampleNum)
 }
 
 #' Convert the parameter F so that turboEM can treat
@@ -35,7 +35,7 @@ convertToTurbo_Q <- function(vQ, signatureNum, sampleNum) {
 #' @param signatureNum the number of mutation signatures
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 convertToTurbo_F <- function(vF, fdim, signatureNum, isBackground) {
-    .Call('pmsignature_convertToTurbo_F', PACKAGE = 'pmsignature', vF, fdim, signatureNum, isBackground)
+    .Call('_pmsignature_convertToTurbo_F', PACKAGE = 'pmsignature', vF, fdim, signatureNum, isBackground)
 }
 
 #' Restore the converted parameter Q for turboEM
@@ -44,7 +44,7 @@ convertToTurbo_F <- function(vF, fdim, signatureNum, isBackground) {
 #' @param signatureNum the number of mutation signatures
 #' @param sampleNum the number of cancer genomes
 convertFromTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
-    .Call('pmsignature_convertFromTurbo_Q', PACKAGE = 'pmsignature', turboQ, signatureNum, sampleNum)
+    .Call('_pmsignature_convertFromTurbo_Q', PACKAGE = 'pmsignature', turboQ, signatureNum, sampleNum)
 }
 
 #' Restore the converted parameter F for turboEM
@@ -54,7 +54,7 @@ convertFromTurbo_Q <- function(turboQ, signatureNum, sampleNum) {
 #' @param signatureNum the number of mutation signatures
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
-    .Call('pmsignature_convertFromTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum, isBackground)
+    .Call('_pmsignature_convertFromTurbo_F', PACKAGE = 'pmsignature', turboF, fdim, signatureNum, isBackground)
 }
 
 #' Update the auxiliary parameters theta and normalize them so that the summation of each group sums to 1 (E-step),
@@ -72,7 +72,7 @@ convertFromTurbo_F <- function(turboF, fdim, signatureNum, isBackground) {
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
 updateTheta_NormalizedC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
-    .Call('pmsignature_updateTheta_NormalizedC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
+    .Call('_pmsignature_updateTheta_NormalizedC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
 }
 
 #' Calculate the value of the log-likelihood for given parameters
@@ -89,7 +89,7 @@ updateTheta_NormalizedC <- function(vPatternList, vSparseCount, vF, vQ, fdim, si
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
 getLogLikelihoodC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0) {
-    .Call('pmsignature_getLogLikelihoodC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
+    .Call('_pmsignature_getLogLikelihoodC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, vF, vQ, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground, vF0)
 }
 
 #' Update the parameter F and Q (M-step in the EM-algorithm)
@@ -106,6 +106,6 @@ getLogLikelihoodC <- function(vPatternList, vSparseCount, vF, vQ, fdim, signatur
 #' @param isBackground the logical value showing whether a background mutaiton features is included or not
 #' @param vF0 a background mutaiton features
 updateMstepFQC <- function(vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground) {
-    .Call('pmsignature_updateMstepFQC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground)
+    .Call('_pmsignature_updateMstepFQC', PACKAGE = 'pmsignature', vPatternList, vSparseCount, nTheta, fdim, signatureNum, sampleNum, patternNum, samplePatternNum, isBackground)
 }
 

@@ -47,4 +47,3 @@ Use colourBrewer palette,
 visPMSignature(G,Param, colourBrewer = "Set2")
 
 }
-

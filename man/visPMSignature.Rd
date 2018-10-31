@@ -37,4 +37,3 @@ You can change the heights of flanking bases according to information contents,
 visPMSignature(Param, 1, isScale = TRUE)
 
 }
-

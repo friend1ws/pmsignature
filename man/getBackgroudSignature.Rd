@@ -4,8 +4,8 @@
 \alias{getBackgroudSignature}
 \title{get mutation feature vector from context sequence data and reference and alternate allele information}
 \usage{
-getBackgroudSignature(type = "independent", numBases = 3, trDir = FALSE,
-  trial = 1e+06)
+getBackgroudSignature(type = "independent", numBases = 3,
+  trDir = FALSE, trial = 1e+06)
 }
 \arguments{
 \item{type}{the type of mutation feature vecotr (should be "independent" or "full").}
@@ -19,4 +19,3 @@ getBackgroudSignature(type = "independent", numBases = 3, trDir = FALSE,
 \description{
 get mutation feature vector from context sequence data and reference and alternate allele information
 }
-

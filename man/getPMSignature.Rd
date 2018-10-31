@@ -37,4 +37,3 @@ BG_prob <- readBGFile(G)
 Param <- getPMSignature(G, K = 3, BG = BG_prob)
 
 }
-

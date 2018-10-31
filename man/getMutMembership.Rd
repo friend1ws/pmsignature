@@ -23,4 +23,3 @@ and EstimatedParameters (e.g., by \\code{getPMSignature} function) as Param,
 mutMembership <- getMutMembership(G, Param)
 
 }
-

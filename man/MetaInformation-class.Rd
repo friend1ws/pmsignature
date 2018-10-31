@@ -10,4 +10,3 @@
  @slot transcriptionDirection the flag representing whether transcription direction is considered or not
  @slot possibleFeatures a vector representing the numbers of possible values for each mutation feature
 }
-

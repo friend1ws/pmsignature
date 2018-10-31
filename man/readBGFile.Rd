@@ -28,4 +28,3 @@ G <- readMPFile(inputFile, numBases = 7)
 BG_prob <- readBGFile(G)
 
 }
-

@@ -23,4 +23,3 @@ getMutationFeatureVector(context, ref_base, alt_base, strandInfo = NULL,
 \description{
 Get mutation feature vector from context sequence data and reference and alternate allele information
 }
-

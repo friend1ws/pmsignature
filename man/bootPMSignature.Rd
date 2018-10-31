@@ -33,4 +33,3 @@ and EstimatedParameters (e.g., by \\code{getPMSignature} function) as Param,
 bootParam <- bootPMSignature(G, Param, bootNum = 100)
 
 }
-

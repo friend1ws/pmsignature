@@ -16,4 +16,3 @@ getCosDistance(F_1, F_2, fdim)
 \description{
 the function for calculating cosine distances between two mutation signature matrices.
 }
-

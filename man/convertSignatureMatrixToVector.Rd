@@ -14,4 +14,3 @@ convertSignatureMatrixToVector(Fmat, fdim)
 \description{
 the function for converting the mutation signature matrix to a vector
 }
-

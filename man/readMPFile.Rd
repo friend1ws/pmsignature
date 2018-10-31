@@ -65,4 +65,3 @@ When adding transcription direction information;
 G <- readMPFile(inputFile, numBases = 5, trDir = TRUE)
 
 }
-

@@ -19,4 +19,3 @@ updateBackgroudSignatureFile(type = "independent", numBases = 3,
 \description{
 update the background signature file in the package system.file.
 }
-

@@ -16,4 +16,3 @@ boundaryTurbo_Q(turboQ, signatureNum, sampleNum)
 \description{
 Check whether the parameter Q is within the appropriate range
 }
-

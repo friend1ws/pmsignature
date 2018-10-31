@@ -15,4 +15,3 @@ the number of mutation signatures specified and so on}
 \description{
 A function for updating parameters using EM-algorithm
 }
-

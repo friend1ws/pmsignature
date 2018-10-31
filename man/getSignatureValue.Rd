@@ -22,4 +22,3 @@ After obtaining EstimatedParameters (typically by \\code{getPMSignature}) as Par
 print(getSignatureValue(Param, 1))
 
 }
-

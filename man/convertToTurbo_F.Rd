@@ -18,4 +18,3 @@ convertToTurbo_F(vF, fdim, signatureNum, isBackground)
 \description{
 Convert the parameter F so that turboEM can treat
 }
-

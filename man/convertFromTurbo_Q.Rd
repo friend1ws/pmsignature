@@ -16,4 +16,3 @@ convertFromTurbo_Q(turboQ, signatureNum, sampleNum)
 \description{
 Restore the converted parameter Q for turboEM
 }
-

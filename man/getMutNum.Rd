@@ -22,4 +22,3 @@ mutNum <- getMutNum(G)
 print(mutNum)
 
 }
-

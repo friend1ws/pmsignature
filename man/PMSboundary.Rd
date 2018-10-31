@@ -13,4 +13,3 @@ the number of mutation signatures specified and so on}
 \description{
 A functional for generating the function checking the parameter (p) is within the restricted conditions or not
 }
-

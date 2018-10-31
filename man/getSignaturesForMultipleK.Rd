@@ -21,4 +21,3 @@ getSignaturesForMultipleK(inputFile, numBases = 5, trDir = TRUE,
 \description{
 Generate the figure of mutation signature for multiple K aligning the signatures.
 }
-

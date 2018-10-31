@@ -16,4 +16,3 @@ convertToTurbo_Q(vQ, signatureNum, sampleNum)
 \description{
 Convert the parameter Q so that turboEM can treat
 }
-

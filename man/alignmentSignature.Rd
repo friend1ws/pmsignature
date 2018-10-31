@@ -14,4 +14,3 @@ alignmentSignature(Params)
 From the list of Parameters from the getPMSignature function, 
 return the order of signatures so that signatures from the several lists are well aligned.
 }
-

@@ -39,4 +39,3 @@ inputFile <- system.file("extdata/Hoang_MFVF.ind.txt", package="pmsignature")
 G <- readMFVFile(inputFile, numBases = 5, type="independent", trDir=TRUE)
 
 }
-
