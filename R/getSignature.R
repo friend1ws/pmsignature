@@ -87,6 +87,7 @@ getPMSignature <- function(mutationFeatureData, K, BG = NULL, numInit = 10, tol 
              sampleList = slot(mutationFeatureData, "sampleList"),
              signatureNum = as.integer(K),
              isBackGround = isBG,
+             backGroundProb = BG,
              signatureFeatureDistribution = F,
              sampleSignatureDistribution = Q,
              loglikelihood = tempL)
@@ -455,6 +456,63 @@ PMSboundary <- function(y) {
   function(p) {
     return(all(boundaryTurbo_F(p[1:lenF], fdim, varK), boundaryTurbo_Q(p[(lenF + 1):(lenF + lenQ)], K, sampleNum)))
   }
+  
+}
+
+
+#' Obtain the standard error estimates for parameters for mutation signatures and memberships
+#' 
+#' @param mutationFeatureData the mutation data (MutationFeatureData class (S4 class)) by the \code{readMPFile} or \code{readMFVFile} functions.
+#' @param EstimatedParameters the estimated parameters (EstimatedParameter class (S4 class)) by the \code{getPMSignature} function.
+#' 
+#' @return a data frame of mutation wise membership.
+#' 
+#' @examples 
+#' After obtaining mutationFeatureData (see e.g., by \code{readMPFile} function) as G, 
+#' and EstimatedParameters (e.g., by \code{getPMSignature} function) as Param,
+#' mutMembership <- getMutMembership(G, Param)
+#' 
+#' @useDynLib pmsignature
+#' @importFrom Rcpp sourceCpp
+#' @export
+getMutMembership <- function(MutationFeatureData, EstimatedParameters) {
+  
+
+  sampleNum <- length(slot(MutationFeatureData, "sampleList"))
+  fdim <- slot(MutationFeatureData, "possibleFeatures")
+  patternList <- slot(MutationFeatureData, "featureVectorList")
+  sparseCount <- slot(MutationFeatureData, "countData")
+
+  K <- slot(EstimatedParameters, "signatureNum")
+  isBG <- slot(EstimatedParameters, "isBackGround")
+  BG0 <- slot(EstimatedParameters, "backGroundProb")
+  
+  patternNum <- ncol(patternList)
+  samplePatternNum <- ncol(sparseCount)
+  
+ 
+  F <- slot(EstimatedParameters, "signatureFeatureDistribution")
+  Q <- slot(EstimatedParameters, "sampleSignatureDistribution")
+  
+  ####################
+  # E-step
+  Theta <- updateTheta_NormalizedC(as.vector(patternList), as.vector(sparseCount), as.vector(F), as.vector(Q), fdim, K, sampleNum, patternNum, samplePatternNum, isBG, BG0)
+  
+  dim(Theta) <- c(K, samplePatternNum)
+  
+  colnames(Theta) <- paste(sparseCount[2,], sparseCount[1,], sep = ",")
+  
+  mut_list <- slot(MutationFeatureData, "mutationPosition")
+  mut_membership <- t(Theta[,paste(mut_list[,"sampleID"], mut_list[,"mutID"], sep = ",")])
+  rownames(mut_membership) <- NULL
+  colnames(mut_membership) <- paste("signature", 1:K, sep = "_")
+  
+  samplelist <- slot(EstimatedParameters, "sampleList")
+  samplename <- samplelist[mut_list[,"sampleID"]]
+  
+  return(cbind(samplename, 
+               mut_list[,c("chr", "pos", "ref", "alt", "strand", "context")],
+               mut_membership))
   
 }
 

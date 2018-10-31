@@ -71,6 +71,7 @@ setClass(
     sampleList = "character",
     signatureNum = "integer",
     isBackGround = "logical",
+    backGroundProb = "numeric",
     signatureFeatureDistribution = "array",
     sampleSignatureDistribution = "matrix",
     loglikelihood = "numeric"
