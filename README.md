@@ -1,6 +1,7 @@
 # pmsignature
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Travis build status](https://travis-ci.org/friend1ws/pmsignature.svg?branch=master)](https://travis-ci.org/friend1ws/pmsignature)
 
 The R package **pmsignature** is developed 
 for efficiently extracting characteristic mutation patterns (mutation signatures) 
