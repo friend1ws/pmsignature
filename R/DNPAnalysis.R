@@ -7,7 +7,6 @@
 #' @param trDir the index representing whether transcription direction is considered or not
 #' @param type this argument can take either independent, full, or custom.
 #' 
-#' @export
 readMPFile_DNP <- function(infile, numBases = 3, trDir = FALSE, type = "independent") {
   
   
