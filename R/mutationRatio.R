@@ -1,7 +1,6 @@
 #' read the mutation position format file and extract the genomic position as a mutation feature
 #' @param infile the path for the input mutation position format file
 #' 
-#' @export
 readMPFile_localMutRate <- function(infile) {
   
   type = "custom";
